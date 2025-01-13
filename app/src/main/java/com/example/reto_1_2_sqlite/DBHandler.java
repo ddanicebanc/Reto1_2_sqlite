@@ -26,6 +26,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 "contrasenia text," +
                 "delegacion_id integer)";
         sqLiteDatabase.execSQL(query);
+
+        query = "create table delegaciones (" +
+                "id integer primary key," +
+                "nombre text)";
+        sqLiteDatabase.execSQL(query);
     }
 
     @Override

@@ -27,6 +27,12 @@
         <activity
             android:name=".RegisterActivity">
         </activity>
+        <activity
+            android:name=".PantallaPrincipal">
+        </activity>
+        <activity
+            android:name=".CalendarActivity">
+        </activity>
     </application>
 
 </manifest>
