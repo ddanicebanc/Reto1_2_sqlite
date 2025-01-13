@@ -2,6 +2,7 @@ package com.example.reto_1_2_sqlite;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
                         EditText edtPassword = findViewById(R.id.edt_psswd);
                         String sPassword = edtPassword.getText().toString();
 
+                        String searchValues = sUser + ";" + sPassword;
+
+                        if (dbhandler.checkPassword(searchValues)) {
+                            Log.d("Comprobación contraseña", "Contraseña OK");
+                        }
                     }
                 }
             }

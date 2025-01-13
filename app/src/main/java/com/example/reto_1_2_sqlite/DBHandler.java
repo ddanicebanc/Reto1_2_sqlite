@@ -108,6 +108,8 @@ public class DBHandler extends SQLiteOpenHelper {
             correct = true;
         }
 
+        cursor.close();
+
         return correct;
     }
 
