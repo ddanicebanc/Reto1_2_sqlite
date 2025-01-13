@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Reto_1_2_sqlite</string>
+    <string name="btn_registrar">Register</string>
+    <string name="btn_login">Login</string>
+    <string name="text_pass">Password:</string>
+    <string name="text_usuario">User:</string>
+    <string name="btn_guardar">Save</string>
+    <string name="spinner">Delegation:</string>
+</resources>
