@@ -88,6 +88,29 @@ public class DBHandler extends SQLiteOpenHelper {
         return exists;
     }
 
+    public boolean checkPassword (String searchValue) {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        String[] selectionArgs = searchValue.split(";");
+        String selection = "nombre = ? AND contrasenia = ?";
+        Boolean correct = false;
+
+        Cursor cursor = sqLiteDatabase.query(
+                "usuarios",
+                null,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        if (cursor.getCount() > 0) {
+            correct = true;
+        }
+
+        return correct;
+    }
+
     public void insertData (String tableName, ArrayList<String> columns, ArrayList<String> columnValues) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
