@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,7 +23,9 @@ public class MainActivity extends AppCompatActivity {
         //If usuarios table is empty, there are no users registered
         if (dbhandler.countTable("usuarios")) {
             dbhandler.close();
-            myIntent = new Intent(MainActivity.this, RegisterActivity.class);
+            myIntent = new Intent(
+                    MainActivity.this,
+                    RegisterActivity.class);
             startActivity(myIntent);
         }
 
@@ -30,7 +33,20 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Open the application home screen
+                EditText edtUser = findViewById(R.id.edt_usr);
+                String sUser = edtUser.getText().toString();
+
+                if (sUser.isEmpty()) {
+
+                } else {
+                    DBHandler handler = new DBHandler(MainActivity.this);
+
+                    if (dbhandler.searchUser("nombre", sUser)) {
+                        EditText edtPassword = findViewById(R.id.edt_psswd);
+                        String sPassword = edtPassword.getText().toString();
+
+                    }
+                }
             }
         });
 
