@@ -132,7 +132,7 @@ class MysqlConnection extends Thread {
         delegationNames.clear();
 
         //Esta es la dirección en casa en el momento de prueba
-        url = "jdbc:mysql://192.168.21.193:3306/db_delegaciones";
+        url = "jdbc:mysql://192.168.1.138:3306/db_delegaciones";
 
         try {
             Connection conn = DriverManager.getConnection(url, "daniroot", "dani");

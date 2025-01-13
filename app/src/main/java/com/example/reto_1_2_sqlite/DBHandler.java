@@ -5,10 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "comercialesdb";
@@ -68,11 +65,14 @@ public class DBHandler extends SQLiteOpenHelper {
         String[] selectionArgs = {searchValue};
         Boolean exists = false;
 
+        //Must have "= ?" to use it in the query
+        searchField = searchField + "= ?";
+
         //Create the cursor and execute the associated query
         Cursor cursor = sqLiteDatabase.query(
-                "usuarios",        // The table to query
+                "usuarios",       // The table to query
                 null,                   // The array of columns to return (pass null to get all)
-                searchField,              // The columns for the WHERE clause
+                searchField,            // The columns for the WHERE clause
                 selectionArgs,          // The values for the WHERE clause
                 null,                   // don't group the rows
                 null,                   // don't filter by row groups
