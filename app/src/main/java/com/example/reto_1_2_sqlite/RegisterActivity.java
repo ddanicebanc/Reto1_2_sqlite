@@ -34,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
         MysqlConnection loadThread = new MysqlConnection();
 
         DBHandler dbHandler = new DBHandler(RegisterActivity.this);
-        if (dbHandler.areEmpty("delegaciones")) {
+        if (dbHandler.countTable("delegaciones")) {
             //Remote connections have to be executed from a different thread than the mainThread
             //Load the spinner with the information in the MYSQL server
             loadThread.start();
@@ -82,14 +82,15 @@ public class RegisterActivity extends AppCompatActivity {
 
                     if (sUser.isEmpty()) {
                         //TODO AlertDialog.builder
+                        //Normal alert dialog
                     } else {
-                        ArrayList<String> searchValues = new ArrayList<>();
-                        searchValues.add(sUser);
-
                         //Check if the username is already introduced
-                        if (dbHandler.checkUsers("nombre", searchValues)) {
+                        if (dbHandler.searchUser("nombre", sUser)) {
                             //TODO AlertDialog.builder
+                            //Normal alert dialog
                             Log.d("Prueba", "El usuario ya existe");
+
+                            edtUser.setText("");
                         } else {
                             String sPassword;
 
@@ -127,6 +128,8 @@ class MysqlConnection extends Thread {
     public void run () {
         //TODO ¿Cómo puedo tener siempre la misma dirección IP?
         String url;
+        delegationIds.clear();
+        delegationNames.clear();
 
         //Esta es la dirección en casa en el momento de prueba
         url = "jdbc:mysql://192.168.21.193:3306/db_delegaciones";

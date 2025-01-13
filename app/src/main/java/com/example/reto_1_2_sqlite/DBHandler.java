@@ -26,11 +26,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 "contrasenia text," +
                 "delegacion_id integer)";
         sqLiteDatabase.execSQL(query);
-
-        query = "create table delegaciones (" +
-                "id integer primary key," +
-                "nombre text)";
-        sqLiteDatabase.execSQL(query);
     }
 
     @Override
@@ -40,18 +35,18 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public boolean areEmpty (String tableName) {
+    public boolean countTable (String tableName) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         Boolean empty = true;
 
         Cursor cursor = sqLiteDatabase.query(
-                tableName,              // The table to query
-                null,                   // The array of columns to return (pass null to get all)
-                null,                   // The columns for the WHERE clause
-                null,                   // The values for the WHERE clause
-                null,                   // don't group the rows
-                null,                   // don't filter by row groups
-                null                    // don't sort
+                tableName,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
         );
 
         if (cursor.getCount() > 0) {
@@ -63,39 +58,20 @@ public class DBHandler extends SQLiteOpenHelper {
         return empty;
     }
 
-    public boolean checkUsers (String searchField, ArrayList<String> searchValues) {
+    public boolean searchUser (String searchField, String searchValue) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        String selection;
-        String[] selectionArgs = new String[searchValues.size()];
-        String sortOrder = " desc";
+        String[] selectionArgs = {searchValue};
         Boolean exists = false;
-
-        //Set the sort order
-        sortOrder = searchField + sortOrder;
-
-        //Check received search field: if searchField is empty
-        if (searchField.isEmpty()) {
-            selection = "id = ?";
-        } else {
-            selection = searchField + " = ?";
-        }
-
-        //Check received search values: if searchValues contains something
-        if (!searchValues.isEmpty()) {
-            for (int i = 0; i < searchValues.size(); i++) {
-                selectionArgs[i] = searchValues.get(i);
-            }
-        }
 
         //Create the cursor and execute the associated query
         Cursor cursor = sqLiteDatabase.query(
                 "usuarios",        // The table to query
                 null,                   // The array of columns to return (pass null to get all)
-                selection,              // The columns for the WHERE clause
+                searchField,              // The columns for the WHERE clause
                 selectionArgs,          // The values for the WHERE clause
                 null,                   // don't group the rows
                 null,                   // don't filter by row groups
-                sortOrder               // The sort order
+                null                    // The sort order
         );
 
         if (cursor.getCount() > 0) {

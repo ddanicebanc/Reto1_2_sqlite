@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         DBHandler dbhandler = new DBHandler(MainActivity.this);
 
         //If usuarios table is empty, there are no users registered
-        if (dbhandler.areEmpty("usuarios")) {
+        if (dbhandler.countTable("usuarios")) {
             dbhandler.close();
             myIntent = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(myIntent);
