@@ -9,11 +9,16 @@ import android.widget.ImageButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class PantallaPrincipal extends AppCompatActivity {
+import java.io.Serializable;
+
+public class PantallaPrincipal extends AppCompatActivity implements Serializable {
     ImageButton btnCalendar;
+    User user;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
+
+        user = (User) getIntent().getSerializableExtra("cUser");
 
         btnCalendar = findViewById(R.id.btn_calendar);
         btnCalendar.setOnClickListener(new View.OnClickListener() {
@@ -23,6 +28,7 @@ public class PantallaPrincipal extends AppCompatActivity {
                         PantallaPrincipal.this,
                         CalendarActivity.class
                 );
+                myIntent.putExtra("cUser", user);
                 startActivity(myIntent);
             }
         });
