@@ -2,14 +2,15 @@ package com.example.reto_1_2_sqlite;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.Serializable;
+
+public class MainActivity extends AppCompatActivity implements Serializable {
     private Button btnRegister;
     private static Intent myIntent;
     public static boolean usuariosVacios;
@@ -49,7 +50,16 @@ public class MainActivity extends AppCompatActivity {
                         String searchValues = sUser + ";" + sPassword;
 
                         if (dbhandler.checkPassword(searchValues)) {
-                            Log.d("Comprobación contraseña", "Contraseña OK");
+                            User user = dbhandler.loadUser(sUser);
+
+                            myIntent = new Intent(
+                                    MainActivity.this,
+                                    PantallaPrincipal.class
+                            );
+                            myIntent.putExtra("cUser", user);
+                            startActivity(myIntent);
+                        } else {
+                            //TODO AlertDialog: incorrect password
                         }
                     }
                 }
