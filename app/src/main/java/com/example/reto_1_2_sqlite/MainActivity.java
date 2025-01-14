@@ -13,7 +13,6 @@ import java.io.Serializable;
 public class MainActivity extends AppCompatActivity implements Serializable {
     private Button btnRegister;
     private static Intent myIntent;
-    public static boolean usuariosVacios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
