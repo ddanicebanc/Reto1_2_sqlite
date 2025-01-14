@@ -62,7 +62,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public boolean countTable (String tableName) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        Boolean empty = true;
+        boolean empty = true;
 
         Cursor cursor = sqLiteDatabase.query(
                 tableName,
@@ -86,7 +86,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public boolean searchUser (String searchField, String searchValue) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         String[] selectionArgs = {searchValue};
-        Boolean exists = false;
+        boolean exists = false;
 
         //Must have "= ?" to use it in the query
         searchField = searchField + "= ?";
@@ -115,7 +115,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         String[] selectionArgs = searchValue.split(";");
         String selection = "nombre = ? AND contrasenia = ?";
-        Boolean correct = false;
+        boolean correct = false;
 
         Cursor cursor = sqLiteDatabase.query(
                 "usuarios",
