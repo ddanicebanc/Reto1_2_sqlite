@@ -10,13 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class PantallaPrincipal extends AppCompatActivity {
-    ImageButton btnAgenda;
+    ImageButton btnCalendar;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
 
-        btnAgenda = findViewById(R.id.btn_calendar);
-        btnAgenda.setOnClickListener(new View.OnClickListener() {
+        btnCalendar = findViewById(R.id.btn_calendar);
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(
