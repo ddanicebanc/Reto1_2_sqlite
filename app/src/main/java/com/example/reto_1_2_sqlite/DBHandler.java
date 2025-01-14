@@ -17,21 +17,44 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String query = "create table usuarios (" +
+        String query = "create table delegaciones (" +
+                "id integer primary key," +
+                "nombre text)";
+        sqLiteDatabase.execSQL(query);
+
+        query = "create table usuarios (" +
                 "id integer primary key autoincrement," +
                 "nombre text unique," +
                 "contrasenia text," +
-                "delegacion_id integer)";
+                "delegacionId integer," +
+                "foreign key (delegacionId) references delegaciones (id))";
         sqLiteDatabase.execSQL(query);
 
-        query = "create table delegaciones (" +
-                "id integer primary key," +
-                "nombre text)";
+        query = "create table partners (" +
+                "id integer primary key autoincrement," +
+                "nombre text," +
+                "direccion text," +
+                "telefono integer," +
+                "email text," +
+                "usuarioId integer," +
+                "foreign key (usuarioId) references usuarios (id))";
+        sqLiteDatabase.execSQL(query);
+
+        query = "create table visitas (" +
+                "id integer primary key autoincrement," +
+                "usuarioId integer," +
+                "partnerId integer," +
+                "fechaVisita date," +
+                "direccion text," +
+                "foreign key (usuarioId) references usuarios (id)," +
+                "foreign key (partnerId) references partners (id))";
         sqLiteDatabase.execSQL(query);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("drop table if exists visitas");
+        sqLiteDatabase.execSQL("drop table if exists partners");
         sqLiteDatabase.execSQL("drop table if exists usuarios");
         sqLiteDatabase.execSQL("drop table if exists delegaciones");
         onCreate(sqLiteDatabase);
