@@ -139,6 +139,8 @@ public class DBHandler extends SQLiteOpenHelper {
             user = new User(sUsername, id);
         }
 
+        cursor.close();
+
         return user;
     }
 
