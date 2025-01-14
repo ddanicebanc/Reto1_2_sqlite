@@ -113,6 +113,35 @@ public class DBHandler extends SQLiteOpenHelper {
         return correct;
     }
 
+    public User loadUser (String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] selectionArgs = {username};
+        String sUsername = "";
+        int id = -1;
+        User user = null;
+
+        Cursor cursor = db.query(
+                "usuarios",
+                null,
+                "nombre = ?",
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        if (cursor.getCount() == 1) {
+            while (cursor.moveToNext()) {
+                sUsername = cursor.getString(1);
+                id = cursor.getInt(0);
+            }
+
+            user = new User(sUsername, id);
+        }
+
+        return user;
+    }
+
     public void insertData (String tableName, ArrayList<String> columns, ArrayList<String> columnValues) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
