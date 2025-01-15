@@ -60,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
             cmbDelegations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    selectedDelegationIndex = position;
+                    selectedDelegationIndex = delegationIds.get(position);
                 }
 
                 @Override
