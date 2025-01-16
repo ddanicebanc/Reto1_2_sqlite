@@ -29,6 +29,26 @@ public class DBHandler extends SQLiteOpenHelper {
                 "delegacionId integer," +
                 "foreign key (delegacionId) references delegaciones (id))";
         sqLiteDatabase.execSQL(query);
+
+        query = "create table partners (" +
+                "id integer primary key autoincrement," +
+                "nombre text," +
+                "direccion text," +
+                "telefono integer," +
+                "email text," +
+                "usuarioId integer," +
+                "foreign key (usuarioId) references usuarios (id))";
+        sqLiteDatabase.execSQL(query);
+
+        query = "create table visitas (" +
+                "id integer primary key autoincrement," +
+                "usuarioId integer," +
+                "partnerId integer," +
+                "fechaVisita date," +
+                "direccion text," +
+                "foreign key (usuarioId) references usuarios (id)," +
+                "foreign key (partnerId) references partners (id))";
+        sqLiteDatabase.execSQL(query);
     }
 
     @Override
