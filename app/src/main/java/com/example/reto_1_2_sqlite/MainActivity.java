@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 } else {
                     DBHandler handler = new DBHandler(MainActivity.this);
 
-                    if (dbhandler.searchUser("nombre", sUser)) {
+                    if (dbhandler.searchByName("nombre", "nombre", sUser)) {
                         EditText edtPassword = findViewById(R.id.edt_psswd);
                         String sPassword = edtPassword.getText().toString();
 
