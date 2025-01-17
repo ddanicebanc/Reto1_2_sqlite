@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return empty;
     }
 
-    public boolean searchUser (String searchField, String searchValue) {
+    public boolean searchByName (String tableName, String searchField, String searchValue) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         String[] selectionArgs = {searchValue};
         boolean exists = false;
@@ -95,7 +96,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         //Create the cursor and execute the associated query
         Cursor cursor = sqLiteDatabase.query(
-                "usuarios",       // The table to query
+                tableName,       // The table to query
                 null,                   // The array of columns to return (pass null to get all)
                 searchField,            // The columns for the WHERE clause
                 selectionArgs,          // The values for the WHERE clause
@@ -219,15 +220,20 @@ public class DBHandler extends SQLiteOpenHelper {
         return visitas;
     }
 
-    public void insertData (String tableName, ArrayList<String> columns, ArrayList<String> columnValues) {
+    public boolean insertData (String tableName, ArrayList<String> columns, ArrayList<String> columnValues) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        boolean error = false;
 
         //TODO Check columns[] and columnValues[] size
         for (int i = 0; i < columns.size(); i++) {
             values.put(columns.get(i), columnValues.get(i));
         }
 
-        db.insert(tableName, null, values);
+        if (db.insert(tableName, null, values) == -1) {
+            error = true;
+        }
+
+        return error;
     }
 }
