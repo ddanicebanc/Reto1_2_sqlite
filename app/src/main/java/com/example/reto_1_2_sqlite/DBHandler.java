@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
@@ -165,6 +167,56 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.close();
 
         return user;
+    }
+
+    public ArrayList<Visita> getArrayVisitas (User usuario) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Visita> visitas = new ArrayList<>();
+        String query = "select * from visitas";
+        Cursor cursor;
+        int visitaId, usuarioId, partnerId, activeUserId;
+        String fechaVisita, direccion, partnerName = "", fechaHoy;
+        LocalDate today = LocalDate.now();
+        fechaHoy = today.toString().replace("-","/");
+
+        activeUserId = usuario.getId();
+
+        query = query + " where usuarioId = " + String.valueOf(activeUserId) +
+                " and fechaVisita >= '" + fechaHoy + "'";
+
+        cursor = db.rawQuery(query, null, null);
+
+        while (cursor.moveToNext()) {
+            visitaId = cursor.getInt(0);
+            usuarioId = cursor.getInt(1);
+            partnerId = cursor.getInt(2);
+            fechaVisita = cursor.getString(3);
+            direccion = cursor.getString(4);
+
+            String partnersQuery = "select nombre from partners where id = " + partnerId;
+
+            Cursor cursorPartners = db.rawQuery(partnersQuery, null, null);
+
+            if (cursorPartners.getCount() == 1) {
+                while (cursorPartners.moveToNext()) {
+                    partnerName = cursorPartners.getString(0);
+                }
+            }
+
+            cursorPartners.close();
+
+            visitas.add(new Visita(
+                    visitaId,
+                    usuarioId,
+                    partnerName,
+                    fechaVisita,
+                    direccion
+            ));
+        }
+
+        cursor.close();
+
+        return visitas;
     }
 
     public void insertData (String tableName, ArrayList<String> columns, ArrayList<String> columnValues) {
