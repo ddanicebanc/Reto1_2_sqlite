@@ -3,6 +3,7 @@ package com.example.reto_1_2_sqlite;
 import static com.example.reto_1_2_sqlite.RegisterActivity.delegationIds;
 import static com.example.reto_1_2_sqlite.RegisterActivity.delegationNames;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,6 +51,11 @@ public class RegisterActivity extends AppCompatActivity {
         //Continue with UI load after spinner data retrieval
         //If loadThread is dead
         if (!loadThread.isAlive()) {
+            ArrayList<String> columnas = new ArrayList<>();
+            columnas.add("id");
+            columnas.add("nombre");
+            //TODO Terminar el registro de las delegaciones en la bbdd sqlite
+
             Spinner cmbDelegations = findViewById(R.id.cmbDelegation);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     this,
@@ -73,7 +79,6 @@ public class RegisterActivity extends AppCompatActivity {
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DBHandler dbHandler = new DBHandler(RegisterActivity.this);
                     String sUser;
 
                     edtUser = findViewById(R.id.edt_usr);
@@ -85,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
                         //Normal alert dialog
                     } else {
                         //Check if the username is already introduced
-                        if (dbHandler.searchUser("nombre", sUser)) {
+                        if (dbHandler.searchByName("nombre", "nombre", sUser)) {
                             //TODO AlertDialog.builder
                             //Normal alert dialog
                             Log.d("Prueba", "El usuario ya existe");
