@@ -3,14 +3,14 @@ package com.example.reto_1_2_sqlite;
 public class Visita {
     private int id;
     private int usuarioId;
-    private int partnerId;
+    private String partnerName;
     private String fechaVisita;
     private String direccion;
 
-    public Visita (int id, int usuarioId, int partnerId, String fechaVisita, String direccion) {
+    public Visita (int id, int usuarioId, String partnerName, String fechaVisita, String direccion) {
         this.id = id;
         this.usuarioId = usuarioId;
-        this.partnerId = partnerId;
+        this.partnerName = partnerName;
         this.fechaVisita = fechaVisita;
         this.direccion = direccion;
     }
@@ -31,12 +31,12 @@ public class Visita {
         this.usuarioId = usuarioId;
     }
 
-    public int getPartnerId() {
-        return partnerId;
+    public String getPartnerName() {
+        return partnerName;
     }
 
-    public void setPartnerId(int partnerId) {
-        this.partnerId = partnerId;
+    public void setPartnerId(String partnerName) {
+        this.partnerName = partnerName;
     }
 
     public String getFechaVisita() {
