@@ -185,7 +185,7 @@ public class DBHandler extends SQLiteOpenHelper {
         activeUserId = usuario.getId();
 
         query = query + " where usuarioId = " + String.valueOf(activeUserId) +
-                " and fechaVisita >= '" + fechaHoy + "'";
+                " and fechaVisita >= '" + fechaHoy + "' order by fechaVisita asc";
 
         cursor = db.rawQuery(query, null, null);
 
@@ -220,6 +220,22 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.close();
 
         return visitas;
+    }
+
+    public ArrayList<String> getSearchFieldArray (String tableName, String searchColumn) {
+        ArrayList<String> searchColumnArray = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select "+ searchColumn +" from "+ tableName;
+
+        Cursor c = db.rawQuery(query, null, null);
+
+        while (c.moveToNext()) {
+            searchColumnArray.add(c.getString(0));
+        }
+
+        c.close();
+
+        return searchColumnArray;
     }
 
     public boolean insertData (String tableName, ArrayList<String> columns, ArrayList<String> columnValues) {
