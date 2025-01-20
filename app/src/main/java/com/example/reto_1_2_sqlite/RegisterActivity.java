@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class RegisterActivity extends AppCompatActivity {
     private EditText edtUser, edtPassword;
     public static ArrayList<String> delegationNames = new ArrayList<>();
-    public static ArrayList<Integer> delegationIds = new ArrayList<>();
+    public static ArrayList<String> delegationIds = new ArrayList<>();
     public int selectedDelegationIndex;
 
     @Override
@@ -43,9 +43,32 @@ public class RegisterActivity extends AppCompatActivity {
                 loadThread.join();
 
                 //dbHandler.insertData("delegaciones");
+                //Inserción de las delegaciones en sqlite para evitar la conexión cada vez que se
+                //realiza el registro
+                ArrayList<String> columns = new ArrayList<>();
+                ArrayList<String> data = new ArrayList<>();
+
+                for (int i = 0; i < delegationNames.size(); i++) {
+                    columns.add("id");
+                    columns.add("nombre");
+                    data.add(String.valueOf(delegationIds.get(i)));
+                    data.add(delegationNames.get(i));
+
+                    dbHandler.insertData("delegaciones", columns, data);
+
+                    columns.clear();
+                    data.clear();
+                }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+        } else {
+            delegationNames = dbHandler.getSearchFieldArray(
+                    "delegaciones", "nombre");
+            delegationIds = dbHandler.getSearchFieldArray(
+                    "delegaciones",
+                    "id"
+            );
         }
 
         //Continue with UI load after spinner data retrieval
@@ -66,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
             cmbDelegations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    selectedDelegationIndex = delegationIds.get(position);
+                    selectedDelegationIndex = Integer.parseInt(delegationIds.get(position));
                 }
 
                 @Override
@@ -90,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                         //Normal alert dialog
                     } else {
                         //Check if the username is already introduced
-                        if (dbHandler.searchByName("nombre", "nombre", sUser)) {
+                        if (dbHandler.searchByName("usuarios", "nombre", sUser)) {
                             //TODO AlertDialog.builder
                             //Normal alert dialog
                             Log.d("Prueba", "El usuario ya existe");
@@ -137,7 +160,7 @@ class MysqlConnection extends Thread {
         delegationNames.clear();
 
         //Esta es la dirección en casa en el momento de prueba
-        url = "jdbc:mysql://192.168.21.193:3306/db_delegaciones";
+        url = "jdbc:mysql://192.168.1.138:3306/db_delegaciones";
 
         try {
             Connection conn = DriverManager.getConnection(url, "daniroot", "dani");
@@ -149,7 +172,7 @@ class MysqlConnection extends Thread {
 
             while (result.next()) {
                 delegationNames.add(result.getString("nombre"));
-                delegationIds.add(result.getInt("id_delegacion"));
+                delegationIds.add(result.getString("id_delegacion"));
             }
 
             conn.close();
