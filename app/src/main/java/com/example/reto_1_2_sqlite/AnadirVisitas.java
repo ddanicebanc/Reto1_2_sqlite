@@ -1,5 +1,6 @@
 package com.example.reto_1_2_sqlite;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -53,10 +54,10 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
                     datos.add(String.valueOf(user.getId()));
 
                     columnas.add("fechaVisita");
-                    datos.add("fecha");
+                    datos.add(editFecha.getText().toString());
 
                     columnas.add("direccion");
-                    datos.add("direccion");
+                    datos.add(editDireccion.getText().toString());
 
                     handler.insertData("visitas", columnas, datos);
                 }
@@ -79,14 +80,24 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
         } else {
             //Query para comprobar que el nombre del partner introducido existe
             if (!handler.searchByName("partners", "nombre", nombre)) {
+                Toast.makeText(this,
+                        "El campo 'El partner seleccionado no existe.",
+                        Toast.LENGTH_LONG)
+                        .show();
                 validado = false;
             }
             if (!isFechaValida(fecha)) {
-                Toast.makeText(this, "El campo 'Fecha' debe contener una fecha válida (dd/mm/yyyy)", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,
+                        "El campo 'Fecha' debe contener una fecha válida (dd/mm/yyyy)",
+                        Toast.LENGTH_LONG)
+                        .show();
                 validado = false;
             }
             if (!direccion.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]+")) {
-                Toast.makeText(this, "El campo 'Dirección' solo puede contener letras y números", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,
+                        "El campo 'Dirección' solo puede contener letras y números",
+                        Toast.LENGTH_LONG)
+                        .show();
                 validado = false;
             }
         }
