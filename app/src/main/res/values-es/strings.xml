@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Reto_1_2_sqlite</string>
     <string name="btn_registrar">Registrarse</string>
     <string name="btn_login">Iniciar sesión</string>
     <string name="text_pass">Contraseña:</string>
     <string name="text_usuario">Usuario:</string>
     <string name="btn_guardar">Guardar</string>
     <string name="spinner">Delegación:</string>
+    <string name="add">Aádir</string>
 </resources>
