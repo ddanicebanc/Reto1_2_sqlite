@@ -1,7 +1,6 @@
 package com.example.reto_1_2_sqlite;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +65,7 @@ public class VisitasAdapter extends RecyclerView.Adapter<VisitasAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         //Creamos la vista de cada item a partir de nuestro layout
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.visitas_row, viewGroup, false);
+                .inflate(R.layout.layout_visits_row, viewGroup, false);
 
         return new ViewHolder(view);
     }
