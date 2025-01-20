@@ -16,6 +16,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public DBHandler (Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.rawQuery("pragma foreign_keys = on", null, null);
     }
 
     @Override
