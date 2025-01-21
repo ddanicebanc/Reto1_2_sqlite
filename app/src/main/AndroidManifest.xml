@@ -36,6 +36,9 @@
         <activity
             android:name=".AnadirVisitas">
         </activity>
+        <activity
+            android:name=".AniadirPartners">
+        </activity>
     </application>
 
 </manifest>
