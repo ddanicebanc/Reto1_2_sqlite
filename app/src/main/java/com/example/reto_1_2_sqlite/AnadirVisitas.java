@@ -1,10 +1,12 @@
 package com.example.reto_1_2_sqlite;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,16 +14,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class AnadirVisitas extends AppCompatActivity implements Serializable {
     public static String nombre, fecha, direccion;
-
-    private EditText editNombreVista, editFecha, editDireccion;
-    private Button guardarButton;
+    private EditText editFecha, editDireccion;
+    private Spinner spnNombrePartners;
     DBHandler handler;
+    public static ArrayList<String> partnerNames = new ArrayList<>();
+    public static ArrayList<String> partnerIds = new ArrayList<>();
+    public int selectedPartnerIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +35,32 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
         handler = new DBHandler(AnadirVisitas.this);
 
         // Inicializar los campos y el botón
-        editNombreVista = findViewById(R.id.editNombreVista);
         editFecha = findViewById(R.id.editFecha);
         editDireccion = findViewById(R.id.editDireccion);
-        guardarButton = findViewById(R.id.Guardar);
+        Button guardarButton = findViewById(R.id.Guardar);
+
+        //Preparación de los datos para el spinner
+        partnerNames = handler.getSearchFieldArray("partners","nombre");
+        partnerIds = handler.getSearchFieldArray("partners", "id");
+
+        spnNombrePartners = findViewById(R.id.spnNombrePartner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                partnerNames
+        );
+        spnNombrePartners.setAdapter(adapter);
+        spnNombrePartners.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedPartnerIndex = Integer.parseInt(partnerIds.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // Configurar el listener del botón
         guardarButton.setOnClickListener(new View.OnClickListener() {
@@ -49,7 +74,7 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
                     datos.add(String.valueOf(user.getId()));
 
                     columnas.add("partnerId");
-                    datos.add(String.valueOf(user.getId()));
+                    datos.add(String.valueOf(selectedPartnerIndex));
 
                     columnas.add("fechaVisita");
                     //Para dar el formato adecuado a la fecha introducida
@@ -76,23 +101,14 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
 
     private boolean validarCampos() {
         //TODO Cambiar toast por AlertDialog
-        nombre = editNombreVista.getText().toString().trim();
         fecha = editFecha.getText().toString().trim();
         direccion = editDireccion.getText().toString().trim();
         boolean validado = true;
 
-        if (TextUtils.isEmpty(nombre) || TextUtils.isEmpty(fecha) || TextUtils.isEmpty(direccion)) {
+        if (fecha.isEmpty() || direccion.isEmpty()) {
             Toast.makeText(this, "Todos los campos deben estar llenos", Toast.LENGTH_LONG).show();
             validado = false;
         } else {
-            //Query para comprobar que el nombre del partner introducido existe
-            if (!handler.searchByName("partners", "nombre", nombre)) {
-                Toast.makeText(this,
-                        "El campo 'El partner seleccionado no existe.",
-                        Toast.LENGTH_LONG)
-                        .show();
-                validado = false;
-            }
             if (!isFechaValida(fecha)) {
                 Toast.makeText(this,
                         "El campo 'Fecha' debe contener una fecha válida (dd/mm/yyyy)",
