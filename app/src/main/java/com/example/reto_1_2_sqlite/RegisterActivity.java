@@ -3,7 +3,6 @@ package com.example.reto_1_2_sqlite;
 import static com.example.reto_1_2_sqlite.RegisterActivity.delegationIds;
 import static com.example.reto_1_2_sqlite.RegisterActivity.delegationNames;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -154,13 +153,12 @@ public class RegisterActivity extends AppCompatActivity {
 
 class MysqlConnection extends Thread {
     public void run () {
-        //TODO ¿Cómo puedo tener siempre la misma dirección IP?
         String url;
         delegationIds.clear();
         delegationNames.clear();
 
         //Esta es la dirección en casa en el momento de prueba
-        url = "jdbc:mysql://192.168.1.138:3306/db_delegaciones";
+        url = "jdbc:mysql://192.168.21.193:3306/db_delegaciones";
 
         try {
             Connection conn = DriverManager.getConnection(url, "daniroot", "dani");
