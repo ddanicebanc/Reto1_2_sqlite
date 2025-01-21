@@ -6,5 +6,11 @@
     <string name="text_usuario">Usuario:</string>
     <string name="btn_guardar">Guardar</string>
     <string name="spinner">Delegación:</string>
-    <string name="add">Aádir</string>
+    <string name="add">Añadir</string>
+    <string name="name">Nombre</string>
+    <string name="address">Dirección:</string>
+    <string name="population">Población:</string>
+    <string name="zip_code">Código Postal:</string>
+    <string name="tlfn">Teléfono:</string>
+    <string name="email">Correo electrónico:</string>
 </resources>
