@@ -192,10 +192,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return user;
     }
 
-    public ArrayList<Visita> getArrayVisitas (User usuario) {
+    public ArrayList<Visita> getArrayVisitas (User usuario, boolean historico) {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Visita> visitas = new ArrayList<>();
-        String query = "select * from visitas";
+        String query;
         Cursor cursor;
         int visitaId, usuarioId, partnerId, activeUserId;
         String fechaVisita, direccion, partnerName = "", fechaHoy;
@@ -204,8 +204,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
         activeUserId = usuario.getId();
 
-        query = query + " where usuarioId = " + String.valueOf(activeUserId) +
-                " and fechaVisita >= '" + fechaHoy + "' order by fechaVisita asc";
+        query = "select * from visitas where usuarioId = " + String.valueOf(activeUserId);
+
+        if (historico == false) {
+            query = query + " and fechaVisita >= '" + fechaHoy + "'";
+        }
+
+        query = query + " order by fechaVisita asc";
 
         cursor = db.rawQuery(query, null, null);
 
