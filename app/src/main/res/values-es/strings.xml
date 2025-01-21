@@ -13,4 +13,5 @@
     <string name="zip_code">Código Postal:</string>
     <string name="tlfn">Teléfono:</string>
     <string name="email">Correo electrónico:</string>
+    <string name="historic">Mostrar visitas antiguas</string>
 </resources>

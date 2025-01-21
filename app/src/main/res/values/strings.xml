@@ -13,4 +13,5 @@
     <string name="zip_code">Zip Code:</string>
     <string name="tlfn">Phone Number:</string>
     <string name="email">Email:</string>
+    <string name="historic">Show previous visits</string>
 </resources>
