@@ -2,8 +2,9 @@ package com.example.reto_1_2_sqlite;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,21 +23,40 @@ public class CalendarActivity extends AppCompatActivity implements Serializable 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_pantalla_calendario);
+        boolean check = false;
+        Intent startIntent = getIntent();
+        Bundle extras = startIntent.getExtras();
 
         //Recuperamos la información del usuario registrado
         user = (User) getIntent().getSerializableExtra("cUser");
 
+        CheckBox cboxHistorico = findViewById(R.id.cboxHistorico);
+        if (extras != null) {
+            cboxHistorico.setChecked(extras.getBoolean("check"));
+        }
+        cboxHistorico.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    startIntent.putExtra("check", true);
+                    startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    recreate();
+                } else {
+                    startIntent.putExtra("check", false);
+                    startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    recreate();
+                }
+            }
+        });
+
         //Obtenemos la referencia al RecyclerView
         RecyclerView rclView = findViewById(R.id.rcVisitas);
-
-        //Recuperamos el User que ha iniciado sesión
-        user = (User) getIntent().getSerializableExtra("cUser");
 
         //Creamos el gestor para la conexión a la base de datos sqlite
         DBHandler handler = new DBHandler(this);
 
         //Recuperamos las visitas del usuario conectado de la base de datos
-        ArrayList<Visita> visitas = handler.getArrayVisitas(user);
+        ArrayList<Visita> visitas = handler.getArrayVisitas(user, cboxHistorico.isChecked());
         handler.close();
 
         //Creamos y establecemos el adaptador para la lista de visitas
