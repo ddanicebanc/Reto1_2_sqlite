@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.Serializable;
 
 public class PantallaPrincipal extends AppCompatActivity implements Serializable {
-    ImageButton btnCalendar;
+    ImageButton btnCalendar, btnPartners;
     User user;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +28,19 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
                 Intent myIntent = new Intent(
                         PantallaPrincipal.this,
                         CalendarActivity.class
+                );
+                myIntent.putExtra("cUser", user);
+                startActivity(myIntent);
+            }
+        });
+
+        btnPartners = findViewById(R.id.btn_partners);
+        btnPartners.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(
+                        PantallaPrincipal.this,
+                        AniadirPartners.class
                 );
                 myIntent.putExtra("cUser", user);
                 startActivity(myIntent);
