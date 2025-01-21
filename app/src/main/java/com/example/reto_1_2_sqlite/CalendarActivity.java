@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,9 +16,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class CalendarActivity extends AppCompatActivity implements Serializable {
     public User user;
+    public DBHandler handler;
+    public TextView txvTitulo;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,6 +34,14 @@ public class CalendarActivity extends AppCompatActivity implements Serializable 
         //Recuperamos la información del usuario registrado
         user = (User) getIntent().getSerializableExtra("cUser");
 
+        //Creamos el gestor para la conexión a la base de datos sqlite
+        handler = new DBHandler(this);
+
+        //Asignación del id a los elementos en pantalla
+        txvTitulo = findViewById(R.id.txvTituloVisitas);
+
+        cargarTitulo();
+
         CheckBox cboxHistorico = findViewById(R.id.cboxHistorico);
         if (extras != null) {
             cboxHistorico.setChecked(extras.getBoolean("check"));
@@ -37,9 +49,11 @@ public class CalendarActivity extends AppCompatActivity implements Serializable 
         cboxHistorico.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //Relanzamos la actividad con un nuevo extra en la intención
                 if (isChecked) {
                     startIntent.putExtra("check", true);
                     startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    //Destruye la actividad actual y lanza la nueva manteniendo la intención
                     recreate();
                 } else {
                     startIntent.putExtra("check", false);
@@ -51,9 +65,6 @@ public class CalendarActivity extends AppCompatActivity implements Serializable 
 
         //Obtenemos la referencia al RecyclerView
         RecyclerView rclView = findViewById(R.id.rcVisitas);
-
-        //Creamos el gestor para la conexión a la base de datos sqlite
-        DBHandler handler = new DBHandler(this);
 
         //Recuperamos las visitas del usuario conectado de la base de datos
         ArrayList<Visita> visitas = handler.getArrayVisitas(user, cboxHistorico.isChecked());
@@ -87,5 +98,19 @@ public class CalendarActivity extends AppCompatActivity implements Serializable 
         super.onRestart();
         finish();
         startActivity(getIntent());
+    }
+
+    public void cargarTitulo () {
+        String region = Locale.getDefault().toString();
+        String titulo;
+        String userName = user.getName();
+
+        if (region.startsWith("es_")) {
+            titulo = "Agenda de " + userName.toUpperCase();
+        } else {
+            titulo = userName.toUpperCase() + "'s agenda";
+        }
+
+        txvTitulo.setText(titulo);
     }
 }
