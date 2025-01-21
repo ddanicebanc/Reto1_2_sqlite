@@ -1,6 +1,5 @@
 package com.example.reto_1_2_sqlite;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -8,11 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,11 +57,10 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
                     datos.add(editDireccion.getText().toString());
 
                     handler.insertData("visitas", columnas, datos);
+                    finish();
                 }
             }
         });
-
-        //Llamada al botón de guardado
     }
 
     private boolean validarCampos() {
