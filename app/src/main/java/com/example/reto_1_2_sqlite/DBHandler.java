@@ -39,6 +39,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 "id integer primary key autoincrement," +
                 "nombre text," +
                 "direccion text," +
+                "poblacion text," +
                 "telefono integer," +
                 "email text," +
                 "usuarioId integer," +
@@ -141,6 +142,25 @@ public class DBHandler extends SQLiteOpenHelper {
         return correct;
     }
 
+    public boolean checkMatchingStringField (String tableName, String searchField, String searchValue) {
+        boolean matches = false;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query;
+
+        query = "select " + searchField +
+                " from " + tableName +
+                " where upper(" + searchField + ") = '" + searchValue.toUpperCase() + "'";
+
+        Cursor c = db.rawQuery(query, null, null);
+        if (c.getCount() == 1) {
+            matches = true;
+        }
+
+        c.close();
+
+        return matches;
+    }
+
     public User loadUser (String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] selectionArgs = {username};
@@ -236,6 +256,28 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
 
         return searchColumnArray;
+    }
+
+    public String getSearchField (String tableName, String filterColumn, String filterValue, String searchColumn) {
+        String returnValue = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select "+ searchColumn +
+                " from " + tableName +
+                " where " + filterColumn + " = " + "'" + filterValue + "'";
+
+        Cursor c = db.rawQuery(query, null, null);
+
+        if (c.getCount() == 1) {
+            while (c.moveToNext()) {
+                returnValue = c.getString(0);
+            }
+        } else {
+            returnValue = "error";
+        }
+
+        c.close();
+
+        return returnValue;
     }
 
     public boolean insertData (String tableName, ArrayList<String> columns, ArrayList<String> columnValues) {
