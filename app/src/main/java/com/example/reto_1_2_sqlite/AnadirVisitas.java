@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -51,7 +52,17 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
                     datos.add(String.valueOf(user.getId()));
 
                     columnas.add("fechaVisita");
-                    datos.add(editFecha.getText().toString());
+                    //Para dar el formato adecuado a la fecha introducida
+                    String[] partesFecha = editFecha.getText().toString().split("/");
+                    fecha = "";
+                    for (int i = partesFecha.length - 1; i >= 0; i--) {
+                        if (i != 0) {
+                            fecha = fecha + partesFecha[i] + "-";
+                        } else {
+                            fecha = fecha + partesFecha[i];
+                        }
+                    }
+                    datos.add(fecha);
 
                     columnas.add("direccion");
                     datos.add(editDireccion.getText().toString());
