@@ -200,7 +200,7 @@ public class DBHandler extends SQLiteOpenHelper {
         int visitaId, usuarioId, partnerId, activeUserId;
         String fechaVisita, direccion, partnerName = "", fechaHoy;
         LocalDate today = LocalDate.now();
-        fechaHoy = today.toString().replace("-","/");
+        fechaHoy = today.toString();
 
         activeUserId = usuario.getId();
 
@@ -215,6 +215,17 @@ public class DBHandler extends SQLiteOpenHelper {
             partnerId = cursor.getInt(2);
             fechaVisita = cursor.getString(3);
             direccion = cursor.getString(4);
+
+            //Formatear la fecha de visita para la correcta visualización
+            String[] partesFecha = fechaVisita.split("-");
+            fechaVisita = "";
+            for (int i = partesFecha.length - 1; i >= 0; i--) {
+                if (i != 0) {
+                    fechaVisita = fechaVisita + partesFecha[i] + "-";
+                } else {
+                    fechaVisita = fechaVisita + partesFecha[i];
+                }
+            }
 
             String partnersQuery = "select nombre from partners where id = " + partnerId;
 
