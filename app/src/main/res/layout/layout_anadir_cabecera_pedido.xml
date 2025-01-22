@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/txvTituloCabecera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
+        android:text="@string/orderHeader"
+        android:layout_marginTop="20dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.525"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txvTituloCabecera"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!-- FECHA DE PEDIDO -->
+            <TextView
+                android:id="@+id/txvOderDate"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="@string/oderDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/edtOrderDate"
+                app:layout_constraintBottom_toBottomOf="@id/edtOrderDate"
+                android:gravity="center_vertical"/>
+
+            <EditText
+                android:id="@+id/edtOrderDate"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                app:layout_constraintStart_toEndOf="@+id/txvPaymentDate"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="16dp"/>
+
+            <!-- PARTNER -->
+            <TextView
+                android:id="@+id/txvPartnerName"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="@string/partner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/spnNombrePartner"
+                app:layout_constraintBottom_toBottomOf="@id/spnNombrePartner"
+                android:gravity="center_vertical"/>
+
+            <Spinner
+                android:id="@+id/spnNombrePartner"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/edtOrderDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp"/>
+
+            <!-- FECHA DE PAGO -->
+            <TextView
+                android:id="@+id/txvPaymentDate"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="@string/paymentDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/edtPaymentDate"
+                app:layout_constraintBottom_toBottomOf="@id/edtPaymentDate"
+                android:gravity="center_vertical" />
+
+            <EditText
+                android:id="@+id/edtPaymentDate"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:hint="dd/mm/yyy"
+                app:layout_constraintTop_toBottomOf="@id/spnNombrePartner"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp"/>
+
+            <!-- FECHA DE ENVÍO -->
+            <TextView
+                android:id="@+id/txvShippingDate"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="@string/shippingDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/edtShippingDate"
+                app:layout_constraintBottom_toBottomOf="@id/edtShippingDate"
+                android:gravity="center_vertical"/>
+
+            <EditText
+                android:id="@+id/edtShippingDate"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:hint="dd/mm/yyy"
+                app:layout_constraintTop_toBottomOf="@id/edtPaymentDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="30dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
