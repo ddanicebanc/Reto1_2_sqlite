@@ -41,7 +41,15 @@
         </activity>
         <activity
             android:name=".ConsultaPartners">
-
+        </activity>
+        <activity
+            android:name=".ConsultaPedidos">
+        </activity>
+        <activity
+            android:name=".AnadirCabeceraPedido">
+        </activity>
+        <activity
+            android:name=".AnadirLineasPedido">
         </activity>
     </application>
 
