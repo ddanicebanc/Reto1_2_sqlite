@@ -259,13 +259,20 @@ public class DBHandler extends SQLiteOpenHelper {
         return visitas;
     }
 
-    public ArrayList<Partner> getArrayPartners (User user) {
+    public ArrayList<Partner> getArrayPartners (User user, int partnerId) {
         ArrayList<Partner> partners = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "select * from partners where usuarioId = " + user.getId();
         int id,telefono,usuarioId;
         String nombre,direccion,poblacion,email;
+
+
+        if (partnerId!= -1 ){
+            query=query + " and id = "+partnerId;
+        }
+
         Cursor c = db.rawQuery(query, null, null);
+
 
         while (c.moveToNext()) {
             id=c.getInt(0);
