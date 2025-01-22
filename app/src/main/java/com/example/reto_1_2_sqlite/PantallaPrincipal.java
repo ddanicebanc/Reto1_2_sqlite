@@ -40,7 +40,7 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
             public void onClick(View view) {
                 Intent myIntent = new Intent(
                         PantallaPrincipal.this,
-                        AniadirPartners.class
+                        ConsultaPartners.class
                 );
                 myIntent.putExtra("cUser", user);
                 startActivity(myIntent);
