@@ -1,6 +1,8 @@
 package com.example.reto_1_2_sqlite;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -23,12 +25,17 @@ import java.util.ArrayList;
 public class ConsultaPartners extends AppCompatActivity implements Serializable {
     public User user;
     public DBHandler handler;
+    public EditText editIdPartner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.layout_consulta_partners);
+        Intent startIntent = getIntent();
+        Bundle extras = startIntent.getExtras();
+        editIdPartner = findViewById(R.id.editIdPartner);
+        ArrayList<Partner> partners= new ArrayList<>();
 
         //Recuperamos la información del usuario registrado
         user = (User) getIntent().getSerializableExtra("cUser");
@@ -43,11 +50,23 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
             return insets;
         });
 
+        if (extras != null){
+            int partnerId=extras.getInt("partnerId");
+            if (partnerId==0){
+                partnerId=-1;
+            }else{
+                editIdPartner.setText(String.valueOf(extras.getInt("partnerId")));
+            }
+            partners = handler.getArrayPartners(user,partnerId);
+
+        }else{
+            partners = handler.getArrayPartners(user,-1);
+        }
+
         //Referencia de recycleview
         RecyclerView rclPartner = findViewById(R.id.recyclerPartners);
 
         //Recuperamos los partners del ususario conectado
-        ArrayList<Partner> partners = handler.getArrayPartners(user);
         handler.close();
 
         //Creamos y establecemos el adaptador para la lista de visitas
@@ -57,12 +76,21 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
 
         // Referencia al botón y configuración del evento click
         Button validarButton = findViewById(R.id.buttonValidar);
-        validarButton.setOnClickListener(v -> validarIdPartner());
+        validarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (validarIdPartner()==true){
+                    startIntent.putExtra("partnerId", Integer.parseInt(editIdPartner.getText().toString()));
+                    startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    recreate();
+                }
+            }
+        });
     }
 
-    private void validarIdPartner() {
+    private boolean validarIdPartner() {
         // Referencia al EditText del ID
-        EditText editIdPartner = findViewById(R.id.editIdPartner);
+        editIdPartner = findViewById(R.id.editIdPartner);
 
         // Obtener el valor ingresado
         String idPartner = editIdPartner.getText().toString().trim();
@@ -70,13 +98,15 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
         // Validaciones
         if (idPartner.isEmpty()) {
             Toast.makeText(this, "El campo 'ID_Partner' no puede estar vacío", Toast.LENGTH_LONG).show();
-            return;
+            return false;
         }
 
         if (!idPartner.matches("\\d+")) {
             Toast.makeText(this, "El campo 'ID_Partner' solo puede contener números", Toast.LENGTH_LONG).show();
-            return;
+            return false;
         }
+
+        return true;
     }
 }
 
