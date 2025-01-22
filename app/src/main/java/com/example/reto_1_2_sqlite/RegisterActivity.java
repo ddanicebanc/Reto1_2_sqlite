@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class RegisterActivity extends AppCompatActivity {
     private EditText edtUser, edtPassword;
     public static ArrayList<String> delegationNames = new ArrayList<>();
-    public static ArrayList<Integer> delegationIds = new ArrayList<>();
+    public static ArrayList<String> delegationIds = new ArrayList<>();
     public int selectedDelegationIndex;
 
     @Override
@@ -42,14 +42,42 @@ public class RegisterActivity extends AppCompatActivity {
                 loadThread.join();
 
                 //dbHandler.insertData("delegaciones");
+                //Inserción de las delegaciones en sqlite para evitar la conexión cada vez que se
+                //realiza el registro
+                ArrayList<String> columns = new ArrayList<>();
+                ArrayList<String> data = new ArrayList<>();
+
+                for (int i = 0; i < delegationNames.size(); i++) {
+                    columns.add("id");
+                    columns.add("nombre");
+                    data.add(String.valueOf(delegationIds.get(i)));
+                    data.add(delegationNames.get(i));
+
+                    dbHandler.insertData("delegaciones", columns, data);
+
+                    columns.clear();
+                    data.clear();
+                }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+        } else {
+            delegationNames = dbHandler.getSearchFieldArray(
+                    "delegaciones", "nombre");
+            delegationIds = dbHandler.getSearchFieldArray(
+                    "delegaciones",
+                    "id"
+            );
         }
 
         //Continue with UI load after spinner data retrieval
         //If loadThread is dead
         if (!loadThread.isAlive()) {
+            ArrayList<String> columnas = new ArrayList<>();
+            columnas.add("id");
+            columnas.add("nombre");
+            //TODO Terminar el registro de las delegaciones en la bbdd sqlite
+
             Spinner cmbDelegations = findViewById(R.id.cmbDelegation);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     this,
@@ -60,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
             cmbDelegations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    selectedDelegationIndex = position;
+                    selectedDelegationIndex = Integer.parseInt(delegationIds.get(position));
                 }
 
                 @Override
@@ -73,7 +101,6 @@ public class RegisterActivity extends AppCompatActivity {
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DBHandler dbHandler = new DBHandler(RegisterActivity.this);
                     String sUser;
 
                     edtUser = findViewById(R.id.edt_usr);
@@ -85,7 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
                         //Normal alert dialog
                     } else {
                         //Check if the username is already introduced
-                        if (dbHandler.searchUser("nombre", sUser)) {
+                        if (dbHandler.searchByName("usuarios", "nombre", sUser)) {
                             //TODO AlertDialog.builder
                             //Normal alert dialog
                             Log.d("Prueba", "El usuario ya existe");
@@ -126,7 +153,6 @@ public class RegisterActivity extends AppCompatActivity {
 
 class MysqlConnection extends Thread {
     public void run () {
-        //TODO ¿Cómo puedo tener siempre la misma dirección IP?
         String url;
         delegationIds.clear();
         delegationNames.clear();
@@ -144,7 +170,7 @@ class MysqlConnection extends Thread {
 
             while (result.next()) {
                 delegationNames.add(result.getString("nombre"));
-                delegationIds.add(result.getInt("id_delegacion"));
+                delegationIds.add(result.getString("id_delegacion"));
             }
 
             conn.close();

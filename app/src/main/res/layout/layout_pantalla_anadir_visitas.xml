@@ -28,16 +28,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editNombreVista"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Spinner
+        android:id="@+id/spnNombrePartner"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="35dp"
-        android:ems="10"
-        android:hint="Nombre"
-        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@+id/NombreVista"
         app:layout_constraintBottom_toBottomOf="@+id/NombreVista"
-        app:layout_constraintStart_toEndOf="@+id/NombreVista" />
+        app:layout_constraintStart_toEndOf="@+id/NombreVista"
+        app:layout_constraintEnd_toEndOf="@+id/editFecha"/>
 
     <EditText
         android:id="@+id/editFecha"

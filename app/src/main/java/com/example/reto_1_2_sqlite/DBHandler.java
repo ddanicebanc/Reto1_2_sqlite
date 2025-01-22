@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
@@ -13,6 +16,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public DBHandler (Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.rawQuery("pragma foreign_keys = on", null, null);
     }
 
     @Override
@@ -28,6 +33,27 @@ public class DBHandler extends SQLiteOpenHelper {
                 "contrasenia text," +
                 "delegacionId integer," +
                 "foreign key (delegacionId) references delegaciones (id))";
+        sqLiteDatabase.execSQL(query);
+
+        query = "create table partners (" +
+                "id integer primary key autoincrement," +
+                "nombre text," +
+                "direccion text," +
+                "poblacion text," +
+                "telefono integer," +
+                "email text," +
+                "usuarioId integer," +
+                "foreign key (usuarioId) references usuarios (id))";
+        sqLiteDatabase.execSQL(query);
+
+        query = "create table visitas (" +
+                "id integer primary key autoincrement," +
+                "usuarioId integer," +
+                "partnerId integer," +
+                "fechaVisita date," +
+                "direccion text," +
+                "foreign key (usuarioId) references usuarios (id)," +
+                "foreign key (partnerId) references partners (id))";
         sqLiteDatabase.execSQL(query);
     }
 
@@ -63,7 +89,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return empty;
     }
 
-    public boolean searchUser (String searchField, String searchValue) {
+    public boolean searchByName (String tableName, String searchField, String searchValue) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         String[] selectionArgs = {searchValue};
         boolean exists = false;
@@ -73,7 +99,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         //Create the cursor and execute the associated query
         Cursor cursor = sqLiteDatabase.query(
-                "usuarios",       // The table to query
+                tableName,       // The table to query
                 null,                   // The array of columns to return (pass null to get all)
                 searchField,            // The columns for the WHERE clause
                 selectionArgs,          // The values for the WHERE clause
@@ -116,6 +142,25 @@ public class DBHandler extends SQLiteOpenHelper {
         return correct;
     }
 
+    public boolean checkMatchingStringField (String tableName, String searchField, String searchValue) {
+        boolean matches = false;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query;
+
+        query = "select " + searchField +
+                " from " + tableName +
+                " where upper(" + searchField + ") = '" + searchValue.toUpperCase() + "'";
+
+        Cursor c = db.rawQuery(query, null, null);
+        if (c.getCount() == 1) {
+            matches = true;
+        }
+
+        c.close();
+
+        return matches;
+    }
+
     public User loadUser (String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] selectionArgs = {username};
@@ -147,15 +192,124 @@ public class DBHandler extends SQLiteOpenHelper {
         return user;
     }
 
-    public void insertData (String tableName, ArrayList<String> columns, ArrayList<String> columnValues) {
+    public ArrayList<Visita> getArrayVisitas (User usuario, boolean historico) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Visita> visitas = new ArrayList<>();
+        String query;
+        Cursor cursor;
+        int visitaId, usuarioId, partnerId, activeUserId;
+        String fechaVisita, direccion, partnerName = "", fechaHoy;
+        LocalDate today = LocalDate.now();
+        fechaHoy = today.toString();
+
+        activeUserId = usuario.getId();
+
+        query = "select * from visitas where usuarioId = " + String.valueOf(activeUserId);
+
+        if (historico == false) {
+            query = query + " and fechaVisita >= '" + fechaHoy + "'";
+        }
+
+        query = query + " order by fechaVisita asc";
+
+        cursor = db.rawQuery(query, null, null);
+
+        while (cursor.moveToNext()) {
+            visitaId = cursor.getInt(0);
+            usuarioId = cursor.getInt(1);
+            partnerId = cursor.getInt(2);
+            fechaVisita = cursor.getString(3);
+            direccion = cursor.getString(4);
+
+            //Formatear la fecha de visita para la correcta visualización
+            String[] partesFecha = fechaVisita.split("-");
+            fechaVisita = "";
+            for (int i = partesFecha.length - 1; i >= 0; i--) {
+                if (i != 0) {
+                    fechaVisita = fechaVisita + partesFecha[i] + "-";
+                } else {
+                    fechaVisita = fechaVisita + partesFecha[i];
+                }
+            }
+
+            String partnersQuery = "select nombre from partners where id = " + partnerId;
+
+            Cursor cursorPartners = db.rawQuery(partnersQuery, null, null);
+
+            if (cursorPartners.getCount() == 1) {
+                while (cursorPartners.moveToNext()) {
+                    partnerName = cursorPartners.getString(0);
+                }
+            }
+
+            cursorPartners.close();
+
+            visitas.add(new Visita(
+                    visitaId,
+                    usuarioId,
+                    partnerName,
+                    fechaVisita,
+                    direccion
+            ));
+        }
+
+        cursor.close();
+
+        return visitas;
+    }
+
+    public ArrayList<String> getSearchFieldArray (String tableName, String searchColumn) {
+        ArrayList<String> searchColumnArray = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select "+ searchColumn +" from "+ tableName;
+
+        Cursor c = db.rawQuery(query, null, null);
+
+        while (c.moveToNext()) {
+            searchColumnArray.add(c.getString(0));
+        }
+
+        c.close();
+
+        return searchColumnArray;
+    }
+
+    public String getSearchField (String tableName, String filterColumn, String filterValue, String searchColumn) {
+        String returnValue = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select "+ searchColumn +
+                " from " + tableName +
+                " where " + filterColumn + " = " + "'" + filterValue + "'";
+
+        Cursor c = db.rawQuery(query, null, null);
+
+        if (c.getCount() == 1) {
+            while (c.moveToNext()) {
+                returnValue = c.getString(0);
+            }
+        } else {
+            returnValue = "error";
+        }
+
+        c.close();
+
+        return returnValue;
+    }
+
+    public boolean insertData (String tableName, ArrayList<String> columns, ArrayList<String> columnValues) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        boolean error = false;
 
         //TODO Check columns[] and columnValues[] size
         for (int i = 0; i < columns.size(); i++) {
             values.put(columns.get(i), columnValues.get(i));
         }
 
-        db.insert(tableName, null, values);
+        if (db.insert(tableName, null, values) == -1) {
+            error = true;
+        }
+
+        return error;
     }
 }
