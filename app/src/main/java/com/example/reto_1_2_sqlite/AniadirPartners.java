@@ -9,6 +9,8 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.reto_1_2_sqlite.modelos.User;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 

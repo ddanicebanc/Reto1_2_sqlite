@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reto_1_2_sqlite.adaptadores.PartnersAdapter;
 import com.example.reto_1_2_sqlite.modelos.Partner;
+import com.example.reto_1_2_sqlite.modelos.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;

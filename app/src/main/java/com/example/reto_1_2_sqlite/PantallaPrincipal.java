@@ -2,12 +2,13 @@ package com.example.reto_1_2_sqlite;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.reto_1_2_sqlite.modelos.User;
 
 import java.io.Serializable;
 

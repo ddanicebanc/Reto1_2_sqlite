@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.reto_1_2_sqlite.adaptadores.VisitasAdapter;
+import com.example.reto_1_2_sqlite.modelos.User;
+import com.example.reto_1_2_sqlite.modelos.Visita;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;

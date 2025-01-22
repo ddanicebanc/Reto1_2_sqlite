@@ -8,6 +8,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.reto_1_2_sqlite.modelos.User;
+
 import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity implements Serializable {

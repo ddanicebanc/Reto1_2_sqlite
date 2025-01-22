@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.reto_1_2_sqlite.modelos.User;
+import com.example.reto_1_2_sqlite.modelos.Visita;
 import com.example.reto_1_2_sqlite.modelos.Partner;
 
 import java.time.LocalDate;
