@@ -49,6 +49,14 @@ public class DBHandler extends SQLiteOpenHelper {
                 "foreign key (usuarioId) references usuarios (id))";
         sqLiteDatabase.execSQL(query);
 
+        query = "create table articulos (" +
+                "id int primary key autoincrement," +
+                "nombre varchar(50)," +
+                "tipo varchar(50)," +
+                "delegacion_id integer," +
+                "foreign key (delegacion_id) references delegaciones (id_delegacion))";
+        sqLiteDatabase.execSQL(query);
+
         query = "create table visitas (" +
                 "id integer primary key autoincrement," +
                 "usuarioId integer," +
@@ -66,8 +74,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 "fechaEnvio date," +
                 "usuarioId integer," +
                 "delegacionId integer," +
+                "partnerId integer," +
                 "foreign key (usuarioId) references usuarios (id)," +
-                "foreign key (delegacinId) references delegaciones (id))";
+                "foreign key (delegacionId) references delegaciones (id)," +
+                "foreign key (partnerId) references partners (id))";
         sqLiteDatabase.execSQL(query);
 
         query = "create table lin_pedidos (" +
@@ -83,8 +93,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("drop table if exists lin_pedidos");
         sqLiteDatabase.execSQL("drop table if exists cab_pedidos");
         sqLiteDatabase.execSQL("drop table if exists visitas");
+        sqLiteDatabase.execSQL("drop table if exists articulos");
         sqLiteDatabase.execSQL("drop table if exists partners");
         sqLiteDatabase.execSQL("drop table if exists usuarios");
         sqLiteDatabase.execSQL("drop table if exists delegaciones");
@@ -190,7 +202,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] selectionArgs = {username};
         String sUsername = "";
-        int id = -1;
+        int id = -1, delegationId = -1;
         User user = null;
 
         Cursor cursor = db.query(
@@ -207,9 +219,10 @@ public class DBHandler extends SQLiteOpenHelper {
             while (cursor.moveToNext()) {
                 sUsername = cursor.getString(1);
                 id = cursor.getInt(0);
+                delegationId = cursor.getInt(2);
             }
 
-            user = new User(sUsername, id);
+            user = new User(sUsername, id, delegationId);
         }
 
         cursor.close();
@@ -357,6 +370,24 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
 
         return returnValue;
+    }
+
+    public int getLatestId (String tableName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c;
+        String query;
+        int id = -1;
+
+        query = "select max(id) from " + tableName;
+        c = db.rawQuery(query, null, null);
+        if (c.getCount() == 1) {
+            while (c.moveToNext()) {
+                id = c.getInt(0);
+            }
+        }
+        c.close();
+
+        return id;
     }
 
     public boolean insertData (String tableName, ArrayList<String> columns, ArrayList<String> columnValues) {
