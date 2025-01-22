@@ -56,10 +56,33 @@ public class DBHandler extends SQLiteOpenHelper {
                 "foreign key (usuarioId) references usuarios (id)," +
                 "foreign key (partnerId) references partners (id))";
         sqLiteDatabase.execSQL(query);
+
+        query = "create table cab_pedidos (" +
+                "id integer primary key autoincrement," +
+                "numero integer," +
+                "fechaPedido date," +
+                "fechaPago date," +
+                "fechaEnvio date," +
+                "usuarioId integer," +
+                "delegacionId integer," +
+                "foreign key (usuarioId) references usuarios (id)," +
+                "foreign key (delegacinId) references delegaciones (id))";
+        sqLiteDatabase.execSQL(query);
+
+        query = "create table lin_pedidos (" +
+                "id integer primary key autoincrement," +
+                "articuloId integer," +
+                "cantidad integer," +
+                "precio real," +
+                "cab_pedido_id integer," +
+                "foreign key (cab_pedido_id) references articulos (id)," +
+                "foreign key (cab_pedido_id) references cab_pedidos (id))";
+        sqLiteDatabase.execSQL(query);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("drop table if exists cab_pedidos");
         sqLiteDatabase.execSQL("drop table if exists visitas");
         sqLiteDatabase.execSQL("drop table if exists partners");
         sqLiteDatabase.execSQL("drop table if exists usuarios");
