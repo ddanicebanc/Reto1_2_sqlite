@@ -43,6 +43,12 @@
             android:name=".ConsultaPartners">
 
         </activity>
+        <activity android:name=".FormulariosPedido">
+
+        </activity>
+        <activity android:name=".PedidosUsuario">
+
+        </activity>
     </application>
 
 </manifest>

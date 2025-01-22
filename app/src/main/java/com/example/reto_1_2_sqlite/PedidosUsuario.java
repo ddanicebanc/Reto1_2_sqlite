@@ -14,7 +14,7 @@ public class PedidosUsuario extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.consulta_pedidos);
+        setContentView(R.layout.layout_consulta_pedidos);
         FloatingActionButton nuevoPedido= findViewById(R.id.btNuevoPedido);
         nuevoPedido.setOnClickListener(new View.OnClickListener() {
             @Override
