@@ -1,10 +1,12 @@
 package com.example.reto_1_2_sqlite;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -14,13 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.reto_1_2_sqlite.modelos.User;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 public class AnadirVisitas extends AppCompatActivity implements Serializable {
-    public static String nombre, fecha, direccion;
+public static String fechaDato, direccion;
     private EditText editFecha, editDireccion;
     private Spinner spnNombrePartners;
     DBHandler handler;
@@ -40,6 +40,38 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
         editFecha = findViewById(R.id.editFecha);
         editDireccion = findViewById(R.id.editDireccion);
         Button guardarButton = findViewById(R.id.Guardar);
+
+        //Selección de la fecha a través de la UI
+        editFecha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+
+                int anio = c.get(Calendar.YEAR);
+                int mes = c.get(Calendar.MONTH);
+                int dia = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        // on below line we are passing context.
+                        AnadirVisitas.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // on below line we are setting date to our edit text.
+                                editFecha.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                fechaDato = "";
+                                fechaDato = fechaDato + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                            }
+                        },
+                        // on below line we are passing year,
+                        // month and day for selected date in our date picker.
+                        anio, mes, dia);
+                // at last we are calling show to
+                // display our date picker dialog.
+                datePickerDialog.show();
+            }
+        });
 
         //Preparación de los datos para el spinner
         partnerNames = handler.getSearchFieldArray("partners","nombre");
@@ -79,17 +111,7 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
                     datos.add(String.valueOf(selectedPartnerIndex));
 
                     columnas.add("fechaVisita");
-                    //Para dar el formato adecuado a la fecha introducida
-                    String[] partesFecha = editFecha.getText().toString().split("/");
-                    fecha = "";
-                    for (int i = partesFecha.length - 1; i >= 0; i--) {
-                        if (i != 0) {
-                            fecha = fecha + partesFecha[i] + "-";
-                        } else {
-                            fecha = fecha + partesFecha[i];
-                        }
-                    }
-                    datos.add(fecha);
+                    datos.add(fechaDato);
 
                     columnas.add("direccion");
                     datos.add(editDireccion.getText().toString());
@@ -103,21 +125,13 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
 
     private boolean validarCampos() {
         //TODO Cambiar toast por AlertDialog
-        fecha = editFecha.getText().toString().trim();
         direccion = editDireccion.getText().toString().trim();
         boolean validado = true;
 
-        if (fecha.isEmpty() || direccion.isEmpty()) {
+        if (fechaDato.isEmpty() || direccion.isEmpty()) {
             Toast.makeText(this, "Todos los campos deben estar llenos", Toast.LENGTH_LONG).show();
             validado = false;
         } else {
-            if (!isFechaValida(fecha)) {
-                Toast.makeText(this,
-                        "El campo 'Fecha' debe contener una fecha válida (dd/mm/yyyy)",
-                        Toast.LENGTH_LONG)
-                        .show();
-                validado = false;
-            }
             if (!direccion.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]+")) {
                 Toast.makeText(this,
                         "El campo 'Dirección' solo puede contener letras y números",
@@ -128,16 +142,5 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
         }
 
         return validado;
-    }
-
-    private boolean isFechaValida(String fecha) {
-        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-        formatoFecha.setLenient(false); // Desactiva la tolerancia para fechas inválidas
-        try {
-            Date date = formatoFecha.parse(fecha);
-            return date != null; // Verifica que se pudo convertir correctamente
-        } catch (ParseException e) {
-            return false;
-        }
     }
 }
