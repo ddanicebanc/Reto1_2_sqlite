@@ -15,4 +15,16 @@
     <string name="email">Correo electrónico:</string>
     <string name="historic">Mostrar visitas antiguas</string>
     <string name="ordersTitle">Pedidos</string>
+    <string name="orderHeader">Información Cab. Pedido</string>
+    <string name="orderLinesTitle">Lineas de Pedido</string>
+    <string name="oderDate">Fecha pedido:</string>
+    <string name="paymentDate">Fecha pago:</string>
+    <string name="shippingDate">Fecha envío:</string>
+    <string name="next">Siguiente</string>
+    <string name="partner">Partner:</string>
+    <string name="endOder">Finalizar pedido</string>
+    <string name="quantity">Cantidad:</string>
+    <string name="price">Precio:</string>
+    <string name="product">Artículo:</string>
+    <string name="insertLine">Insertar nueva línea</string>
 </resources>
