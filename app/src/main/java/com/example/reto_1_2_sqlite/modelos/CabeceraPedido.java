@@ -1,17 +1,21 @@
 package com.example.reto_1_2_sqlite.modelos;
 
-public class CabeceraPedido {
-    private int id, usuarioId, delegacionId;
+import java.io.Serializable;
+
+public class CabeceraPedido implements Serializable {
+    private int id, usuarioId, delegacionId, partnerId;
     private String fechaPedido, fechaEnvio, fechaPago;
 
     //Constructor
-    public CabeceraPedido(int id, int usuarioId, int delegacionId, String fechaPedido, String fechaEnvio, String fechaPago) {
+    public CabeceraPedido(int id, int usuarioId, int delegacionId, String fechaPedido,
+                          String fechaEnvio, String fechaPago, int partnerId) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.delegacionId = delegacionId;
         this.fechaPedido = fechaPedido;
         this.fechaEnvio = fechaEnvio;
         this.fechaPago = fechaPago;
+        this.partnerId = partnerId;
     }
 
     //Getters and Setters
@@ -61,5 +65,13 @@ public class CabeceraPedido {
 
     public void setFechaPago(String fechaPago) {
         this.fechaPago = fechaPago;
+    }
+
+    public int getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(int partnerId) {
+        this.partnerId = partnerId;
     }
 }
