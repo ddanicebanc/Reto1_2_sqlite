@@ -13,7 +13,7 @@ import com.example.reto_1_2_sqlite.modelos.User;
 import java.io.Serializable;
 
 public class PantallaPrincipal extends AppCompatActivity implements Serializable {
-    ImageButton btnCalendar, btnPartners;
+    ImageButton btnCalendar, btnPartners, btnPedidos;
     User user;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +42,19 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
                 Intent myIntent = new Intent(
                         PantallaPrincipal.this,
                         ConsultaPartners.class
+                );
+                myIntent.putExtra("cUser", user);
+                startActivity(myIntent);
+            }
+        });
+
+        btnPedidos = findViewById(R.id.btnPedidos);
+        btnPedidos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(
+                        PantallaPrincipal.this,
+                        ConsultaPedidos.class
                 );
                 myIntent.putExtra("cUser", user);
                 startActivity(myIntent);
