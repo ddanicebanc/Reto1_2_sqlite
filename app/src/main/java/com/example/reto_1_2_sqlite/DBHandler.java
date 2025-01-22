@@ -5,7 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
+
+import com.example.reto_1_2_sqlite.modelos.Partner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -256,6 +257,37 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.close();
 
         return visitas;
+    }
+
+    public ArrayList<Partner> getArrayPartners (User user) {
+        ArrayList<Partner> partners = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select * from partners where usuarioId = " + user.getId();
+        int id,telefono,usuarioId;
+        String nombre,direccion,poblacion,email;
+        Cursor c = db.rawQuery(query, null, null);
+
+        while (c.moveToNext()) {
+            id=c.getInt(0);
+            nombre=c.getString(1);
+            direccion=c.getString(2);
+            poblacion=c.getString(3);
+            telefono=c.getInt(4);
+            email=c.getString(5);
+            usuarioId=c.getInt(6);
+
+            partners.add(new Partner(
+                    id,
+                    usuarioId,
+                    telefono,
+                    nombre,
+                    direccion,
+                    poblacion,
+                    email
+            ));
+        }
+        c.close();
+        return partners;
     }
 
     public ArrayList<String> getSearchFieldArray (String tableName, String searchColumn) {
