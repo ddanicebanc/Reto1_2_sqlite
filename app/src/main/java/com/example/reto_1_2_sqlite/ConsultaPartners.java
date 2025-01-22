@@ -1,7 +1,6 @@
 package com.example.reto_1_2_sqlite;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,14 +10,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class ConsultaPartners extends AppCompatActivity {
+import com.example.reto_1_2_sqlite.adaptadores.PartnersAdapter;
+import com.example.reto_1_2_sqlite.modelos.Partner;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class ConsultaPartners extends AppCompatActivity implements Serializable {
+    public User user;
+    public DBHandler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.layout_consulta_partner);
+        setContentView(R.layout.layout_consulta_partners);
+
+        //Recuperamos la información del usuario registrado
+        user = (User) getIntent().getSerializableExtra("cUser");
+
+        //Creamos el gestor para la conexión a la base de datos sqlite
+        handler = new DBHandler(this);
 
         // Configuración de las barras del sistema
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -26,6 +41,18 @@ public class ConsultaPartners extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        //Referencia de recycleview
+        RecyclerView rclPartner = findViewById(R.id.recyclerPartners);
+
+        //Recuperamos los partners del ususario conectado
+        ArrayList<Partner> partners = handler.getArrayPartners(user);
+        handler.close();
+
+        //Creamos y establecemos el adaptador para la lista de visitas
+        PartnersAdapter adapter = new PartnersAdapter(partners, this);
+        rclPartner.setAdapter(adapter);
+        rclPartner.setLayoutManager(new LinearLayoutManager(this));
 
         // Referencia al botón y configuración del evento click
         Button validarButton = findViewById(R.id.buttonValidar);
@@ -40,7 +67,7 @@ public class ConsultaPartners extends AppCompatActivity {
         String idPartner = editIdPartner.getText().toString().trim();
 
         // Validaciones
-        if (TextUtils.isEmpty(idPartner)) {
+        if (idPartner.isEmpty()) {
             Toast.makeText(this, "El campo 'ID_Partner' no puede estar vacío", Toast.LENGTH_LONG).show();
             return;
         }
