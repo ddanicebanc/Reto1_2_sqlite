@@ -39,6 +39,10 @@
         <activity
             android:name=".AniadirPartners">
         </activity>
+        <activity
+            android:name=".ConsultaPartners">
+
+        </activity>
     </application>
 
 </manifest>
