@@ -1,4 +1,4 @@
-package com.example.reto_1_2_sqlite;
+package com.example.reto_1_2_sqlite.modelos;
 
 import java.io.Serializable;
 
