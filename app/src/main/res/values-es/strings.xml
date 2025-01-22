@@ -14,4 +14,18 @@
     <string name="tlfn">Teléfono:</string>
     <string name="email">Correo electrónico:</string>
     <string name="historic">Mostrar visitas antiguas</string>
+
+
+
+    <string name="orders">Pedidos</string>
+
+
+    <string name="new_order">Nuevo Pedido</string>
+    <string name="order_number">N° Pedido</string>
+    <string name="order_date">Fecha del pedido</string>
+    <string name="shipping_date">Fecha de envío</string>
+    <string name="payment_date">Fecha de pago</string>
+    <string name="sales_agent">Comercial</string>
+    <string name="save">Guardar</string>
+
 </resources>

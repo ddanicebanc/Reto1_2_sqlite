@@ -14,4 +14,15 @@
     <string name="tlfn">Phone Number:</string>
     <string name="email">Email:</string>
     <string name="historic">Show previous visits</string>
+
+
+    <string name="orders">Orders</string>
+    <string name="new_order">New order</string>
+    <string name="order_number">Order number</string>
+    <string name="order_date">Order date</string>
+    <string name="shipping_date">Shipping date</string>
+    <string name="payment_date">Payment date</string>
+    <string name="sales_agent">Sales agent</string>
+    <string name="save">Save</string>
+
 </resources>
