@@ -40,7 +40,6 @@ public class VisitasAdapter extends RecyclerView.Adapter<VisitasAdapter.ViewHold
 
         public TextView getTxvPartnerName () {return txvPartnerName;}
         public TextView getTxvVisitDate () {return txvVisitDate;}
-
         public TextView getTxvDireccion () {return txvDireccion;}
 
          @Override
