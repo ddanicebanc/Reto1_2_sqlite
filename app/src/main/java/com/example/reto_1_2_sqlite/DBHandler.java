@@ -61,7 +61,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
         query = "create table cab_pedidos (" +
                 "id integer primary key autoincrement," +
-                "numero integer," +
                 "fechaPedido date," +
                 "fechaPago date," +
                 "fechaEnvio date," +
