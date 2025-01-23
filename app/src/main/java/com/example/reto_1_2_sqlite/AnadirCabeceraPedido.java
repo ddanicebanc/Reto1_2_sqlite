@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,8 @@ import com.example.reto_1_2_sqlite.modelos.CabeceraPedido;
 import com.example.reto_1_2_sqlite.modelos.User;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -162,7 +165,7 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
             @Override
             public void onClick(View v) {
                 if (comprobarCampos()) {
-                    int id = handler.getLatestId("cab_pedidos");
+                    int id = handler.getLatestId("cab_pedidos") + 1;
                     CabeceraPedido cabecera = new CabeceraPedido(
                             id,
                             user.getId(),
@@ -186,14 +189,36 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
     }
 
     private boolean comprobarCampos () {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         boolean valido = true;
+
+        if (sFechaPedido == null) {
+            sFechaPedido = "";
+        }
+        if (sFechaPago == null) {
+            sFechaPago = "";
+        }
+        if (sFechaEnvio == null) {
+            sFechaEnvio = "";
+        }
 
         if (edtFPedido.getText().toString().isEmpty()) {
             valido = false;
         }
 
-        if (!edtFPago.getText().toString().isEmpty()) {
+        if (edtFPago.getText().toString().isEmpty()) {
             valido = false;
+        }
+
+        try {
+            if (sdf.parse(sFechaPedido).after(sdf.parse(sFechaPago))) {
+                Toast.makeText(this,
+                        "La fecha de pago no puede ser anterior a la fecha del pedido.",
+                        Toast.LENGTH_LONG).show();
+                valido = false;
+            }
+        } catch (ParseException pe) {
+            Log.d ("Date pase exception", pe.getMessage());
         }
 
         return valido;
@@ -202,6 +227,8 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
     private void inicializarCampos () {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String today = LocalDate.now().format(format).toString();
+        format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        sFechaPedido = LocalDate.now().format(format).toString();
 
         edtFPedido.setText(today);
     }
