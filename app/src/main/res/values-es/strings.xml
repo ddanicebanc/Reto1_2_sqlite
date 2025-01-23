@@ -5,7 +5,7 @@
     <string name="text_pass">Contraseña:</string>
     <string name="text_usuario">Usuario:</string>
     <string name="btn_guardar">Guardar</string>
-    <string name="spinner">Delegación:</string>
+    <string name="spn_delegation">Delegación:</string>
     <string name="add">Añadir</string>
     <string name="name">Nombre</string>
     <string name="address">Dirección:</string>
@@ -27,4 +27,5 @@
     <string name="price">Precio:</string>
     <string name="product">Artículo:</string>
     <string name="insertLine">Insertar nueva línea</string>
+    <string name="spn_comercial">Comercial:</string>
 </resources>
