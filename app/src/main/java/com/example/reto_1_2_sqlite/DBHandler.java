@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.reto_1_2_sqlite.modelos.CabeceraPedido;
 import com.example.reto_1_2_sqlite.modelos.User;
 import com.example.reto_1_2_sqlite.modelos.Visita;
 import com.example.reto_1_2_sqlite.modelos.Partner;
@@ -332,6 +333,40 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         c.close();
         return partners;
+    }
+
+    public ArrayList<CabeceraPedido> getArrayPedidos (User user) {
+        ArrayList<CabeceraPedido> pedidos = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select * from cab_pedidos where usuarioId = " + user.getId();
+        int id,usuarioId,delegacionId, partnerId;
+        String fechaPedido,fechaEnvio,fechaPago;
+
+        Cursor c = db.rawQuery(query, null, null);
+
+
+        while (c.moveToNext()) {
+            id=c.getInt(0);
+            fechaPedido = c.getString(1);
+            fechaPago = c.getString(2);
+            fechaEnvio = c.getString(3);
+            usuarioId = c.getInt(4);
+            delegacionId = c.getInt(5);
+            partnerId = c.getInt(6);
+
+            pedidos.add(new CabeceraPedido(
+                    id,
+                    usuarioId,
+                    delegacionId,
+                    fechaPedido,
+                    fechaEnvio,
+                    fechaPago,
+                    partnerId
+            ));
+        }
+        c.close();
+
+        return pedidos;
     }
 
     public ArrayList<String> getSearchFieldArray (String tableName, String searchColumn) {
