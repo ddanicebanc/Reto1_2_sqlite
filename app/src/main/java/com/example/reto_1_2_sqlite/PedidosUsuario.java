@@ -3,6 +3,7 @@ package com.example.reto_1_2_sqlite;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,5 +29,27 @@ public class PedidosUsuario extends AppCompatActivity {
             }
         });
 
+        /////////////////////////////////////////////////Footer/////////////////////////////////////////////
+        Button btnIni = findViewById(R.id.btnInicio);
+        btnIni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(PedidosUsuario.this, MainActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
+
+        Button btnCnPed = findViewById(R.id.btnConPed);
+        btnCnPed.setEnabled(false);
+
+        Button btnCnPar = findViewById(R.id.btnConPar);
+        btnCnPar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(PedidosUsuario.this, ConsultaPartners.class);
+                startActivity(myIntent);
+            }
+        });
     }
 }

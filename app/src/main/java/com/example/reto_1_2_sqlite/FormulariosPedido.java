@@ -20,6 +20,12 @@ import java.util.Date;
 import java.util.Locale;
 
 public class FormulariosPedido extends AppCompatActivity {
+
+    String nPedido;
+    Date fPedido;
+    Date fPago;
+    String nComercial;
+    Date fEnvio;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,11 +92,14 @@ public class FormulariosPedido extends AppCompatActivity {
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                nPedido = pedNum.getText().toString();
                 Intent myIntent =  new Intent(
                         FormulariosPedido.this,
                         LineasPedido.class
 
                 );
+
+
                 startActivity(myIntent);
             }
         });

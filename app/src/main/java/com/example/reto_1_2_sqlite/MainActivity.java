@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -71,6 +72,28 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             public void onClick(View v) {
                 //Open the register activity
                 myIntent = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
+    /////////////////////////////////////////////////Footer/////////////////////////////////////////////
+        Button btnIni = findViewById(R.id.btnInicio);
+        btnIni.setEnabled(false);
+
+        Button btnCnPed = findViewById(R.id.btnConPed);
+        btnCnPed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myIntent = new Intent(MainActivity.this, PedidosUsuario.class);
+                startActivity(myIntent);
+            }
+        });
+
+        Button btnCnPar = findViewById(R.id.btnConPar);
+        btnCnPar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myIntent = new Intent(MainActivity.this, ConsultaPartners.class);
                 startActivity(myIntent);
             }
         });

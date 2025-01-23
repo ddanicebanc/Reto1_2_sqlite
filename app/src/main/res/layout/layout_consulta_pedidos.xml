@@ -5,13 +5,13 @@
     android:id="@+id/pedidos"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_constraintCircleRadius="@android:dimen/dialog_min_width_minor"
-    >
+    android:layout_gravity="top"
+    app:layout_constraintCircleRadius="@android:dimen/dialog_min_width_minor">
 
     <TextView
         android:id="@+id/viewPedidosprincipal"
         android:layout_width="415dp"
-        android:layout_height="79dp"
+        android:layout_height="70dp"
         android:background="#B71C1C"
         android:gravity="center"
         android:text="@string/orders"
@@ -27,15 +27,14 @@
 
     <LinearLayout
         android:id="@+id/listaPedidos"
-        android:layout_width="408dp"
-        android:layout_height="567dp"
-        android:layout_marginStart="4dp"
+        android:layout_width="411dp"
+        android:layout_height="318dp"
+        android:gravity="top"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.497">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rclPedidos"
@@ -49,9 +48,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="302dp"
-        android:layout_marginTop="1dp"
         android:layout_marginEnd="53dp"
-        android:layout_marginBottom="27dp"
+        android:layout_marginBottom="76dp"
         android:adjustViewBounds="true"
         android:background="#B71C1C"
         android:clickable="true"
@@ -63,8 +61,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listaPedidos"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toTopOf="@+id/listaPedidos"
         tools:ignore="SpeakableTextPresentCheck" />
+
+    <include
+        android:id="@+id/footer"
+        layout="@layout/layout_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
