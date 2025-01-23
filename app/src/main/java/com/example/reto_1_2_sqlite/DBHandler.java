@@ -211,32 +211,30 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public User loadUser (String username) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] selectionArgs = {username};
-        String sUsername = "";
-        int id = -1, delegationId = -1;
+        String query, nombre;
+        int idUsuario, idDelegacion;
+        Cursor c;
         User user = null;
 
-        Cursor cursor = db.query(
-                "usuarios",
-                null,
-                "nombre = ?",
-                selectionArgs,
-                null,
-                null,
-                null
-        );
+        query = "select u.id, u.nombre, c.delegacion_id " +
+                "from usuarios u " +
+                "inner join comerciales c on (c.id = u.comercial_id)";
 
-        if (cursor.getCount() == 1) {
-            while (cursor.moveToNext()) {
-                sUsername = cursor.getString(1);
-                id = cursor.getInt(0);
-                delegationId = cursor.getInt(2);
+        c = db.rawQuery(query, null,null);
+
+        if (c.getCount() == 1) {
+            while (c.moveToNext()) {
+                idUsuario = c.getInt(0);
+                nombre = c.getString(1);
+                idDelegacion = c.getInt(2);
+
+                user = new User(
+                        nombre,
+                        idUsuario,
+                        idDelegacion
+                );
             }
-
-            user = new User(sUsername, id, delegationId);
         }
-
-        cursor.close();
 
         return user;
     }
