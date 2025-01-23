@@ -37,6 +37,7 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.ViewHold
         public TextView getTxvNumeroPedido () {return txvNumeroPedido;}
         public TextView getTxvFechaPedido () {return txvFechaPedido;}
 
+        @Override
         public void onClick (View view) {clickListener.onClick(view, getAdapterPosition());}
     }
 
