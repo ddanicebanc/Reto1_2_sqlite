@@ -31,12 +31,22 @@ public class DBHandler extends SQLiteOpenHelper {
                 "nombre text)";
         sqLiteDatabase.execSQL(query);
 
-        query = "create table usuarios (" +
-                "id integer primary key autoincrement," +
-                "nombre text unique," +
-                "contrasenia text," +
-                "delegacionId integer," +
-                "foreign key (delegacionId) references delegaciones (id))";
+        query = "create table comerciales (\n" +
+                "id integer primary key autoincrement,\n" +
+                "nombre text,\n" +
+                "telefono integer,\n" +
+                "delegacionId integer,\n" +
+                "foreign key (delegacionId) references delegaciones (id)\n" +
+                ")";
+        sqLiteDatabase.execSQL(query);
+
+        query = "create table usuarios (\n" +
+                "id integer primary key autoincrement,\n" +
+                "nombre text unique,\n" +
+                "contrasenia text,\n" +
+                "comercialId integer,\n" +
+                "foreign key (comercialId) references comerciales (id) on delete cascade\n" +
+                ")";
         sqLiteDatabase.execSQL(query);
 
         query = "create table partners (" +
@@ -56,6 +66,16 @@ public class DBHandler extends SQLiteOpenHelper {
                 "tipo varchar(50)," +
                 "delegacion_id integer," +
                 "foreign key (delegacion_id) references delegaciones (id_delegacion))";
+        sqLiteDatabase.execSQL(query);
+
+        query = "create table catalogo (\n" +
+                "articuloId integer,\n" +
+                "delegacionId integer,\n" +
+                "precio real,\n" +
+                "primary key (articuloId, delegacionId),\n" +
+                "foreign key (articuloId) references articulos (id),\n" +
+                "foreign key (delegacionId) references delegaciones (id)\n" +
+                ")";
         sqLiteDatabase.execSQL(query);
 
         query = "create table visitas (" +
@@ -97,9 +117,11 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("drop table if exists lin_pedidos");
         sqLiteDatabase.execSQL("drop table if exists cab_pedidos");
         sqLiteDatabase.execSQL("drop table if exists visitas");
+        sqLiteDatabase.execSQL("drop table if exists catalogo");
         sqLiteDatabase.execSQL("drop table if exists articulos");
         sqLiteDatabase.execSQL("drop table if exists partners");
         sqLiteDatabase.execSQL("drop table if exists usuarios");
+        sqLiteDatabase.execSQL("drop table if exists comerciales");
         sqLiteDatabase.execSQL("drop table if exists delegaciones");
         onCreate(sqLiteDatabase);
     }
