@@ -1,11 +1,14 @@
 package com.example.reto_1_2_sqlite;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -19,6 +22,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AnadirCabeceraPedido extends AppCompatActivity implements Serializable {
     EditText edtFPedido, edtFPago, edtFEnvio;
@@ -26,7 +30,8 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
     DBHandler handler;
     public static ArrayList<String> partnerNames = new ArrayList<>();
     public static ArrayList<String> partnerIds = new ArrayList<>();
-    public int selectedPartnerIndex;
+    private int selectedPartnerIndex;
+    private String sFechaPedido, sFechaPago, sFechaEnvio;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +48,91 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
         edtFEnvio = findViewById(R.id.edtShippingDate);
 
         inicializarCampos();
+
+        //Establecimiento de las escucha para los campos de las fechas
+        edtFPago.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+
+                int anio = c.get(Calendar.YEAR);
+                int mes = c.get(Calendar.MONTH);
+                int dia = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        // on below line we are passing context.
+                        AnadirCabeceraPedido.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // on below line we are setting date to our edit text.
+                                edtFPago.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                sFechaPago = "";
+                                sFechaPago = sFechaPago + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                                Log.d("Fecha Pago", sFechaPago);
+                            }
+                        },
+                        // on below line we are passing year,
+                        // month and day for selected date in our date picker.
+                        anio, mes, dia);
+                // at last we are calling show to
+                // display our date picker dialog.
+                datePickerDialog.show();
+            }
+        });
+
+        edtFPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+
+                int anio = c.get(Calendar.YEAR);
+                int mes = c.get(Calendar.MONTH);
+                int dia = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        AnadirCabeceraPedido.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // on below line we are setting date to our edit text.
+                                edtFPedido.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                sFechaPedido = "";
+                                sFechaPedido = sFechaPedido + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                            }
+                        },
+                        anio, mes, dia);
+                datePickerDialog.show();
+            }
+        });
+
+        edtFEnvio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+
+                int anio = c.get(Calendar.YEAR);
+                int mes = c.get(Calendar.MONTH);
+                int dia = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        AnadirCabeceraPedido.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // on below line we are setting date to our edit text.
+                                edtFEnvio.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                sFechaEnvio = "";
+                                sFechaEnvio = sFechaEnvio + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                            }
+                        },
+                        anio, mes, dia);
+                datePickerDialog.show();
+            }
+        });
 
         //Preparación de los datos para el spinner
         partnerNames = handler.getSearchFieldArray("partners","nombre");
