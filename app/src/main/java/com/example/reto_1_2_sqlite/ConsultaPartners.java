@@ -1,6 +1,8 @@
 package com.example.reto_1_2_sqlite;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -57,6 +59,26 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
         // Referencia al botón y configuración del evento click
         Button validarButton = findViewById(R.id.buttonValidar);
         validarButton.setOnClickListener(v -> validarIdPartner());
+
+        /////////////////////////////////////////////////Footer/////////////////////////////////////////////
+        Button btnIni = findViewById(R.id.btnInicio);
+        btnIni.setOnClickListener(view -> {
+            Intent myIntent = new Intent(ConsultaPartners.this, MainActivity.class);
+            startActivity(myIntent);
+        });
+
+        Button btnCnPed = findViewById(R.id.btnConPed);
+        btnCnPed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(ConsultaPartners.this, PedidosUsuario.class);
+                startActivity(myIntent);
+            }
+        });
+
+        Button btnCnPar = findViewById(R.id.btnConPar);
+        btnCnPar.setEnabled(false);
+
     }
 
     private void validarIdPartner() {
