@@ -26,33 +26,40 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
     private EditText edtCantidad, edtPrecio;
     private int selectedProductIndex;
     private static ArrayList<String> nombreArticulos = new ArrayList<>();
-    private static ArrayList<String> idArticulos = new ArrayList<>();
+    private static ArrayList<Integer> idArticulos = new ArrayList<>();
     private static ArrayList<LineaPedido> lineas = new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_anadir_lineas_pedido);
-        Intent startIntent = getIntent();
-        Bundle extras = startIntent.getExtras();
 
         User user = (User) getIntent().getSerializableExtra("cUser");
-        CabeceraPedido cabecera = (CabeceraPedido) getIntent().getSerializableExtra("cabecera");
+        //Recuperamos el Intent inicial para diferenciarlo en cada carga al sacar los extras
+        Intent startIntent = getIntent();
+        Bundle extras = startIntent.getExtras();
+        CabeceraPedido cabecera = (CabeceraPedido) extras.getSerializable("cabecera");
         DBHandler handler = new DBHandler(this);
 
-        if (extras != null) {
-            try {
-                lineas = (ArrayList<LineaPedido>) extras.getSerializable("lineas");
-            } catch (MissingResourceException mre) {
-                Log.d("Extras", "No se encuentra el extra lineas.");
-            }
+        /*
+        Cuando se añade una linea y vuelve a cargar la pantalla, tendremos un extra con el
+        arrayList con las lineas del pedido. Controlamos la excepción para que no se cierre en la
+        primera carga
+        */
+        try {
+            lineas = (ArrayList<LineaPedido>) extras.getSerializable("lineas");
+        } catch (MissingResourceException mre) {
+            Log.d("Extras", "No se encuentra el extra lineas.");
         }
 
         edtCantidad = findViewById(R.id.edtLineQuantity);
         edtPrecio = findViewById(R.id.edtLinePrice);
 
+        //Configuración para el spinner de los artículos
         Spinner spnArticulos = findViewById(R.id.spnNombreArticulo);
-        nombreArticulos = handler.getSearchFieldArray("articulos", "nombre");
-        idArticulos = handler.getSearchFieldArray("articulos", "id");
+        //Carga de los articulos pertenecientes a la delegación del usuario (la del comercial)
+        //TODO Hay que cambiar la base de datos para reflejar la tabla de catálogo
+        nombreArticulos = handler.getArticuloStringData("nombre", user.getDelegationId());
+        idArticulos = handler.getArticuloIntData("id", user.getDelegationId());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
@@ -62,7 +69,7 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
         spnArticulos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedProductIndex = Integer.parseInt(idArticulos.get(position));
+                selectedProductIndex = idArticulos.get(position);
             }
 
             @Override
@@ -71,11 +78,15 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
             }
         });
 
+        //Configuración para el botón de añadir nuevas líneas
         Button btnNuevaLinea = findViewById(R.id.btnInsertLine);
         btnNuevaLinea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validarCampos()) {
+                    if (lineas == null) {
+                        lineas = new ArrayList<>();
+                    }
                     lineas.add(new LineaPedido(
                             selectedProductIndex,
                             Integer.parseInt(edtCantidad.getText().toString()),
@@ -88,6 +99,23 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
                     startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     recreate();
                 }
+            }
+        });
+
+        //Configuración para el botón de finalizar el pedido
+        Button finalizarPedido = findViewById(R.id.btnEndOrder);
+        finalizarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Hacer el insert de los datos en las tablas de cabecera y lineas
+                Intent myIntent = new Intent(
+                        AnadirLineasPedido.this,
+                        ConsultaPedidos.class
+                );
+                myIntent.putExtra("cUser", user);
+                //Elimina las actividades de cabecera y lineas de pedido de la cola de actividades
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(myIntent);
             }
         });
     }
