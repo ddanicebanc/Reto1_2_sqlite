@@ -60,8 +60,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 "id integer primary key autoincrement," +
                 "nombre varchar(50)," +
                 "tipo varchar(50)," +
-                "delegacion_id integer," +
-                "foreign key (delegacion_id) references delegaciones (id_delegacion) on delete cascade)";
+                "delegacion_id integer)";
         sqLiteDatabase.execSQL(query);
 
         query = "create table catalogo (\n" +
@@ -391,6 +390,44 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
 
         return searchColumnArray;
+    }
+
+    public ArrayList<String> getArticuloStringData (String nombreColumna, int idDel) {
+        ArrayList<String> datos = new ArrayList<>();
+        String query = "select " + nombreColumna +
+                " from articulos " +
+                "where delegacion_id = " + idDel;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null, null);
+
+        if (c.getCount() > 0) {
+            while (c.moveToNext()) {
+                datos.add(c.getString(0));
+            }
+        }
+
+        c.close();
+
+        return datos;
+    }
+
+    public ArrayList<Integer> getArticuloIntData (String nombreColumna, int idDel) {
+        ArrayList<Integer> datos = new ArrayList<>();
+        String query = "select " + nombreColumna +
+                " from articulos " +
+                "where delegacion_id = " + idDel;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null, null);
+
+        if (c.getCount() > 0) {
+            while (c.moveToNext()) {
+                datos.add(c.getInt(0));
+            }
+        }
+
+        c.close();
+
+        return datos;
     }
 
     public ArrayList<String> getComercialStringData (String nombreColumna) {
