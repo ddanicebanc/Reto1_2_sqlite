@@ -49,6 +49,9 @@
         <activity android:name=".PedidosUsuario">
 
         </activity>
+        <activity android:name=".LineasPedido">
+
+        </activity>
     </application>
 
 </manifest>
