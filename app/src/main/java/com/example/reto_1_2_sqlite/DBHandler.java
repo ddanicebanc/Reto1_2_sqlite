@@ -26,17 +26,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String query = "create table delegaciones (" +
-                "id integer primary key," +
-                "nombre text)";
-        sqLiteDatabase.execSQL(query);
+        String query;
 
         query = "create table comerciales (\n" +
                 "id integer primary key autoincrement,\n" +
                 "nombre text,\n" +
                 "telefono integer,\n" +
-                "delegacionId integer,\n" +
-                "foreign key (delegacionId) references delegaciones (id)\n" +
+                "delegacion_id integer\n" +
                 ")";
         sqLiteDatabase.execSQL(query);
 
@@ -44,8 +40,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 "id integer primary key autoincrement,\n" +
                 "nombre text unique,\n" +
                 "contrasenia text,\n" +
-                "comercialId integer,\n" +
-                "foreign key (comercialId) references comerciales (id) on delete cascade\n" +
+                "comercial_id integer,\n" +
+                "foreign key (comercial_id) references comerciales (id) on delete cascade\n" +
                 ")";
         sqLiteDatabase.execSQL(query);
 
@@ -57,15 +53,15 @@ public class DBHandler extends SQLiteOpenHelper {
                 "telefono integer," +
                 "email text," +
                 "usuarioId integer," +
-                "foreign key (usuarioId) references usuarios (id))";
+                "foreign key (usuarioId) references usuarios (id) on delete cascade)";
         sqLiteDatabase.execSQL(query);
 
         query = "create table articulos (" +
-                "id int primary key autoincrement," +
+                "id integer primary key autoincrement," +
                 "nombre varchar(50)," +
                 "tipo varchar(50)," +
                 "delegacion_id integer," +
-                "foreign key (delegacion_id) references delegaciones (id_delegacion))";
+                "foreign key (delegacion_id) references delegaciones (id_delegacion) on delete cascade)";
         sqLiteDatabase.execSQL(query);
 
         query = "create table catalogo (\n" +
@@ -73,8 +69,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 "delegacionId integer,\n" +
                 "precio real,\n" +
                 "primary key (articuloId, delegacionId),\n" +
-                "foreign key (articuloId) references articulos (id),\n" +
-                "foreign key (delegacionId) references delegaciones (id)\n" +
+                "foreign key (articuloId) references articulos (id) on delete cascade,\n" +
+                "foreign key (delegacionId) references delegaciones (id) on delete cascade\n" +
                 ")";
         sqLiteDatabase.execSQL(query);
 
@@ -84,8 +80,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 "partnerId integer," +
                 "fechaVisita date," +
                 "direccion text," +
-                "foreign key (usuarioId) references usuarios (id)," +
-                "foreign key (partnerId) references partners (id))";
+                "foreign key (usuarioId) references usuarios (id) on delete cascade," +
+                "foreign key (partnerId) references partners (id) on delete cascade)";
         sqLiteDatabase.execSQL(query);
 
         query = "create table cab_pedidos (" +
@@ -96,9 +92,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 "usuarioId integer," +
                 "delegacionId integer," +
                 "partnerId integer," +
-                "foreign key (usuarioId) references usuarios (id)," +
-                "foreign key (delegacionId) references delegaciones (id)," +
-                "foreign key (partnerId) references partners (id))";
+                "foreign key (usuarioId) references usuarios (id) on delete cascade," +
+                "foreign key (delegacionId) references delegaciones (id) on delete cascade," +
+                "foreign key (partnerId) references partners (id) on delete cascade)";
         sqLiteDatabase.execSQL(query);
 
         query = "create table lin_pedidos (" +
@@ -107,8 +103,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 "cantidad integer," +
                 "precio real," +
                 "cab_pedido_id integer," +
-                "foreign key (cab_pedido_id) references articulos (id)," +
-                "foreign key (cab_pedido_id) references cab_pedidos (id))";
+                "foreign key (cab_pedido_id) references articulos (id) on delete cascade," +
+                "foreign key (cab_pedido_id) references cab_pedidos (id) on delete cascade)";
         sqLiteDatabase.execSQL(query);
     }
 
@@ -150,31 +146,23 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public boolean searchByName (String tableName, String searchField, String searchValue) {
-        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        String[] selectionArgs = {searchValue};
-        boolean exists = false;
+        SQLiteDatabase sqLiteDatabase;
+        Cursor c;
+        String query;
+        boolean existe;
 
-        //Must have "= ?" to use it in the query
-        searchField = searchField + "= ?";
+        sqLiteDatabase = this.getReadableDatabase();
+        query = "select * from " + tableName + " where " + searchField + " = '" + searchValue + "'";
+        c = sqLiteDatabase.rawQuery(query, null, null);
+        existe = false;
 
-        //Create the cursor and execute the associated query
-        Cursor cursor = sqLiteDatabase.query(
-                tableName,       // The table to query
-                null,                   // The array of columns to return (pass null to get all)
-                searchField,            // The columns for the WHERE clause
-                selectionArgs,          // The values for the WHERE clause
-                null,                   // don't group the rows
-                null,                   // don't filter by row groups
-                null                    // The sort order
-        );
-
-        if (cursor.getCount() > 0) {
-            exists = true;
+        if (c.getCount() > 0) {
+            existe = true;
         }
 
-        cursor.close();
+        c.close();
 
-        return exists;
+        return existe;
     }
 
     public boolean checkPassword (String searchValue) {
@@ -400,6 +388,66 @@ public class DBHandler extends SQLiteOpenHelper {
 
         while (c.moveToNext()) {
             searchColumnArray.add(c.getString(0));
+        }
+
+        c.close();
+
+        return searchColumnArray;
+    }
+
+    public ArrayList<String> getComercialStringData (String nombreColumna) {
+        ArrayList<String> datos = new ArrayList<>();
+        String query = "select " + nombreColumna +
+                " from comerciales " +
+                "where id not in (" +
+                "select comercial_id " +
+                "from usuarios)";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null, null);
+
+        if (c.getCount() > 0) {
+            while (c.moveToNext()) {
+                datos.add(c.getString(0));
+            }
+        }
+
+        c.close();
+
+        return datos;
+    }
+
+    public ArrayList<Integer> getComercialIntData (String nombreColumna) {
+        ArrayList<Integer> datos = new ArrayList<>();
+        String query = "select " + nombreColumna +
+                " from comerciales " +
+                "where id not in (" +
+                "select comercial_id " +
+                "from usuarios)";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null, null);
+
+        if (c.getCount() > 0) {
+            while (c.moveToNext()) {
+                datos.add(c.getInt(0));
+            }
+        }
+
+        c.close();
+
+        return datos;
+    }
+
+
+
+    public ArrayList<Integer> getSearchFieldIntegerArray (String tableName, String searchColumn) {
+        ArrayList<Integer> searchColumnArray = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select "+ searchColumn +" from "+ tableName;
+
+        Cursor c = db.rawQuery(query, null, null);
+
+        while (c.moveToNext()) {
+            searchColumnArray.add(c.getInt(0));
         }
 
         c.close();
