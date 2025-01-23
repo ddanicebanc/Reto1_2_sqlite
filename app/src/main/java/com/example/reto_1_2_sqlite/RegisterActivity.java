@@ -1,7 +1,9 @@
 package com.example.reto_1_2_sqlite;
 
+import static com.example.reto_1_2_sqlite.RegisterActivity.comercialIds;
+import static com.example.reto_1_2_sqlite.RegisterActivity.comercialNames;
+import static com.example.reto_1_2_sqlite.RegisterActivity.comercialTels;
 import static com.example.reto_1_2_sqlite.RegisterActivity.delegationIds;
-import static com.example.reto_1_2_sqlite.RegisterActivity.delegationNames;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -23,154 +25,183 @@ import java.util.ArrayList;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText edtUser, edtPassword;
-    public static ArrayList<String> delegationNames = new ArrayList<>();
-    public static ArrayList<String> delegationIds = new ArrayList<>();
-    public int selectedDelegationIndex;
+    public static ArrayList<Integer> delegationIds = new ArrayList<>();
+    public static ArrayList<String> comercialNames = new ArrayList<>();
+    public static ArrayList<Integer> comercialTels = new ArrayList<>();
+    public static ArrayList<Integer> comercialIds = new ArrayList<>();
+    private int idComercialSeleccionado;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_pantalla_registro);
+        //DECLARACIONES
+        //Conexiones
         MysqlConnection loadThread = new MysqlConnection();
+        DBHandler handler = new DBHandler(RegisterActivity.this);
 
-        DBHandler dbHandler = new DBHandler(RegisterActivity.this);
-        if (dbHandler.countTable("delegaciones")) {
-            //Remote connections have to be executed from a different thread than the mainThread
-            //Load the spinner with the information in the MYSQL server
+        //ArrayLists para los insert
+        ArrayList<String> columnas = new ArrayList<>();
+        ArrayList<String> datos = new ArrayList<>();
+
+        //Elementos del layout
+        Spinner cmbComerciales;
+        Button btnGuardar;
+
+        //Adaptadores
+        ArrayAdapter<String> adapter;
+
+        //ASIGNACIONES
+        cmbComerciales = findViewById(R.id.cmbComercial);
+        btnGuardar = findViewById(R.id.btn_guardar);
+        edtUser = findViewById(R.id.edt_usr);
+        edtPassword = findViewById(R.id.edt_psswd);
+
+        if (handler.countTable("comerciales")) {
+            //Lanzamiento de un hilo diferente al MainThread, las conexiones remotas no pueden estar
+            //en el hilo principal
             loadThread.start();
+
             try {
+                //Espera a la carga de datos en los arrays
                 loadThread.join();
 
-                //dbHandler.insertData("delegaciones");
-                //Inserción de las delegaciones en sqlite para evitar la conexión cada vez que se
-                //realiza el registro
-                ArrayList<String> columns = new ArrayList<>();
-                ArrayList<String> data = new ArrayList<>();
+                //Comprobamos que no se haya perdido ningún dato
+                if (comercialIds.size() == comercialNames.size() &&
+                        comercialTels.size() == delegationIds.size()) {
+                    //Recorremos los datos recibidos de la base de datos remota para insertarlos
+                    // en local
+                    for (int i = 0; i < comercialIds.size(); i++) {
+                        //Creamos las columnas e introducimos los datos en el ArrayList de datos
+                        columnas.add("id");
+                        columnas.add("nombre");
+                        columnas.add("telefono");
+                        columnas.add("delegacion_id");
 
-                for (int i = 0; i < delegationNames.size(); i++) {
-                    columns.add("id");
-                    columns.add("nombre");
-                    data.add(String.valueOf(delegationIds.get(i)));
-                    data.add(delegationNames.get(i));
+                        datos.add(String.valueOf(comercialIds.get(i)));
+                        datos.add(comercialNames.get(i));
+                        datos.add(String.valueOf(comercialTels.get(i)));
+                        datos.add(String.valueOf(delegationIds.get(i)));
 
-                    dbHandler.insertData("delegaciones", columns, data);
+                        //Insertamos la información un registro a la vez
+                        handler.insertData("comerciales", columnas, datos);
 
-                    columns.clear();
-                    data.clear();
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            delegationNames = dbHandler.getSearchFieldArray(
-                    "delegaciones", "nombre");
-            delegationIds = dbHandler.getSearchFieldArray(
-                    "delegaciones",
-                    "id"
-            );
-        }
-
-        //Continue with UI load after spinner data retrieval
-        //If loadThread is dead
-        if (!loadThread.isAlive()) {
-            ArrayList<String> columnas = new ArrayList<>();
-            columnas.add("id");
-            columnas.add("nombre");
-            //TODO Terminar el registro de las delegaciones en la bbdd sqlite
-
-            Spinner cmbDelegations = findViewById(R.id.cmbDelegation);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    this,
-                    android.R.layout.simple_spinner_item,
-                    delegationNames
-            );
-            cmbDelegations.setAdapter(adapter);
-            cmbDelegations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    selectedDelegationIndex = Integer.parseInt(delegationIds.get(position));
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
-            Button btnSave = findViewById(R.id.btn_guardar);
-            btnSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String sUser;
-
-                    edtUser = findViewById(R.id.edt_usr);
-
-                    sUser = edtUser.getText().toString();
-
-                    if (sUser.isEmpty()) {
-                        //TODO AlertDialog.builder
-                        //Normal alert dialog
-                    } else {
-                        //Check if the username is already introduced
-                        if (dbHandler.searchByName("usuarios", "nombre", sUser)) {
-                            //TODO AlertDialog.builder
-                            //Normal alert dialog
-                            Log.d("Prueba", "El usuario ya existe");
-
-                            edtUser.setText("");
-                        } else {
-                            String sPassword;
-
-                            edtPassword = findViewById(R.id.edt_psswd);
-
-                            sPassword = edtPassword.getText().toString();
-
-                            if (sPassword.isEmpty()) {
-                                //TODO AlertDialog.builder
-                            } else {
-                                ArrayList<String> columns = new ArrayList<>();
-                                ArrayList<String> data = new ArrayList<>();
-                                String sSelectedDelegationIndex = String.valueOf(selectedDelegationIndex);
-
-                                columns.add("nombre");
-                                columns.add("contrasenia");
-                                columns.add("delegacionId");
-                                data.add(sUser);
-                                data.add(sPassword);
-                                data.add(sSelectedDelegationIndex);
-
-                                dbHandler.insertData("usuarios", columns, data);
-                                dbHandler.close();
-                                finish();
-                            }
-                        }
+                        //Limpiamos los datos de los ArrayList para insertar el siguiente registro
+                        columnas.clear();
+                        datos.clear();
                     }
                 }
-            });
+            } catch (InterruptedException ie) {
+                Log.e ("CONEXIÓN", ie.getMessage());
+            }
+        } else {
+            //Si la tabla comerciales tiene datos, cargamos los datos directamente desde local
+            comercialIds = handler.getComercialIntData(
+                    "id");
+            comercialNames = handler.getComercialStringData(
+                    "nombre");
+            comercialTels = handler.getComercialIntData(
+                    "telefono");
+            delegationIds = handler.getComercialIntData(
+                    "delegacion_id");
         }
+
+        //Continuamos con el proceso de carga de la actividad
+        //Configuración del combobox/spinner del los comerciales para el registro
+        adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                comercialNames
+        );
+        cmbComerciales.setAdapter(adapter);
+        //Escucha para el clic en el spinner
+        cmbComerciales.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Cuando seleccionemos un elemento del spinner guardamos el id del comercial
+                idComercialSeleccionado = comercialIds.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        //Configuración del botón de registro de usuarios
+        //Escucha para el clic del botón
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Variables locales para la función de escucha del clic
+                String usuario, contrasenia;
+
+                usuario = edtUser.getText().toString();
+                contrasenia = edtPassword.getText().toString();
+
+                //Seguimos con el proceso si el campo del nombre de usuario tiene contenido
+                if (!usuario.isEmpty()) {
+                    //Mismo proceso con el campo de la contraseña
+                    if (!contrasenia.isEmpty()) {
+                        //Comprobamos que el usuario no esté repetido
+                        if (!handler.searchByName("usuarios", "nombre", usuario)) {
+                            //Rellenamos los arrayList con las columnas y datos
+                            columnas.add("nombre");
+                            columnas.add("contrasenia");
+                            columnas.add("comercial_id");
+
+                            datos.add(usuario);
+                            datos.add(contrasenia);
+                            datos.add(String.valueOf(idComercialSeleccionado));
+
+                            handler.insertData("usuarios", columnas, datos);
+                            //Cerramos la conexión antes de terminar la actividad
+                            handler.close();
+
+                            //Terminamos la actividad
+                            finish();
+                        }
+                    } else {
+
+                    }
+                } else {
+
+                }
+            }
+        });
     }
 }
 
+/**
+ * Hilo para cargar los comerciales en la base de datos local
+ */
 class MysqlConnection extends Thread {
     public void run () {
         String url;
+        //Vaciado de los arrays con los datos de los comerciales para evitar duplicados
+        comercialIds.clear();
+        comercialNames.clear();
+        comercialTels.clear();
         delegationIds.clear();
-        delegationNames.clear();
 
         //Esta es la dirección en casa en el momento de prueba
-        url = "jdbc:mysql://192.168.21.193:3306/db_delegaciones";
+        url = "jdbc:mysql://192.168.1.134:3306/db_delegaciones";
 
+        //Conexión a la base de datos remota a través del conector jdbc
         try {
             Connection conn = DriverManager.getConnection(url, "daniroot", "dani");
-            Log.d("Conexión", "CONEXIÓN CORRECTA");
+            Log.d("CONEXIÓN", "CONEXIÓN CORRECTA");
 
-            String query = "select * from delegaciones;";
+            String query = "select * from comerciales;";
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
+            //Accedemos a las columnas a traves de sus índices. El ResultSet está en base 1
             while (result.next()) {
-                delegationNames.add(result.getString("nombre"));
-                delegationIds.add(result.getString("id_delegacion"));
+                comercialIds.add(result.getInt(1));
+                comercialNames.add(result.getString(2));
+                comercialTels.add(result.getInt(3));
+                delegationIds.add(result.getInt(4));
             }
 
             conn.close();
