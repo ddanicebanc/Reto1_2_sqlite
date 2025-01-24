@@ -100,6 +100,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         query = "create table lin_pedidos (" +
                 "id integer primary key autoincrement," +
+                "numeroLinea integer," +
                 "articuloId integer," +
                 "cantidad integer," +
                 "precio real," +
@@ -393,7 +394,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return searchColumnArray;
     }
 
-    public ArrayList<String> getArticuloStringData (String nombreColumna, int idDel) {
+    public ArrayList<String> getArticuloStringArray(String nombreColumna, int idDel) {
         ArrayList<String> datos = new ArrayList<>();
         String query = "select " + nombreColumna +
                 " from articulos " +
@@ -412,7 +413,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return datos;
     }
 
-    public ArrayList<Integer> getArticuloIntData (String nombreColumna, int idDel) {
+    public ArrayList<Integer> getArticuloIntArray(String nombreColumna, int idDel) {
         ArrayList<Integer> datos = new ArrayList<>();
         String query = "select " + nombreColumna +
                 " from articulos " +
@@ -429,6 +430,21 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
 
         return datos;
+    }
+
+    public String getArticuloStringData (String nombreColumna, int idArticulo) {
+        String valor = "";
+        String query = "select " + nombreColumna + " from articulos where id = " + idArticulo;
+        Cursor c = this.getReadableDatabase().rawQuery(query, null);
+
+        if (c.getCount() == 1) {
+            while (c.moveToNext()) {
+                valor = c.getString(0);
+            }
+        }
+        c.close();
+
+        return valor;
     }
 
     public ArrayList<String> getComercialStringData (String nombreColumna) {
@@ -534,7 +550,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public Bitmap getImagenArticulo (int idArticulo) {
         SQLiteDatabase db = this.getReadableDatabase();
         Bitmap imagen = null;
-        String query = "select imagen from ariculos where id = " + idArticulo;
+        String query = "select imagen from articulos where id = " + idArticulo;
         Cursor c = db.rawQuery(query, null);
 
         if (c.getCount() == 1) {
