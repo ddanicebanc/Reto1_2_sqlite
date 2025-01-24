@@ -92,7 +92,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 "delegacionId integer," +
                 "partnerId integer," +
                 "foreign key (usuarioId) references usuarios (id) on delete cascade," +
-                "foreign key (delegacionId) references delegaciones (id) on delete cascade," +
                 "foreign key (partnerId) references partners (id) on delete cascade)";
         sqLiteDatabase.execSQL(query);
 
@@ -117,7 +116,6 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("drop table if exists partners");
         sqLiteDatabase.execSQL("drop table if exists usuarios");
         sqLiteDatabase.execSQL("drop table if exists comerciales");
-        sqLiteDatabase.execSQL("drop table if exists delegaciones");
         onCreate(sqLiteDatabase);
     }
 
