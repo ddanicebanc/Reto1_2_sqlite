@@ -170,9 +170,9 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
                             id,
                             user.getId(),
                             user.getDelegationId(),
-                            edtFPedido.getText().toString(),
-                            edtFEnvio.getText().toString(),
-                            edtFPago.getText().toString(),
+                            sFechaPedido,
+                            sFechaEnvio,
+                            sFechaPago,
                             selectedPartnerIndex
                     );
 
