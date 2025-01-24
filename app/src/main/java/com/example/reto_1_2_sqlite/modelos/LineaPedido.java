@@ -3,9 +3,10 @@ package com.example.reto_1_2_sqlite.modelos;
 import java.io.Serializable;
 
 public class LineaPedido implements Serializable {
-    private int id, articuloId, cantidad, precio, cabPedidoId;
+    private int id, articuloId, cantidad, cabPedidoId;
+    private float precio;
 
-    public LineaPedido( int articuloId, int cantidad, int precio, int cabPedidoId) {
+    public LineaPedido( int articuloId, int cantidad, float precio, int cabPedidoId) {
         this.articuloId = articuloId;
         this.cantidad = cantidad;
         this.precio = precio;
@@ -36,7 +37,7 @@ public class LineaPedido implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public int getPrecio() {
+    public float getPrecio() {
         return precio;
     }
 
