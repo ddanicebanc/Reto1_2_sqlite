@@ -1,6 +1,7 @@
 package com.example.reto_1_2_sqlite;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +14,10 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.reto_1_2_sqlite.adaptadores.LineasAdapter;
 import com.example.reto_1_2_sqlite.modelos.CabeceraPedido;
 import com.example.reto_1_2_sqlite.modelos.LineaPedido;
 import com.example.reto_1_2_sqlite.modelos.User;
@@ -24,7 +28,9 @@ import java.util.MissingResourceException;
 
 public class AnadirLineasPedido extends AppCompatActivity implements Serializable {
     private EditText edtCantidad, edtPrecio;
-    private int selectedProductIndex;
+    private int selectedProductIndex, numeroLinea;
+    private String nombreArticuloSeleccionado;
+    private Bitmap imagenArticulo;
     private static ArrayList<String> nombreArticulos = new ArrayList<>();
     private static ArrayList<Integer> idArticulos = new ArrayList<>();
     private static ArrayList<LineaPedido> lineas = new ArrayList<>();
@@ -39,6 +45,15 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
         Bundle extras = startIntent.getExtras();
         CabeceraPedido cabecera = (CabeceraPedido) extras.getSerializable("cabecera");
         DBHandler handler = new DBHandler(this);
+
+
+        //Inicializamos el número de línea con el siguiente id en la tabla, sólo si no se encuentra
+        // el extra "numeroLinea"
+        try {
+            numeroLinea = extras.getInt("numeroLinea");
+        } catch (MissingResourceException mre) {
+            numeroLinea = handler.getLatestId("lin_pedidos") + 1;
+        }
 
         /*
         Cuando se añade una linea y vuelve a cargar la pantalla, tendremos un extra con el
@@ -59,18 +74,20 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
 
         //Carga de los articulos pertenecientes a la delegación del usuario (la del comercial)
         //TODO Hay que cambiar la base de datos para reflejar la tabla de catálogo
-        nombreArticulos = handler.getArticuloStringData("nombre", user.getDelegationId());
-        idArticulos = handler.getArticuloIntData("id", user.getDelegationId());
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        nombreArticulos = handler.getArticuloStringArray("nombre", user.getDelegationId());
+        idArticulos = handler.getArticuloIntArray("id", user.getDelegationId());
+        ArrayAdapter<String> adapterArticulos = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
                 nombreArticulos
         );
-        spnArticulos.setAdapter(adapter);
+        spnArticulos.setAdapter(adapterArticulos);
         spnArticulos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedProductIndex = idArticulos.get(position);
+                nombreArticuloSeleccionado = nombreArticulos.get(position);
+                imagenArticulo = handler.getImagenArticulo(selectedProductIndex);
             }
 
             @Override
@@ -78,6 +95,17 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
 
             }
         });
+
+        //Configuración del recyclerView
+        //Comprobación de que el arrayList no es nulo
+        if (lineas != null) {
+            RecyclerView rclLineas = findViewById(R.id.rclLineas);
+
+            //Crear el adaptador y el LayoutManager para mostrar la información en el rcl
+            LineasAdapter adapterLineas = new LineasAdapter(lineas, this);
+            rclLineas.setAdapter(adapterLineas);
+            rclLineas.setLayoutManager(new LinearLayoutManager(this));
+        }
 
         //Configuración para el botón de añadir nuevas líneas
         Button btnNuevaLinea = findViewById(R.id.btnInsertLine);
@@ -88,15 +116,22 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
                     if (lineas == null) {
                         lineas = new ArrayList<>();
                     }
+
+                    numeroLinea++;
+
                     lineas.add(new LineaPedido(
                             selectedProductIndex,
                             Integer.parseInt(edtCantidad.getText().toString()),
                             Float.parseFloat(edtPrecio.getText().toString()),
-                            cabecera.getId()
+                            cabecera.getId(),
+                            nombreArticuloSeleccionado,
+                            numeroLinea,
+                            imagenArticulo
                     ));
 
                     //Refresco de la actividad para ver los cambios reflejados en la lista
                     startIntent.putExtra("lineas", lineas);
+                    startIntent.putExtra("numeroLinea", numeroLinea);
                     startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     recreate();
                 }
@@ -143,7 +178,7 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
                 columnas.add("cab_pedido_id");
 
                 for (LineaPedido l : lineas) {
-                    datos.add(String.valueOf(l.getId()));
+                    datos.add(String.valueOf(l.getNumeroLinea()));
                     datos.add(String.valueOf(l.getArticuloId()));
                     datos.add(String.valueOf(l.getCantidad()));
                     datos.add(String.valueOf(l.getPrecio()));
