@@ -63,7 +63,6 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
                 int dia = c.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        // on below line we are passing context.
                         AnadirCabeceraPedido.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
@@ -79,8 +78,9 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
                         // on below line we are passing year,
                         // month and day for selected date in our date picker.
                         anio, mes, dia);
-                // at last we are calling show to
-                // display our date picker dialog.
+                //Cambiamos el primer día de la semana para el cuadro de diálogo
+                datePickerDialog.getDatePicker().setFirstDayOfWeek(Calendar.MONDAY);
+
                 datePickerDialog.show();
             }
         });
@@ -107,6 +107,9 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
                             }
                         },
                         anio, mes, dia);
+                //Cambiamos el primer día de la semana para el cuadro de diálogo
+                datePickerDialog.getDatePicker().setFirstDayOfWeek(Calendar.MONDAY);
+
                 datePickerDialog.show();
             }
         });
@@ -133,6 +136,9 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
                             }
                         },
                         anio, mes, dia);
+                //Cambiamos el primer día de la semana para el cuadro de diálogo
+                datePickerDialog.getDatePicker().setFirstDayOfWeek(Calendar.MONDAY);
+
                 datePickerDialog.show();
             }
         });
