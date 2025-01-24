@@ -56,6 +56,7 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
 
         //Configuración para el spinner de los artículos
         Spinner spnArticulos = findViewById(R.id.spnNombreArticulo);
+
         //Carga de los articulos pertenecientes a la delegación del usuario (la del comercial)
         //TODO Hay que cambiar la base de datos para reflejar la tabla de catálogo
         nombreArticulos = handler.getArticuloStringData("nombre", user.getDelegationId());
@@ -90,7 +91,7 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
                     lineas.add(new LineaPedido(
                             selectedProductIndex,
                             Integer.parseInt(edtCantidad.getText().toString()),
-                            Integer.parseInt(edtPrecio.getText().toString()),
+                            Float.parseFloat(edtPrecio.getText().toString()),
                             cabecera.getId()
                     ));
 
@@ -108,6 +109,52 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
             @Override
             public void onClick(View v) {
                 //TODO Hacer el insert de los datos en las tablas de cabecera y lineas
+                //Insertamos la información en la base de datos
+                ArrayList<String> columnas = new ArrayList<>();
+                ArrayList<String> datos = new ArrayList<>();
+
+                //Cabecera del pedido
+                columnas.add("id");
+                columnas.add("fechaPedido");
+                columnas.add("fechaPago");
+                columnas.add("fechaEnvio");
+                columnas.add("usuarioId");
+                columnas.add("delegacionId");
+                columnas.add("partnerId");
+
+                datos.add(String.valueOf(cabecera.getId()));
+                datos.add(cabecera.getFechaPedido());
+                datos.add(cabecera.getFechaPago());
+                datos.add(cabecera.getFechaEnvio());
+                datos.add(String.valueOf(cabecera.getUsuarioId()));
+                datos.add(String.valueOf(cabecera.getDelegacionId()));
+                datos.add(String.valueOf(cabecera.getPartnerId()));
+
+                handler.insertData("cab_pedidos", columnas, datos);
+
+                //Lineas de los pedidos
+                columnas.clear();
+                datos.clear();
+
+                columnas.add("id");
+                columnas.add("articuloId");
+                columnas.add("cantidad");
+                columnas.add("precio");
+                columnas.add("cab_pedido_id");
+
+                for (LineaPedido l : lineas) {
+                    datos.add(String.valueOf(l.getId()));
+                    datos.add(String.valueOf(l.getArticuloId()));
+                    datos.add(String.valueOf(l.getCantidad()));
+                    datos.add(String.valueOf(l.getPrecio()));
+                    datos.add(String.valueOf(l.getCabPedidoId()));
+
+                    handler.insertData("lin_pedidos", columnas, datos);
+
+                    datos.clear();
+                }
+
+                //Al terminar lanzamos la actividad de la consulta de pedidos
                 Intent myIntent = new Intent(
                         AnadirLineasPedido.this,
                         ConsultaPedidos.class
