@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.example.reto_1_2_sqlite.modelos.CabeceraPedido;
 import com.example.reto_1_2_sqlite.modelos.User;
@@ -60,7 +62,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 "id integer primary key autoincrement," +
                 "nombre varchar(50)," +
                 "tipo varchar(50)," +
-                "delegacion_id integer)";
+                "delegacion_id integer," +
+                "imagen blob)";
         sqLiteDatabase.execSQL(query);
 
         query = "create table catalogo (\n" +
@@ -526,6 +529,22 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
 
         return id;
+    }
+
+    public Bitmap getImagenArticulo (int idArticulo) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Bitmap imagen = null;
+        String query = "select imagen from ariculos where id = " + idArticulo;
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.getCount() == 1) {
+            while (c.moveToNext()) {
+                byte[] byteImage = c.getBlob(0);
+                imagen = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+            }
+        }
+
+        return imagen;
     }
 
     public boolean insertData (String tableName, ArrayList<String> columns, ArrayList<String> columnValues) {
