@@ -185,7 +185,7 @@ class MysqlConnection extends Thread {
         delegationIds.clear();
 
         //Esta es la dirección en casa en el momento de prueba
-        url = "jdbc:mysql://192.168.1.134:3306/db_delegaciones";
+        url = "jdbc:mysql://192.168.1.139:3306/db_delegaciones";
 
         //Conexión a la base de datos remota a través del conector jdbc
         try {
