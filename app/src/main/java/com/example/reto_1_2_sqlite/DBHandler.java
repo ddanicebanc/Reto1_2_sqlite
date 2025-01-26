@@ -219,7 +219,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         query = "select u.id, u.nombre, c.delegacion_id " +
                 "from usuarios u " +
-                "inner join comerciales c on (c.id = u.comercial_id)";
+                "inner join comerciales c on (c.id = u.comercial_id)" +
+                "where u.nombre = '" + username + "'";
 
         c = db.rawQuery(query, null,null);
 
