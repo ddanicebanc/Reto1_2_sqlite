@@ -17,6 +17,7 @@
         android:textStyle="bold"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rclCatalogo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
