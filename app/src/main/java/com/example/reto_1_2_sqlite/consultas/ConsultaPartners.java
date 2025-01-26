@@ -20,6 +20,7 @@ import com.example.reto_1_2_sqlite.adaptadores.PartnersAdapter;
 import com.example.reto_1_2_sqlite.anadir.AniadirPartners;
 import com.example.reto_1_2_sqlite.modelos.Partner;
 import com.example.reto_1_2_sqlite.modelos.User;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -52,14 +53,15 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
         });
 
         if (extras != null){
-            int partnerId=extras.getInt("partnerId");
-            if (partnerId==0){
-                partnerId=-1;
+            int partnerId = extras.getInt("partnerId");
+
+            if (partnerId == 0){
+                partnerId = -1;
             }else{
                 editIdPartner.setText(String.valueOf(extras.getInt("partnerId")));
             }
-            partners = handler.getArrayPartners(user,partnerId);
 
+            partners = handler.getArrayPartners(user,partnerId);
         }else{
             partners = handler.getArrayPartners(user,-1);
         }
@@ -88,7 +90,7 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
             }
         });
 
-        Button btnAdd = findViewById(R.id.btnAddPartner);
+        FloatingActionButton btnAdd = findViewById(R.id.btnAddPartner);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +100,7 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
                 );
                 i.putExtra("cUser", user);
                 startActivity(i);
+                finish();
             }
         });
     }
