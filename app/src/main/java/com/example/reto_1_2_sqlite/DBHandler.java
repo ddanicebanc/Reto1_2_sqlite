@@ -101,11 +101,11 @@ public class DBHandler extends SQLiteOpenHelper {
         query = "create table lin_pedidos (" +
                 "id integer primary key autoincrement," +
                 "numeroLinea integer," +
-                "articuloId integer," +
+                "articulo_id integer," +
                 "cantidad integer," +
                 "precio real," +
                 "cab_pedido_id integer," +
-                "foreign key (cab_pedido_id) references articulos (id) on delete cascade," +
+                "foreign key (articulo_id) references articulos (id) on delete cascade," +
                 "foreign key (cab_pedido_id) references cab_pedidos (id) on delete cascade)";
         sqLiteDatabase.execSQL(query);
     }
