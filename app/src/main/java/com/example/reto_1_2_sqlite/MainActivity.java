@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -50,17 +51,25 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
                         String searchValues = sUser + ";" + sPassword;
 
-                        if (dbhandler.checkPassword(searchValues)) {
-                            User user = dbhandler.loadUser(sUser);
-
-                            myIntent = new Intent(
+                        if (sPassword.isEmpty()) {
+                            Toast.makeText(
                                     MainActivity.this,
-                                    PantallaPrincipal.class
-                            );
-                            myIntent.putExtra("cUser", user);
-                            startActivity(myIntent);
+                                    "Por favor, introduce una contraseña.",
+                                    Toast.LENGTH_SHORT
+                            ).show();
                         } else {
-                            //TODO AlertDialog: incorrect password
+                            if (dbhandler.checkPassword(searchValues)) {
+                                User user = dbhandler.loadUser(sUser);
+
+                                myIntent = new Intent(
+                                        MainActivity.this,
+                                        PantallaPrincipal.class
+                                );
+                                myIntent.putExtra("cUser", user);
+                                startActivity(myIntent);
+                            } else {
+                                //TODO AlertDialog: incorrect password
+                            }
                         }
                     }
                 }
