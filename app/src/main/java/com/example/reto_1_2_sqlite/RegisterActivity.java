@@ -5,6 +5,7 @@ import static com.example.reto_1_2_sqlite.RegisterActivity.comercialNames;
 import static com.example.reto_1_2_sqlite.RegisterActivity.comercialTels;
 import static com.example.reto_1_2_sqlite.RegisterActivity.delegationIds;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,8 +14,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.sql.Connection;
@@ -160,12 +163,34 @@ public class RegisterActivity extends AppCompatActivity {
 
                             //Terminamos la actividad
                             finish();
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                            builder.setMessage("El nombre de usuario introducido ya existe, selecciona otro por favor.")
+                                    .setTitle("ERROR")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            edtUser.setText("");
+                                            edtUser.requestFocus();
+                                            dialog.cancel();
+                                        }
+                                    });
+                            builder.show();
                         }
                     } else {
-
+                        Toast.makeText(
+                                RegisterActivity.this,
+                                "Por favor, introduce una contraseña.",
+                                Toast.LENGTH_SHORT
+                        ).show();
                     }
                 } else {
-
+                    Toast.makeText(
+                            RegisterActivity.this,
+                            "Por favor, introduce un nombre de usuario.",
+                            Toast.LENGTH_SHORT
+                    ).show();
                 }
             }
         });
@@ -185,7 +210,7 @@ class MysqlConnection extends Thread {
         delegationIds.clear();
 
         //Esta es la dirección en casa en el momento de prueba
-        url = "jdbc:mysql://192.168.1.139:3306/db_delegaciones";
+        url = "jdbc:mysql://192.168.1.134:3306/db_delegaciones";
 
         //Conexión a la base de datos remota a través del conector jdbc
         try {
