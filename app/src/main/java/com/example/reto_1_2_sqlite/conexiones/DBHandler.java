@@ -192,14 +192,17 @@ public class DBHandler extends SQLiteOpenHelper {
         return correct;
     }
 
-    public boolean checkMatchingStringField (String tableName, String searchField, String searchValue) {
+    public boolean comprobarNombrePartner (String nombrePartner, User user) {
         boolean matches = false;
         SQLiteDatabase db = this.getReadableDatabase();
         String query;
 
-        query = "select " + searchField +
-                " from " + tableName +
-                " where upper(" + searchField + ") = '" + searchValue.toUpperCase() + "'";
+        query = "select partners.nombre " +
+                "from partners " +
+                "inner join usuarios on (usuarios.id = partners.usuarioId) " +
+                "inner join comerciales on (comerciales.id = usuarios.comercial_id) " +
+                "where upper(partners.nombre) = '" + nombrePartner.toUpperCase() + "' " +
+                "and comerciales.delegacion_id = " + user.getDelegationId();
 
         Cursor c = db.rawQuery(query, null, null);
         if (c.getCount() == 1) {
@@ -316,8 +319,8 @@ public class DBHandler extends SQLiteOpenHelper {
         String nombre,direccion,poblacion,email;
 
 
-        if (partnerId!= -1 ){
-            query=query + " and id = "+partnerId;
+        if (partnerId != -1 ){
+            query=query + " and id = " + partnerId;
         }
 
         Cursor c = db.rawQuery(query, null, null);
