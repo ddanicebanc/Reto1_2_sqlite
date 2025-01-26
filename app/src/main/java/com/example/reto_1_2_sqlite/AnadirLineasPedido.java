@@ -221,8 +221,8 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
         columnas.clear();
         datos.clear();
 
-        columnas.add("id");
-        columnas.add("articuloId");
+        columnas.add("numeroLinea");
+        columnas.add("articulo_id");
         columnas.add("cantidad");
         columnas.add("precio");
         columnas.add("cab_pedido_id");
