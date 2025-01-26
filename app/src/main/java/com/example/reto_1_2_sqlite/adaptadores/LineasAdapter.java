@@ -61,7 +61,7 @@ public class LineasAdapter extends RecyclerView.Adapter<LineasAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         //Creamos la vista de cada item a partir de nuestro layout
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.layout_lineas_pedido_row, viewGroup, false);
+                .inflate(R.layout.row_lineas_pedido, viewGroup, false);
 
         return new ViewHolder(view);
     }

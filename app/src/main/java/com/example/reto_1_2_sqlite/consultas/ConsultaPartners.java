@@ -31,7 +31,7 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_consulta_partners);
+        setContentView(R.layout.con_partners);
         Intent startIntent = getIntent();
         Bundle extras = startIntent.getExtras();
         editIdPartner = findViewById(R.id.editIdPartner);

@@ -73,7 +73,7 @@ public class PartnersAdapter extends RecyclerView.Adapter<PartnersAdapter.ViewHo
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
             //Creamos la vista de cada item a partir de nuestro layout
             View view = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.layout_partners_row, viewGroup, false);
+                    .inflate(R.layout.row_partners, viewGroup, false);
 
             return new ViewHolder(view);
         }

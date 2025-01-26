@@ -23,7 +23,7 @@ public class AniadirPartners extends AppCompatActivity implements Serializable {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_anadir_partners);
+        setContentView(R.layout.an_partners);
 
         handler = new DBHandler(AniadirPartners.this);
 

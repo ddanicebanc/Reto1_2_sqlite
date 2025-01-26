@@ -32,7 +32,7 @@ public class CalendarActivity extends AppCompatActivity implements Serializable 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_pantalla_calendario);
+        setContentView(R.layout.con_visitas);
         boolean check = false;
         Intent startIntent = getIntent();
         Bundle extras = startIntent.getExtras();

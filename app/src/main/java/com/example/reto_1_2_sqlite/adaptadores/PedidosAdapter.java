@@ -53,7 +53,7 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder (ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.layout_cabeceras_pedido_row, viewGroup, false);
+                .inflate(R.layout.row_cabeceras_pedido, viewGroup, false);
 
         return new ViewHolder(view);
     }

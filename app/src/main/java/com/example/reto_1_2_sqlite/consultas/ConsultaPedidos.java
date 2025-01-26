@@ -26,7 +26,7 @@ public class ConsultaPedidos extends AppCompatActivity implements Serializable {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_consulta_pedidos);
+        setContentView(R.layout.con_pedidos);
         Intent startIntent = getIntent();
         Bundle extras = startIntent.getExtras();
 

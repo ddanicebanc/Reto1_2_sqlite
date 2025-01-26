@@ -39,7 +39,7 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_anadir_cabecera_pedido);
+        setContentView(R.layout.an_cabecera_pedido);
         Intent startIntent = getIntent();
         Bundle extras = startIntent.getExtras();
 

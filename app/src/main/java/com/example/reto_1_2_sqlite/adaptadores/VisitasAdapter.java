@@ -67,7 +67,7 @@ public class VisitasAdapter extends RecyclerView.Adapter<VisitasAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         //Creamos la vista de cada item a partir de nuestro layout
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.layout_visits_row, viewGroup, false);
+                .inflate(R.layout.row_visitas, viewGroup, false);
 
         return new ViewHolder(view);
     }

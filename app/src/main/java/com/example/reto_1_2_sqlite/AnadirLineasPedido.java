@@ -44,7 +44,7 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_anadir_lineas_pedido);
+        setContentView(R.layout.an_lineas_pedido);
 
         user = (User) getIntent().getSerializableExtra("cUser");
         //Recuperamos el Intent inicial para diferenciarlo en cada carga al sacar los extras

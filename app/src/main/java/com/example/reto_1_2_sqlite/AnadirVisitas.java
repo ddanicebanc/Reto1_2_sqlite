@@ -31,7 +31,7 @@ public static String fechaDato, direccion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_pantalla_anadir_visitas);
+        setContentView(R.layout.an_visitas);
 
         User user = (User) getIntent().getSerializableExtra("cUser");
         handler = new DBHandler(AnadirVisitas.this);
