@@ -31,7 +31,7 @@
             android:name=".PantallaPrincipal">
         </activity>
         <activity
-            android:name=".consultas.CalendarActivity">
+            android:name=".consultas.ConsultaVisitas">
         </activity>
         <activity
             android:name=".anadir.AnadirVisitas">

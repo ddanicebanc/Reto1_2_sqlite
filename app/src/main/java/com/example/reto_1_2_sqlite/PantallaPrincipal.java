@@ -8,7 +8,7 @@ import android.widget.ImageButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.reto_1_2_sqlite.consultas.CalendarActivity;
+import com.example.reto_1_2_sqlite.consultas.ConsultaVisitas;
 import com.example.reto_1_2_sqlite.consultas.ConsultaCatalogo;
 import com.example.reto_1_2_sqlite.consultas.ConsultaPartners;
 import com.example.reto_1_2_sqlite.consultas.ConsultaPedidos;
@@ -32,7 +32,7 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
             public void onClick(View v) {
                 Intent myIntent = new Intent(
                         PantallaPrincipal.this,
-                        CalendarActivity.class
+                        ConsultaVisitas.class
                 );
                 myIntent.putExtra("cUser", user);
                 startActivity(myIntent);

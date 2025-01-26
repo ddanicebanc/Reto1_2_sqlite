@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class CalendarActivity extends AppCompatActivity implements Serializable {
+public class ConsultaVisitas extends AppCompatActivity implements Serializable {
     public User user;
     public DBHandler handler;
     public TextView txvTitulo;
@@ -87,7 +87,7 @@ public class CalendarActivity extends AppCompatActivity implements Serializable 
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(
-                        CalendarActivity.this,
+                        ConsultaVisitas.this,
                         AnadirVisitas.class
                 );
                 myIntent.putExtra("cUser", user);
