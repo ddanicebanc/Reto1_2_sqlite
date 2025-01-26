@@ -32,11 +32,11 @@
         android:id="@+id/btnPedidos"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:scaleType="fitXY"
+        android:scaleType="centerInside"
+        android:src="@drawable/orders"
         android:background="?android:selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:src="@drawable/orders"
         android:layout_margin="10dp"/>
 
     <ImageButton
