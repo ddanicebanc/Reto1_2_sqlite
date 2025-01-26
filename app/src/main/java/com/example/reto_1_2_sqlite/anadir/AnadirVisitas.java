@@ -1,4 +1,4 @@
-package com.example.reto_1_2_sqlite;
+package com.example.reto_1_2_sqlite.anadir;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.reto_1_2_sqlite.DBHandler;
+import com.example.reto_1_2_sqlite.R;
 import com.example.reto_1_2_sqlite.modelos.User;
 
 import java.io.Serializable;

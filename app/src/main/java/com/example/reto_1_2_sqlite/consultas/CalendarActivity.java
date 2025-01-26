@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.reto_1_2_sqlite.AnadirVisitas;
+import com.example.reto_1_2_sqlite.anadir.AnadirVisitas;
 import com.example.reto_1_2_sqlite.DBHandler;
 import com.example.reto_1_2_sqlite.R;
 import com.example.reto_1_2_sqlite.adaptadores.VisitasAdapter;

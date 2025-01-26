@@ -34,10 +34,10 @@
             android:name=".consultas.CalendarActivity">
         </activity>
         <activity
-            android:name=".AnadirVisitas">
+            android:name=".anadir.AnadirVisitas">
         </activity>
         <activity
-            android:name=".AniadirPartners">
+            android:name=".anadir.AniadirPartners">
         </activity>
         <activity
             android:name=".consultas.ConsultaPartners">
@@ -46,10 +46,10 @@
             android:name=".consultas.ConsultaPedidos">
         </activity>
         <activity
-            android:name=".AnadirCabeceraPedido">
+            android:name=".anadir.AnadirCabeceraPedido">
         </activity>
         <activity
-            android:name=".AnadirLineasPedido">
+            android:name=".anadir.AnadirLineasPedido">
         </activity>
         <activity
             android:name=".consultas.ConsultaCatalogo">
