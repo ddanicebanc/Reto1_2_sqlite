@@ -1,4 +1,4 @@
-package com.example.reto_1_2_sqlite;
+package com.example.reto_1_2_sqlite.conexiones;
 
 import android.content.ContentValues;
 import android.content.Context;

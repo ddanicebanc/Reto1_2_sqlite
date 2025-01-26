@@ -14,9 +14,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.reto_1_2_sqlite.DBHandler;
+import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.R;
 import com.example.reto_1_2_sqlite.adaptadores.PartnersAdapter;
+import com.example.reto_1_2_sqlite.anadir.AniadirPartners;
 import com.example.reto_1_2_sqlite.modelos.Partner;
 import com.example.reto_1_2_sqlite.modelos.User;
 
@@ -84,6 +85,19 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
                     startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     recreate();
                 }
+            }
+        });
+
+        Button btnAdd = findViewById(R.id.btnAddPartner);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        ConsultaPartners.this,
+                        AniadirPartners.class
+                );
+                i.putExtra("cUser", user);
+                startActivity(i);
             }
         });
     }
