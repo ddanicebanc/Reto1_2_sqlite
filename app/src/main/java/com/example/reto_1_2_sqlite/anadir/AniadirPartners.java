@@ -1,27 +1,34 @@
 package com.example.reto_1_2_sqlite.anadir;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.R;
+import com.example.reto_1_2_sqlite.consultas.ConsultaPartners;
 import com.example.reto_1_2_sqlite.modelos.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class AniadirPartners extends AppCompatActivity implements Serializable {
-    Button saveButton;
-    EditText edtName, edtAddress, edtCity, edtPhone, edtEmail, edtZipC;
-    Spinner spnName;
-    DBHandler handler;
-    String partnerIndex;
+    private Button saveButton;
+    private EditText edtName, edtAddress, edtCity, edtPhone, edtEmail, edtZipC;
+    private Spinner spnName;
+    private User user;
+    private DBHandler handler;
+    private String partnerIndex;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +36,7 @@ public class AniadirPartners extends AppCompatActivity implements Serializable {
 
         handler = new DBHandler(AniadirPartners.this);
 
-        User user = (User) getIntent().getSerializableExtra("cUser");
+        user = (User) getIntent().getSerializableExtra("cUser");
 
         edtName = findViewById(R.id.edt_name);
         edtAddress = findViewById(R.id.edt_address);
@@ -65,6 +72,13 @@ public class AniadirPartners extends AppCompatActivity implements Serializable {
                     datos.add(String.valueOf(user.getId()));
 
                     handler.insertData("partners", columnas, datos);
+
+                    Intent i = new Intent(
+                            AniadirPartners.this,
+                            ConsultaPartners.class
+                    );
+                    i.putExtra("cUser", user);
+                    startActivity(i);
                     finish();
                 } else {
                     //TODO En caso de que no pase la validación
@@ -84,12 +98,28 @@ public class AniadirPartners extends AppCompatActivity implements Serializable {
         email = edtEmail.getText().toString();
         zipcode = edtEmail.getText().toString();
 
-        if (address.isEmpty() || city.isEmpty() || phone.isEmpty() || email.isEmpty() || zipcode.isEmpty()) {
+        if (name.isEmpty()) {
+            Toast.makeText(this,
+                    "Es necesario introducir un nombre para el partner.",
+                    Toast.LENGTH_SHORT).show();
+            edtName.requestFocus();
             error = true;
         }
 
-        if (handler.checkMatchingStringField("partners", "nombre", name)) {
-            //TODO AlertDialog con "El partner que quieres introducir ya existe
+        if (handler.comprobarNombrePartner(name, user)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("ERROR")
+                    .setMessage("El partner introducido ya existe.")
+                    .setCancelable(false)
+                    .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            edtName.setText("");
+                            edtName.requestFocus();
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
             error = true;
         }
 
