@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.reto_1_2_sqlite.modelos.Articulo;
 import com.example.reto_1_2_sqlite.modelos.CabeceraPedido;
 import com.example.reto_1_2_sqlite.modelos.User;
 import com.example.reto_1_2_sqlite.modelos.Visita;
@@ -377,6 +378,27 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
 
         return pedidos;
+    }
+
+    public ArrayList<Articulo> getArrayArticulos (User user) {
+        ArrayList<Articulo> articulos = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select nombre, imagen from articulos where delegacion_id = " + user.getDelegationId();
+        Cursor c;
+
+        c = db.rawQuery(query, null);
+
+        while (c.moveToNext()) {
+            byte[] byteImage = c.getBlob(1);
+            Bitmap imagen = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+
+            articulos.add(new Articulo(
+                    c.getString(0),
+                    imagen
+            ));
+        }
+
+        return articulos;
     }
 
     public ArrayList<String> getSearchFieldArray (String tableName, String searchColumn) {
