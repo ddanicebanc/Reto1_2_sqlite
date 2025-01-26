@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.reto_1_2_sqlite.consultas.CalendarActivity;
+import com.example.reto_1_2_sqlite.consultas.ConsultaCatalogo;
 import com.example.reto_1_2_sqlite.consultas.ConsultaPartners;
 import com.example.reto_1_2_sqlite.consultas.ConsultaPedidos;
 import com.example.reto_1_2_sqlite.modelos.User;
@@ -16,7 +17,7 @@ import com.example.reto_1_2_sqlite.modelos.User;
 import java.io.Serializable;
 
 public class PantallaPrincipal extends AppCompatActivity implements Serializable {
-    ImageButton btnCalendar, btnPartners, btnPedidos;
+    ImageButton btnCalendar, btnPartners, btnPedidos, btnCatalogo;
     User user;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +59,19 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
                 Intent myIntent = new Intent(
                         PantallaPrincipal.this,
                         ConsultaPedidos.class
+                );
+                myIntent.putExtra("cUser", user);
+                startActivity(myIntent);
+            }
+        });
+
+        btnCatalogo = findViewById(R.id.btnCatalogo);
+        btnCatalogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(
+                        PantallaPrincipal.this,
+                        ConsultaCatalogo.class
                 );
                 myIntent.putExtra("cUser", user);
                 startActivity(myIntent);
