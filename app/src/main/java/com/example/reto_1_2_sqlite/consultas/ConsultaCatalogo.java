@@ -2,6 +2,9 @@ package com.example.reto_1_2_sqlite.consultas;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +20,7 @@ import com.example.reto_1_2_sqlite.modelos.User;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ConsultaCatalogo extends AppCompatActivity implements Serializable {
+public class ConsultaCatalogo extends AppCompatActivity implements Serializable, CatalogoAdapter.ItemClickListener {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,13 @@ public class ConsultaCatalogo extends AppCompatActivity implements Serializable 
         RecyclerView rclCatalogo = findViewById(R.id.rclCatalogo);
         CatalogoAdapter adapter = new CatalogoAdapter(articulos, this);
         rclCatalogo.setAdapter(adapter);
-        rclCatalogo.setLayoutManager(new LinearLayoutManager(this));
+        rclCatalogo.setLayoutManager(new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL,
+                false));
+        adapter.setOnClickListener(this::onClick);
     }
+
+
+    @Override
+    public void onClick(View view, int position) {}
 }
