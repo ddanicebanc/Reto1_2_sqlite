@@ -1,5 +1,6 @@
 package com.example.reto_1_2_sqlite;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +33,10 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
     private int selectedProductIndex, numeroLinea;
     private String nombreArticuloSeleccionado;
     private Bitmap imagenArticulo;
+//    private boolean aceptarSinLineas = false;
+    private DBHandler handler;
+    private CabeceraPedido cabecera;
+    User user;
     private static ArrayList<String> nombreArticulos = new ArrayList<>();
     private static ArrayList<Integer> idArticulos = new ArrayList<>();
     private static ArrayList<LineaPedido> lineas = new ArrayList<>();
@@ -39,12 +45,12 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_anadir_lineas_pedido);
 
-        User user = (User) getIntent().getSerializableExtra("cUser");
+        user = (User) getIntent().getSerializableExtra("cUser");
         //Recuperamos el Intent inicial para diferenciarlo en cada carga al sacar los extras
         Intent startIntent = getIntent();
         Bundle extras = startIntent.getExtras();
-        CabeceraPedido cabecera = (CabeceraPedido) extras.getSerializable("cabecera");
-        DBHandler handler = new DBHandler(this);
+        cabecera = (CabeceraPedido) extras.getSerializable("cabecera");
+        handler = new DBHandler(this);
 
 
         //Inicializamos el número de línea con el siguiente id en la tabla, sólo si no se encuentra
@@ -133,6 +139,11 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
                     startIntent.putExtra("lineas", lineas);
                     startIntent.putExtra("numeroLinea", numeroLinea);
                     startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                    //Vaciamos los campos de cantidad y precio
+                    edtCantidad.setText("");
+                    edtPrecio.setText("");
+
                     recreate();
                 }
             }
@@ -143,63 +154,100 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
         finalizarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Hacer el insert de los datos en las tablas de cabecera y lineas
-                //Insertamos la información en la base de datos
-                ArrayList<String> columnas = new ArrayList<>();
-                ArrayList<String> datos = new ArrayList<>();
+                //Comprobación del número de lineas introducidas en el pedido
+                //La comprobación del arraylist nulo tiene que ir la primera para que no salte la excepción
+                if (lineas == null || lineas.size() == 0) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AnadirLineasPedido.this);
+                    builder.setMessage("No has introducido ningún articulo al pedido. \n" +
+                            "¿Estás seguro que deseas continuar?")
+                            .setTitle("¡ATENCIÓN!")
+                            .setCancelable(false)
+                            .setNegativeButton("Cancelar",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
 
-                //Cabecera del pedido
-                columnas.add("id");
-                columnas.add("fechaPedido");
-                columnas.add("fechaPago");
-                columnas.add("fechaEnvio");
-                columnas.add("usuarioId");
-                columnas.add("delegacionId");
-                columnas.add("partnerId");
+                                        }
+                                    })
+                            .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //Inicializamos el arraylist de las lineas para que el proceso
+                                    //de inserción de lineas en la bbdd no de nullPointerException
+                                    if (lineas == null) {
+                                        lineas = new ArrayList<>();
+                                    }
 
-                datos.add(String.valueOf(cabecera.getId()));
-                datos.add(cabecera.getFechaPedido());
-                datos.add(cabecera.getFechaPago());
-                datos.add(cabecera.getFechaEnvio());
-                datos.add(String.valueOf(cabecera.getUsuarioId()));
-                datos.add(String.valueOf(cabecera.getDelegacionId()));
-                datos.add(String.valueOf(cabecera.getPartnerId()));
+//                                    //Cambiamos la condición para poder introducir la cabecera del
+//                                    //pedido sin líneas
+//                                    aceptarSinLineas = true;
 
-                handler.insertData("cab_pedidos", columnas, datos);
-
-                //Lineas de los pedidos
-                columnas.clear();
-                datos.clear();
-
-                columnas.add("id");
-                columnas.add("articuloId");
-                columnas.add("cantidad");
-                columnas.add("precio");
-                columnas.add("cab_pedido_id");
-
-                for (LineaPedido l : lineas) {
-                    datos.add(String.valueOf(l.getNumeroLinea()));
-                    datos.add(String.valueOf(l.getArticuloId()));
-                    datos.add(String.valueOf(l.getCantidad()));
-                    datos.add(String.valueOf(l.getPrecio()));
-                    datos.add(String.valueOf(l.getCabPedidoId()));
-
-                    handler.insertData("lin_pedidos", columnas, datos);
-
-                    datos.clear();
+                                    insertarPedido();
+                                }
+                            });
+                    builder.show();
+                } else {
+                    insertarPedido();
                 }
-
-                //Al terminar lanzamos la actividad de la consulta de pedidos
-                Intent myIntent = new Intent(
-                        AnadirLineasPedido.this,
-                        ConsultaPedidos.class
-                );
-                myIntent.putExtra("cUser", user);
-                //Elimina las actividades de cabecera y lineas de pedido de la cola de actividades
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(myIntent);
             }
         });
+    }
+
+    private void insertarPedido () {
+        //Insertamos la información en la base de datos
+        ArrayList<String> columnas = new ArrayList<>();
+        ArrayList<String> datos = new ArrayList<>();
+
+        //Cabecera del pedido
+        columnas.add("id");
+        columnas.add("fechaPedido");
+        columnas.add("fechaPago");
+        columnas.add("fechaEnvio");
+        columnas.add("usuarioId");
+        columnas.add("delegacionId");
+        columnas.add("partnerId");
+
+        datos.add(String.valueOf(cabecera.getId()));
+        datos.add(cabecera.getFechaPedido());
+        datos.add(cabecera.getFechaPago());
+        datos.add(cabecera.getFechaEnvio());
+        datos.add(String.valueOf(cabecera.getUsuarioId()));
+        datos.add(String.valueOf(cabecera.getDelegacionId()));
+        datos.add(String.valueOf(cabecera.getPartnerId()));
+
+        handler.insertData("cab_pedidos", columnas, datos);
+
+        //Lineas de los pedidos
+        columnas.clear();
+        datos.clear();
+
+        columnas.add("id");
+        columnas.add("articuloId");
+        columnas.add("cantidad");
+        columnas.add("precio");
+        columnas.add("cab_pedido_id");
+
+        for (LineaPedido l : lineas) {
+            datos.add(String.valueOf(l.getNumeroLinea()));
+            datos.add(String.valueOf(l.getArticuloId()));
+            datos.add(String.valueOf(l.getCantidad()));
+            datos.add(String.valueOf(l.getPrecio()));
+            datos.add(String.valueOf(l.getCabPedidoId()));
+
+            handler.insertData("lin_pedidos", columnas, datos);
+
+            datos.clear();
+        }
+
+        //Al terminar lanzamos la actividad de la consulta de pedidos
+        Intent myIntent = new Intent(
+                AnadirLineasPedido.this,
+                ConsultaPedidos.class
+        );
+        myIntent.putExtra("cUser", user);
+        //Elimina las actividades de cabecera y lineas de pedido de la cola de actividades
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(myIntent);
     }
 
     private boolean validarCampos() {
