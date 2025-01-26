@@ -43,6 +43,10 @@ public class CatalogoAdapter extends RecyclerView.Adapter<CatalogoAdapter.ViewHo
         public void onClick (View view) {clickListener.onClick(view, getAdapterPosition());}
     }
 
+    public void setOnClickListener (ItemClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
     public CatalogoAdapter (ArrayList<Articulo> dataSet, Context context) {
         this.dataSet = dataSet;
         this.context = context;
