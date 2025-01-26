@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reto_1_2_sqlite.adaptadores.LineasAdapter;
+import com.example.reto_1_2_sqlite.consultas.ConsultaPedidos;
 import com.example.reto_1_2_sqlite.modelos.CabeceraPedido;
 import com.example.reto_1_2_sqlite.modelos.LineaPedido;
 import com.example.reto_1_2_sqlite.modelos.User;

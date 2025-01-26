@@ -1,4 +1,4 @@
-package com.example.reto_1_2_sqlite;
+package com.example.reto_1_2_sqlite.consultas;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.reto_1_2_sqlite.AnadirCabeceraPedido;
+import com.example.reto_1_2_sqlite.DBHandler;
+import com.example.reto_1_2_sqlite.R;
 import com.example.reto_1_2_sqlite.adaptadores.PedidosAdapter;
 import com.example.reto_1_2_sqlite.modelos.CabeceraPedido;
 import com.example.reto_1_2_sqlite.modelos.User;

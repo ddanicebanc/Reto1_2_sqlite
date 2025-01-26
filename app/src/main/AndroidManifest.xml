@@ -31,7 +31,7 @@
             android:name=".PantallaPrincipal">
         </activity>
         <activity
-            android:name=".CalendarActivity">
+            android:name=".consultas.CalendarActivity">
         </activity>
         <activity
             android:name=".AnadirVisitas">
@@ -40,10 +40,10 @@
             android:name=".AniadirPartners">
         </activity>
         <activity
-            android:name=".ConsultaPartners">
+            android:name=".consultas.ConsultaPartners">
         </activity>
         <activity
-            android:name=".ConsultaPedidos">
+            android:name=".consultas.ConsultaPedidos">
         </activity>
         <activity
             android:name=".AnadirCabeceraPedido">

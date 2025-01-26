@@ -1,4 +1,4 @@
-package com.example.reto_1_2_sqlite;
+package com.example.reto_1_2_sqlite.consultas;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -15,6 +14,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.reto_1_2_sqlite.DBHandler;
+import com.example.reto_1_2_sqlite.R;
 import com.example.reto_1_2_sqlite.adaptadores.PartnersAdapter;
 import com.example.reto_1_2_sqlite.modelos.Partner;
 import com.example.reto_1_2_sqlite.modelos.User;
