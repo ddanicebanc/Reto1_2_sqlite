@@ -71,7 +71,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 "articulo_id integer,\n" +
                 "delegacion_id integer,\n" +
                 "precio real,\n" +
-                "primary key (articulo_id, delegacionId),\n" +
+                "primary key (articulo_id, delegacion_id),\n" +
                 "foreign key (articulo_id) references articulos (id) on delete cascade,\n" +
                 "foreign key (delegacion_id) references delegaciones (id) on delete cascade\n" +
                 ")";
