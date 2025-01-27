@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.reto_1_2_sqlite.PantallaPrincipal;
 import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.R;
 import com.example.reto_1_2_sqlite.adaptadores.PartnersAdapter;
@@ -106,6 +108,67 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
                         AniadirPartners.class
                 );
                 i.putExtra("cUser", user);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        //Funcionamiento de los botones del footer
+        ImageButton btnHome = findViewById(R.id.btnHome);
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        ConsultaPartners.this,
+                        PantallaPrincipal.class
+                );
+                i.putExtra("cUser", user);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        ImageButton btnCal = findViewById(R.id.btnAg);
+        btnCal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        ConsultaPartners.this,
+                        ConsultaVisitas.class
+                );
+                i.putExtra("cUser", user);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        ImageButton btnCat = findViewById(R.id.btnCat);
+        btnCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        ConsultaPartners.this,
+                        ConsultaCatalogo.class
+                );
+                i.putExtra("cUser", user);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        ImageButton btnPed = findViewById(R.id.btnPed);
+        btnPed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        ConsultaPartners.this,
+                        ConsultaPedidos.class
+                );
+                i.putExtra("cUser", user);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 finish();
             }
