@@ -51,7 +51,7 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
 
         //Controlador para el mapview
         IMapController controller = map.getController();
-        controller.setZoom(20d);
+        controller.setZoom(15d);
         //Punto de incio para el mapa con un GeoPoint
         GeoPoint inicio = new GeoPoint(43.3048085436558, -2.01689600060729);
         //Establecemos el punto de incio en el controlador del mapa
