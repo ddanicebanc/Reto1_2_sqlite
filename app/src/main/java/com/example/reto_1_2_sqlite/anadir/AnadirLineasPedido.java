@@ -181,10 +181,6 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
                                         lineas = new ArrayList<>();
                                     }
 
-//                                    //Cambiamos la condición para poder introducir la cabecera del
-//                                    //pedido sin líneas
-//                                    aceptarSinLineas = true;
-
                                     insertarPedido();
                                 }
                             });
@@ -206,9 +202,9 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
         columnas.add("fechaPedido");
         columnas.add("fechaPago");
         columnas.add("fechaEnvio");
-        columnas.add("usuarioId");
-        columnas.add("delegacionId");
-        columnas.add("partnerId");
+        columnas.add("usuario_id");
+        columnas.add("delegacion_id");
+        columnas.add("partner_id");
 
         datos.add(String.valueOf(cabecera.getId()));
         datos.add(cabecera.getFechaPedido());

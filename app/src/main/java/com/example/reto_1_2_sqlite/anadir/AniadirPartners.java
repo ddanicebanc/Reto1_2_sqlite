@@ -68,7 +68,7 @@ public class AniadirPartners extends AppCompatActivity implements Serializable {
                     columnas.add("email");
                     datos.add(edtEmail.getText().toString());
 
-                    columnas.add("usuarioId");
+                    columnas.add("usuario_id");
                     datos.add(String.valueOf(user.getId()));
 
                     handler.insertData("partners", columnas, datos);

@@ -106,10 +106,10 @@ public static String fechaDato, direccion;
                     ArrayList<String> columnas = new ArrayList<>();
                     ArrayList<String> datos = new ArrayList<>();
 
-                    columnas.add("usuarioId");
+                    columnas.add("usuario_id");
                     datos.add(String.valueOf(user.getId()));
 
-                    columnas.add("partnerId");
+                    columnas.add("partner_id");
                     datos.add(String.valueOf(selectedPartnerIndex));
 
                     columnas.add("fechaVisita");
