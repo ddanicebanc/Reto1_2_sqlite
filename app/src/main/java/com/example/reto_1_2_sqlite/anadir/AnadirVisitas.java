@@ -71,6 +71,8 @@ public static String fechaDato, direccion;
                         anio, mes, dia);
                 // at last we are calling show to
                 // display our date picker dialog.
+                datePickerDialog.getDatePicker().setFirstDayOfWeek(Calendar.MONDAY);
+
                 datePickerDialog.show();
             }
         });
