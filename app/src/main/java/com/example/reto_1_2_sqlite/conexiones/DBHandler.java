@@ -55,8 +55,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 "poblacion text," +
                 "telefono integer," +
                 "email text," +
-                "usuarioId integer," +
-                "foreign key (usuarioId) references usuarios (id) on delete cascade)";
+                "usuario_Id integer," +
+                "foreign key (usuario_id) references usuarios (id) on delete cascade)";
         sqLiteDatabase.execSQL(query);
 
         query = "create table articulos (" +
@@ -68,23 +68,23 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(query);
 
         query = "create table catalogo (\n" +
-                "articuloId integer,\n" +
-                "delegacionId integer,\n" +
+                "articulo_id integer,\n" +
+                "delegacion_id integer,\n" +
                 "precio real,\n" +
-                "primary key (articuloId, delegacionId),\n" +
-                "foreign key (articuloId) references articulos (id) on delete cascade,\n" +
-                "foreign key (delegacionId) references delegaciones (id) on delete cascade\n" +
+                "primary key (articulo_id, delegacionId),\n" +
+                "foreign key (articulo_id) references articulos (id) on delete cascade,\n" +
+                "foreign key (delegacion_id) references delegaciones (id) on delete cascade\n" +
                 ")";
         sqLiteDatabase.execSQL(query);
 
         query = "create table visitas (" +
                 "id integer primary key autoincrement," +
-                "usuarioId integer," +
-                "partnerId integer," +
+                "usuario_id integer," +
+                "partner_id integer," +
                 "fechaVisita date," +
                 "direccion text," +
-                "foreign key (usuarioId) references usuarios (id) on delete cascade," +
-                "foreign key (partnerId) references partners (id) on delete cascade)";
+                "foreign key (usuario_id) references usuarios (id) on delete cascade," +
+                "foreign key (partner_id) references partners (id) on delete cascade)";
         sqLiteDatabase.execSQL(query);
 
         query = "create table cab_pedidos (" +
@@ -92,11 +92,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 "fechaPedido date," +
                 "fechaPago date," +
                 "fechaEnvio date," +
-                "usuarioId integer," +
-                "delegacionId integer," +
-                "partnerId integer," +
-                "foreign key (usuarioId) references usuarios (id) on delete cascade," +
-                "foreign key (partnerId) references partners (id) on delete cascade)";
+                "usuario_id integer," +
+                "delegacion_id integer," +
+                "partner_id integer," +
+                "foreign key (usuario_id) references usuarios (id) on delete cascade," +
+                "foreign key (partner_id) references partners (id) on delete cascade)";
         sqLiteDatabase.execSQL(query);
 
         query = "create table lin_pedidos (" +
@@ -402,6 +402,49 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
         return articulos;
+    }
+
+    //TODO Seguir aquí
+    public ArrayList<String> getNombrePartners (User user) {
+        ArrayList<String> datos = new ArrayList<>();
+        String query = "select nombre" +
+                " from partners " +
+                " inner join usuarios on (usuarios.partner_id = partners.id)" +
+                " inner join comerciales on (comerciales.id = usuarios.comercial_id)" +
+                " where comerciales.delegacion_id = " + user.getDelegationId();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null, null);
+
+        if (c.getCount() > 0) {
+            while (c.moveToNext()) {
+                datos.add(c.getString(0));
+            }
+        }
+
+        c.close();
+
+        return datos;
+    }
+
+    public ArrayList<Integer> getIdPartners (User user) {
+        ArrayList<Integer> datos = new ArrayList<>();
+        String query = "select id " +
+                " from partners " +
+                " inner join usuarios on (usuarios.partner_id = partners.id)" +
+                " inner join comerciales on (comerciales.id = usuarios.comercial_id)" +
+                " where comerciales.delegacion_id = " + user.getDelegationId();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null, null);
+
+        if (c.getCount() > 0) {
+            while (c.moveToNext()) {
+                datos.add(c.getInt(0));
+            }
+        }
+
+        c.close();
+
+        return datos;
     }
 
     public ArrayList<String> getSearchFieldArray (String tableName, String searchColumn) {
