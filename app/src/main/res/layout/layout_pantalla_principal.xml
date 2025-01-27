@@ -8,7 +8,7 @@
         android:id="@+id/map"
         android:layout_width="300dp"
         android:layout_height="500dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/footer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,7 +43,7 @@
         android:scaleType="centerInside"
         android:src="@drawable/orders"
         android:background="?android:selectableItemBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/footer"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="10dp"/>
 
@@ -53,9 +53,16 @@
         android:layout_height="60dp"
         android:scaleType="fitXY"
         android:background="?android:selectableItemBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/footer"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="10dp"
         android:src="@drawable/catalogo"/>
+
+    <include
+        android:id="@+id/footer"
+        layout="@layout/layout_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
