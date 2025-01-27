@@ -27,7 +27,7 @@ public static String fechaDato, direccion;
     private Spinner spnNombrePartners;
     DBHandler handler;
     public static ArrayList<String> partnerNames = new ArrayList<>();
-    public static ArrayList<String> partnerIds = new ArrayList<>();
+    public static ArrayList<Integer> partnerIds = new ArrayList<>();
     public int selectedPartnerIndex;
 
     @Override
@@ -76,8 +76,8 @@ public static String fechaDato, direccion;
         });
 
         //Preparación de los datos para el spinner
-        partnerNames = handler.getSearchFieldArray("partners","nombre");
-        partnerIds = handler.getSearchFieldArray("partners", "id");
+        partnerNames = handler.getNombrePartners(user);
+        partnerIds = handler.getIdPartners(user);
 
         spnNombrePartners = findViewById(R.id.spnNombrePartner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -89,7 +89,7 @@ public static String fechaDato, direccion;
         spnNombrePartners.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedPartnerIndex = Integer.parseInt(partnerIds.get(position));
+                selectedPartnerIndex = partnerIds.get(position);
             }
 
             @Override
