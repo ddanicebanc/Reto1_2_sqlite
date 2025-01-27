@@ -24,7 +24,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public DBHandler (Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         SQLiteDatabase db = this.getReadableDatabase();
-        db.rawQuery("pragma foreign_keys = on", null, null);
+        db.rawQuery("pragma foreign_keys = on", null, null).close();
     }
 
     @Override
@@ -242,6 +242,8 @@ public class DBHandler extends SQLiteOpenHelper {
             }
         }
 
+        c.close();
+
         return user;
     }
 
@@ -257,7 +259,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         activeUserId = usuario.getId();
 
-        query = "select * from visitas where usuario_id = " + String.valueOf(activeUserId);
+        query = "select * from visitas where usuario_id = " + activeUserId;
 
         if (historico == false) {
             query = query + " and fechaVisita >= '" + fechaHoy + "'";
@@ -400,6 +402,8 @@ public class DBHandler extends SQLiteOpenHelper {
                     imagen
             ));
         }
+
+        c.close();
 
         return articulos;
     }
@@ -627,6 +631,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 imagen = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
             }
         }
+
+        c.close();
 
         return imagen;
     }
