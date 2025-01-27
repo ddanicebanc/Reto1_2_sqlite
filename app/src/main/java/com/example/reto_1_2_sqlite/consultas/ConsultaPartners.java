@@ -82,8 +82,15 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
         validarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validarIdPartner()==true){
-                    startIntent.putExtra("partnerId", Integer.parseInt(editIdPartner.getText().toString()));
+                if (validarIdPartner() == true){
+                    int tempPartnerId;
+
+                    if (editIdPartner.getText().toString().isEmpty()) {
+                        tempPartnerId = 0;
+                    } else {
+                        tempPartnerId = Integer.parseInt(editIdPartner.getText().toString());
+                    }
+                    startIntent.putExtra("partnerId", tempPartnerId);
                     startIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     recreate();
                 }
@@ -112,10 +119,8 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
         // Obtener el valor ingresado
         String idPartner = editIdPartner.getText().toString().trim();
 
-        // Validaciones
         if (idPartner.isEmpty()) {
-            Toast.makeText(this, "El campo 'ID_Partner' no puede estar vacío", Toast.LENGTH_LONG).show();
-            return false;
+            return true;
         }
 
         if (!idPartner.matches("\\d+")) {
