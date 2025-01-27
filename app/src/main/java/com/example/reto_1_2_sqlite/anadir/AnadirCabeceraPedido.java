@@ -34,7 +34,7 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
     private Spinner spnNombrePartners;
     DBHandler handler;
     public static ArrayList<String> partnerNames = new ArrayList<>();
-    public static ArrayList<String> partnerIds = new ArrayList<>();
+    public static ArrayList<Integer> partnerIds = new ArrayList<>();
     private int selectedPartnerIndex;
     private String sFechaPedido, sFechaPago, sFechaEnvio;
 
@@ -146,8 +146,8 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
         });
 
         //Preparación de los datos para el spinner
-        partnerNames = handler.getSearchFieldArray("partners","nombre");
-        partnerIds = handler.getSearchFieldArray("partners", "id");
+        partnerNames = handler.getNombrePartners(user);
+        partnerIds = handler.getIdPartners(user);
 
         spnNombrePartners = findViewById(R.id.spnNombrePartner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -159,7 +159,7 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
         spnNombrePartners.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedPartnerIndex = Integer.parseInt(partnerIds.get(position));
+                selectedPartnerIndex = partnerIds.get(position);
             }
 
             @Override
