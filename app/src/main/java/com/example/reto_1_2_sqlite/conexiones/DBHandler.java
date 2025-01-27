@@ -199,7 +199,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         query = "select partners.nombre " +
                 "from partners " +
-                "inner join usuarios on (usuarios.id = partners.usuarioId) " +
+                "inner join usuarios on (usuarios.id = partners.usuario_id) " +
                 "inner join comerciales on (comerciales.id = usuarios.comercial_id) " +
                 "where upper(partners.nombre) = '" + nombrePartner.toUpperCase() + "' " +
                 "and comerciales.delegacion_id = " + user.getDelegationId();
@@ -257,7 +257,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         activeUserId = usuario.getId();
 
-        query = "select * from visitas where usuarioId = " + String.valueOf(activeUserId);
+        query = "select * from visitas where usuario_id = " + String.valueOf(activeUserId);
 
         if (historico == false) {
             query = query + " and fechaVisita >= '" + fechaHoy + "'";
@@ -314,7 +314,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<Partner> getArrayPartners (User user, int partnerId) {
         ArrayList<Partner> partners = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "select * from partners where usuarioId = " + user.getId();
+        String query = "select * from partners where usuario_id = " + user.getId();
         int id,telefono,usuarioId;
         String nombre,direccion,poblacion,email;
 
@@ -352,7 +352,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<CabeceraPedido> getArrayPedidos (User user) {
         ArrayList<CabeceraPedido> pedidos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "select * from cab_pedidos where usuarioId = " + user.getId();
+        String query = "select * from cab_pedidos where usuario_id = " + user.getId();
         int id,usuarioId,delegacionId, partnerId;
         String fechaPedido,fechaEnvio,fechaPago;
 
@@ -404,12 +404,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return articulos;
     }
 
-    //TODO Seguir aquí
     public ArrayList<String> getNombrePartners (User user) {
         ArrayList<String> datos = new ArrayList<>();
-        String query = "select nombre" +
+        String query = "select partners.nombre" +
                 " from partners " +
-                " inner join usuarios on (usuarios.partner_id = partners.id)" +
+                " inner join usuarios on (usuarios.id = partners.usuario_id)" +
                 " inner join comerciales on (comerciales.id = usuarios.comercial_id)" +
                 " where comerciales.delegacion_id = " + user.getDelegationId();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -428,9 +427,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public ArrayList<Integer> getIdPartners (User user) {
         ArrayList<Integer> datos = new ArrayList<>();
-        String query = "select id " +
+        String query = "select partners.id" +
                 " from partners " +
-                " inner join usuarios on (usuarios.partner_id = partners.id)" +
+                " inner join usuarios on (usuarios.id = partners.usuario_id)" +
                 " inner join comerciales on (comerciales.id = usuarios.comercial_id)" +
                 " where comerciales.delegacion_id = " + user.getDelegationId();
         SQLiteDatabase db = this.getReadableDatabase();
