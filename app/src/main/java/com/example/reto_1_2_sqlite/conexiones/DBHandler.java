@@ -255,7 +255,17 @@ public class DBHandler extends SQLiteOpenHelper {
         int visitaId, usuarioId, partnerId, activeUserId;
         String fechaVisita, direccion, partnerName = "", fechaHoy;
         LocalDate today = LocalDate.now();
+        String partes[];
+
         fechaHoy = today.toString();
+        partes = fechaHoy.split("-");
+
+        if (partes[1].charAt(0) == '0') {
+            partes[1] = partes[1].substring(1);
+        }
+
+        fechaHoy = "";
+        fechaHoy = partes[0] + "-" + partes[1] + "-" + partes[2];
 
         activeUserId = usuario.getId();
 
