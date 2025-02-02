@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation("mysql:mysql-connector-java:5.1.6")
     implementation("org.osmdroid:osmdroid-android:6.1.20")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

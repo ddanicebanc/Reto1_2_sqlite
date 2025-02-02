@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.reto_1_2_sqlite.PantallaPrincipal;
 import com.example.reto_1_2_sqlite.anadir.AnadirVisitas;
 import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.R;
@@ -92,6 +94,67 @@ public class ConsultaVisitas extends AppCompatActivity implements Serializable {
                 );
                 myIntent.putExtra("cUser", user);
                 startActivity(myIntent);
+            }
+        });
+
+        //Funcionamiento de los botones del footer
+        ImageButton btnHome = findViewById(R.id.btnHome);
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        ConsultaVisitas.this,
+                        PantallaPrincipal.class
+                );
+                i.putExtra("cUser", user);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        ImageButton btnPar = findViewById(R.id.btnPar);
+        btnPar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        ConsultaVisitas.this,
+                        ConsultaPartners.class
+                );
+                i.putExtra("cUser", user);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        ImageButton btnCat = findViewById(R.id.btnCat);
+        btnCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        ConsultaVisitas.this,
+                        ConsultaCatalogo.class
+                );
+                i.putExtra("cUser", user);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        ImageButton btnPed = findViewById(R.id.btnPed);
+        btnPed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        ConsultaVisitas.this,
+                        ConsultaPedidos.class
+                );
+                i.putExtra("cUser", user);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                finish();
             }
         });
     }

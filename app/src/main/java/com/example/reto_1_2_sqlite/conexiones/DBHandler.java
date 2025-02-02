@@ -31,11 +31,20 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String query;
 
+        query = "create table delegaciones (\n" +
+                "id intenger primary key autoincrement,\n" +
+                "nombre text," +
+                "longitud real," +
+                "latitud real" +
+                ")";
+        sqLiteDatabase.execSQL(query);
+
         query = "create table comerciales (\n" +
                 "id integer primary key autoincrement,\n" +
                 "nombre text,\n" +
                 "telefono integer,\n" +
-                "delegacion_id integer\n" +
+                "delegacion_id integer,\n" +
+                "foreign key (delegacion_id) references delegaciones (delegaciones_id) on delete cascade" +
                 ")";
         sqLiteDatabase.execSQL(query);
 
@@ -121,6 +130,8 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("drop table if exists partners");
         sqLiteDatabase.execSQL("drop table if exists usuarios");
         sqLiteDatabase.execSQL("drop table if exists comerciales");
+        sqLiteDatabase.execSQL("drop table if exists delegaciones");
+
         onCreate(sqLiteDatabase);
     }
 
@@ -255,7 +266,17 @@ public class DBHandler extends SQLiteOpenHelper {
         int visitaId, usuarioId, partnerId, activeUserId;
         String fechaVisita, direccion, partnerName = "", fechaHoy;
         LocalDate today = LocalDate.now();
+        String partes[];
+
         fechaHoy = today.toString();
+        partes = fechaHoy.split("-");
+
+        if (partes[1].charAt(0) == '0') {
+            partes[1] = partes[1].substring(1);
+        }
+
+        fechaHoy = "";
+        fechaHoy = partes[0] + "-" + partes[1] + "-" + partes[2];
 
         activeUserId = usuario.getId();
 

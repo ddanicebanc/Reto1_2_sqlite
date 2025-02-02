@@ -38,8 +38,15 @@
         android:layout_height="wrap_content"
         android:src="@drawable/add"
         android:contentDescription="@string/add"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/footer"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp"/>
+
+    <include
+        android:id="@+id/footer"
+        layout="@layout/layout_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

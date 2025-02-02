@@ -116,6 +116,59 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
                 startActivity(myIntent);
             }
         });
+
+        //Configuración del footer
+        ImageButton btnCal = findViewById(R.id.btnAg);
+        btnCal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        PantallaPrincipal.this,
+                        ConsultaVisitas.class
+                );
+                i.putExtra("cUser", user);
+                startActivity(i);
+            }
+        });
+
+        ImageButton btnPart = findViewById(R.id.btnPar);
+        btnPart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        PantallaPrincipal.this,
+                        ConsultaPartners.class
+                );
+                i.putExtra("cUser", user);
+                startActivity(i);
+            }
+        });
+
+        ImageButton btnPed = findViewById(R.id.btnPed);
+        btnPed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        PantallaPrincipal.this,
+                        ConsultaPedidos.class
+                );
+                i.putExtra("cUser", user);
+                startActivity(i);
+            }
+        });
+
+        ImageButton btnCat = findViewById(R.id.btnCat);
+        btnCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(
+                        PantallaPrincipal.this,
+                        ConsultaCatalogo.class
+                );
+                i.putExtra("cUser", user);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
