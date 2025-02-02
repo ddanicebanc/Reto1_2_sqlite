@@ -72,13 +72,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 "id integer primary key autoincrement," +
                 "nombre varchar(50)," +
                 "tipo varchar(50)," +
-                "delegacion_id integer," +
                 "imagen blob)";
         sqLiteDatabase.execSQL(query);
 
         query = "create table catalogo (\n" +
                 "articulo_id integer,\n" +
                 "delegacion_id integer,\n" +
+                "stock integer,\n" +
                 "precio real,\n" +
                 "primary key (articulo_id, delegacion_id),\n" +
                 "foreign key (articulo_id) references articulos (id) on delete cascade,\n" +
@@ -409,7 +409,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<Articulo> getArrayArticulos (User user) {
         ArrayList<Articulo> articulos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "select nombre, imagen from articulos where delegacion_id = " + user.getDelegationId();
+        String query = "select articulos.nombre, articulos.imagen, catalogo.precio" +
+                        " from catalogo " +
+                        " inner join articulos on (articulos.id = catalogo.articulo_id)" +
+                        " where catalogo.delegacion_id = " + user.getDelegationId();
         Cursor c;
 
         c = db.rawQuery(query, null);
