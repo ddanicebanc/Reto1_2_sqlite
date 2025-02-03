@@ -414,6 +414,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public ArrayList<Articulo> getArrayArticulos (User user) {
+        //TODO Después de la bajada de datos, comprobar la carga de los artículos en el catálogo
         ArrayList<Articulo> articulos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "select articulos.nombre, articulos.imagen, catalogo.precio" +

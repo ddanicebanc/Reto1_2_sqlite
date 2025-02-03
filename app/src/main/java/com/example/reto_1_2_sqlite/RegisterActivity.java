@@ -157,6 +157,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!contrasenia.isEmpty()) {
                         //Comprobamos que el usuario no esté repetido
                         if (!handler.searchByName("usuarios", "nombre", usuario)) {
+                            //TODO añadir el usuario con el mismo id que el comercial
                             //Rellenamos los arrayList con las columnas y datos
                             columnas.add("nombre");
                             columnas.add("contrasenia");
