@@ -58,6 +58,16 @@
         android:layout_margin="10dp"
         android:src="@drawable/catalogo"/>
 
+    <Button
+        android:id="@+id/pruebasync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="prueba"
+        app:layout_constraintBottom_toTopOf="@+id/map"
+        app:layout_constraintEnd_toStartOf="@+id/btn_partners"
+        app:layout_constraintStart_toEndOf="@+id/btn_calendar"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <include
         android:id="@+id/footer"
         layout="@layout/layout_footer"
