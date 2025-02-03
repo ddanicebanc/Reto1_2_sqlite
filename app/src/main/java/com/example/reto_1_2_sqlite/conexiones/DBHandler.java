@@ -19,10 +19,16 @@ import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "comercialesdb";
-    private static final int DB_VERSION = 1;
+    public static int DB_VERSION = 1;
 
     public DBHandler (Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.rawQuery("pragma foreign_keys = on", null, null).close();
+    }
+
+    public DBHandler (Context context, int version) {
+        super (context, DB_NAME, null, version);
         SQLiteDatabase db = this.getReadableDatabase();
         db.rawQuery("pragma foreign_keys = on", null, null).close();
     }
@@ -32,7 +38,7 @@ public class DBHandler extends SQLiteOpenHelper {
         String query;
 
         query = "create table delegaciones (\n" +
-                "id intenger primary key autoincrement,\n" +
+                "id_delegacion intenger primary key,\n" +
                 "nombre text," +
                 "longitud real," +
                 "latitud real" +
@@ -43,8 +49,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 "id integer primary key autoincrement,\n" +
                 "nombre text,\n" +
                 "telefono integer,\n" +
+                "email text,\n" +
                 "delegacion_id integer,\n" +
-                "foreign key (delegacion_id) references delegaciones (delegaciones_id) on delete cascade" +
+                "foreign key (delegacion_id) references delegaciones (id_delegacion) on delete cascade" +
                 ")";
         sqLiteDatabase.execSQL(query);
 
@@ -68,11 +75,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 "foreign key (usuario_id) references usuarios (id) on delete cascade)";
         sqLiteDatabase.execSQL(query);
 
-        query = "create table articulos (" +
-                "id integer primary key autoincrement," +
-                "nombre varchar(50)," +
-                "tipo varchar(50)," +
-                "imagen blob)";
+            query = "create table articulos (" +
+                    "id integer primary key autoincrement," +
+                    "nombre varchar(50)," +
+                    "tipo varchar(50)," +
+                    "imagen text)";
         sqLiteDatabase.execSQL(query);
 
         query = "create table catalogo (\n" +
@@ -417,6 +424,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         c = db.rawQuery(query, null);
 
+        //TODO Arreglar la recuperación de datos
         while (c.moveToNext()) {
             byte[] byteImage = c.getBlob(1);
             Bitmap imagen = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
