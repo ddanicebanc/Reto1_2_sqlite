@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
@@ -13,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.reto_1_2_sqlite.conexiones.HiloSincronizacion;
 import com.example.reto_1_2_sqlite.consultas.ConsultaVisitas;
 import com.example.reto_1_2_sqlite.consultas.ConsultaCatalogo;
 import com.example.reto_1_2_sqlite.consultas.ConsultaPartners;
@@ -167,6 +170,21 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
                 );
                 i.putExtra("cUser", user);
                 startActivity(i);
+            }
+        });
+
+        Button btntest = findViewById(R.id.pruebasync);
+        btntest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HiloSincronizacion hilo = new HiloSincronizacion(PantallaPrincipal.this);
+
+                try {
+                    hilo.start();
+                    hilo.join();
+                } catch (InterruptedException ie) {
+                    Log.d("CONEXIÓN", ie.getMessage());
+                }
             }
         });
     }
