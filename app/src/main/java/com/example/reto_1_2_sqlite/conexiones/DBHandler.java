@@ -447,7 +447,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 " from partners " +
                 " inner join usuarios on (usuarios.id = partners.usuario_id)" +
                 " inner join comerciales on (comerciales.id = usuarios.comercial_id)" +
-                " where comerciales.delegacion_id = " + user.getDelegationId();
+                " where comerciales.delegacion_id = " + user.getDelegationId() +
+                " and usuarios.id = " + user.getId();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(query, null, null);
 
@@ -468,7 +469,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 " from partners " +
                 " inner join usuarios on (usuarios.id = partners.usuario_id)" +
                 " inner join comerciales on (comerciales.id = usuarios.comercial_id)" +
-                " where comerciales.delegacion_id = " + user.getDelegationId();
+                " where comerciales.delegacion_id = " + user.getDelegationId() +
+                " and usuarios.id = " + user.getId();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(query, null, null);
 
