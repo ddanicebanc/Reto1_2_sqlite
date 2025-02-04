@@ -20,7 +20,7 @@ public class CargaDelegaciones extends Thread {
     @Override
     public void run () {
         //Esta es la dirección en casa en el momento de prueba
-        String url = "jdbc:mysql://192.168.1.139:3306/prueba_carga";
+        String url = "jdbc:mysql://192.168.21.193:3306/prueba_carga";
 
         //Conexión a la base de datos remota a través del conector jdbc
         try {
