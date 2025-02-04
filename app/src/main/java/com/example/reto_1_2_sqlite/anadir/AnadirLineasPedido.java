@@ -82,7 +82,6 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
         Spinner spnArticulos = findViewById(R.id.spnNombreArticulo);
 
         //Carga de los articulos pertenecientes a la delegación del usuario (la del comercial)
-        //TODO Hay que cambiar la base de datos para reflejar la tabla de catálogo
         nombreArticulos = handler.getArticuloStringArray("nombre", user.getDelegationId());
         idArticulos = handler.getArticuloIntArray("id", user.getDelegationId());
         ArrayAdapter<String> adapterArticulos = new ArrayAdapter<>(
