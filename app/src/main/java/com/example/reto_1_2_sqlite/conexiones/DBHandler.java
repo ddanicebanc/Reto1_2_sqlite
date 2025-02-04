@@ -503,7 +503,8 @@ public class DBHandler extends SQLiteOpenHelper {
         ArrayList<String> datos = new ArrayList<>();
         String query = "select " + nombreColumna +
                 " from articulos " +
-                "where delegacion_id = " + idDel;
+                " inner join catalogo on (articulos.id = catalogo.articulo_id)" +
+                " where catalogo.delegacion_id = " + idDel;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(query, null, null);
 
@@ -521,8 +522,9 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<Integer> getArticuloIntArray(String nombreColumna, int idDel) {
         ArrayList<Integer> datos = new ArrayList<>();
         String query = "select " + nombreColumna +
-                " from articulos " +
-                "where delegacion_id = " + idDel;
+                " from articulos" +
+                " inner join catalogo on (articulos.id = catalogo.articulo_id) " +
+                " where delegacion_id = " + idDel;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(query, null, null);
 
