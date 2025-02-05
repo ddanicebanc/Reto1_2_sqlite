@@ -1,6 +1,7 @@
 package com.example.reto_1_2_sqlite.anadir;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,10 +12,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.R;
+import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.modelos.User;
 
 import java.io.Serializable;
@@ -128,11 +130,24 @@ public static String fechaDato, direccion;
     }
 
     private boolean validarCampos() {
-        //TODO Cambiar toast por AlertDialog
         direccion = editDireccion.getText().toString().trim();
         boolean validado = true;
 
         if (fechaDato.isEmpty() || direccion.isEmpty()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("ERROR")
+                    .setMessage("El partner introducido ya existe.")
+                    .setCancelable(false)
+                    .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            editFecha.setText("");
+                            editDireccion.setText("");
+                            editFecha.requestFocus();
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
             Toast.makeText(this, "Todos los campos deben estar llenos", Toast.LENGTH_LONG).show();
             validado = false;
         } else {
