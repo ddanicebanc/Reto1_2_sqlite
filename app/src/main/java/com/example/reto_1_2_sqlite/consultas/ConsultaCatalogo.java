@@ -8,12 +8,13 @@ import android.widget.ImageButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reto_1_2_sqlite.PantallaPrincipal;
-import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.R;
 import com.example.reto_1_2_sqlite.adaptadores.CatalogoAdapter;
+import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.modelos.Articulo;
 import com.example.reto_1_2_sqlite.modelos.User;
 
@@ -34,7 +35,10 @@ public class ConsultaCatalogo extends AppCompatActivity implements Serializable,
 
         ArrayList<Articulo> articulos = handler.getArrayArticulos(user);
 
+        //Para que el catálogo no salte más de un artículo a la vez
+        PagerSnapHelper snapHelper = new PagerSnapHelper();
         RecyclerView rclCatalogo = findViewById(R.id.rclCatalogo);
+        snapHelper.attachToRecyclerView(rclCatalogo);
         CatalogoAdapter adapter = new CatalogoAdapter(articulos, this);
         rclCatalogo.setAdapter(adapter);
         rclCatalogo.setLayoutManager(new LinearLayoutManager(this,
