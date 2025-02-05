@@ -21,45 +21,52 @@
         android:id="@+id/NombreVista"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="131dp"
         android:text="Nombre:"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="32dp"/>
 
     <Spinner
         android:id="@+id/spnNombrePartner"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="35dp"
-        app:layout_constraintTop_toTopOf="@+id/NombreVista"
-        app:layout_constraintBottom_toBottomOf="@+id/NombreVista"
-        app:layout_constraintStart_toEndOf="@+id/NombreVista"
-        app:layout_constraintEnd_toEndOf="@+id/editFecha"/>
-
-    <EditText
-        android:id="@+id/editFecha"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:ems="10"
-        android:hint="dd/mm/yyy"
-        android:focusable="false"
-        android:inputType="none"
-        app:layout_constraintBottom_toBottomOf="@+id/Fecha"
-        app:layout_constraintStart_toEndOf="@+id/Fecha" />
+        app:layout_constraintTop_toTopOf="@id/NombreVista"
+        app:layout_constraintBottom_toBottomOf="@id/NombreVista"
+        app:layout_constraintStart_toStartOf="@id/editDireccion"
+        app:layout_constraintEnd_toEndOf="@id/editDireccion"/>
 
     <TextView
         android:id="@+id/Fecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
         android:text="Fecha"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/NombreVista"
+        app:layout_constraintStart_toStartOf="@id/NombreVista"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/editFecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="dd/mm/yyy"
+        android:focusable="false"
+        android:inputType="none"
+        app:layout_constraintBottom_toBottomOf="@+id/Fecha"
+        app:layout_constraintStart_toStartOf="@+id/editDireccion"/>
+
+    <TextView
+        android:id="@+id/Direccion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Direccion"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/Fecha"
+        app:layout_constraintStart_toStartOf="@id/Fecha"
+        android:layout_marginTop="20dp"/>
 
     <EditText
         android:id="@+id/editDireccion"
@@ -71,17 +78,6 @@
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="@+id/Direccion"
         app:layout_constraintStart_toEndOf="@+id/Direccion" />
-
-    <TextView
-        android:id="@+id/Direccion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="150dp"
-        android:text="Direccion"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/AnadirVisitas"
