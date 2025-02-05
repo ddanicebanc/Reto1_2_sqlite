@@ -21,30 +21,44 @@ public class HiloSincronizacion extends Thread {
 
     @Override
     public void run () {
-        String url = "jdbc:mysql://192.168.21.193:3306/db_delegaciones";
+        String url = "jdbc:mysql://192.168.1.133:3306/prueba_carga";
 
         try {
             Connection conn = DriverManager.getConnection(url, "daniroot", "dani");
+            DBHandler handler = new DBHandler(context);
 
             //ARTÍCULOS
+            //Recuperación de los ids de los artículos en local
+            ArrayList<Integer> idsLocal = handler.getArticuloIntArray("articulos.id", -1);
+
+            //Creación del string para la consulta en MYSQL
+            String idsQuery = crearStringIds(idsLocal);
+
             String query = "select * from articulos";
+            //Añadir el filtro en caso de que haya artículos en local
+            if (idsQuery.length() > 0) {
+                query = query + "\nwhere id_articulo in (" + idsQuery + ")";
+            }
+            query += ";";
+
+            //Creación de los objetos para la consulta
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-            DBHandler handler = new DBHandler(context, 2);
+            //Arraylists para los campos y datos a guardar
             ArrayList<String> campos = new ArrayList<>();
             ArrayList<String> datos = new ArrayList<>();
-
+            //Columnas de la tabla articulos
             campos.add("id");
             campos.add("nombre");
             campos.add("tipo");
             campos.add("imagen");
 
             while (result.next()) {
-                id = result.getInt("id");
-                nombre = result.getString("nombre");
-                tipo = result.getString("tipo");
-                imagen = result.getString("imagen");
+                id = result.getInt(1);
+                nombre = result.getString(2);
+                tipo = result.getString(3);
+                imagen = result.getString(4);
 
                 datos.add(String.valueOf(id));
                 datos.add(nombre);
@@ -52,11 +66,94 @@ public class HiloSincronizacion extends Thread {
                 datos.add(imagen);
 
                 handler.insertData("articulos", campos, datos);
+
+                //Limpieza de los datos a guardar para el siguiente registro
+                datos.clear();
+            }
+
+            //Delegaciones
+            idsLocal.clear();
+            idsLocal = handler.getSearchFieldIntegerArray("delegaciones", "id_delegacion");
+
+            idsQuery = crearStringIds(idsLocal);
+
+            query = "select * from delegaciones";
+            if (idsQuery.length() > 0) {
+                query = query + "\nwhere id_delegacion in (" + idsQuery + ")";
+            }
+            query += ";";
+
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(query);
+
+            campos.clear();
+            datos.clear();
+            campos.add("id_delegacion");
+            campos.add("nombre");
+
+            while (result.next()) {
+                id = result.getInt(1);
+                nombre = result.getString(2);
+
+                datos.add(String.valueOf(id));
+                datos.add(nombre);
+
+                handler.insertData("delegaciones", campos, datos);
+
+                datos.clear();
+            }
+
+            //Catálogo
+            query = "select * from catalogo;";
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(query);
+            Boolean encontrado = false;
+
+            handler.getCatalogo(result);
+
+            //COMERCIALES
+            query = "select * from comerciales";
+            stmt = conn.createStatement();
+            result = stmt.executeQuery(query);
+
+            datos.clear();
+            campos.clear();
+            campos.add("id");
+            campos.add("nombre");
+            campos.add("telefono");
+            campos.add("email");
+            campos.add("delegacion_id");
+
+            while (result.next()) {
+                datos.add(String.valueOf(result.getInt("id_comercial")));
+                datos.add(result.getString("nombre"));
+                datos.add(String.valueOf(result.getInt("telefono")));
+                datos.add(result.getString("email"));
+                datos.add(String.valueOf(result.getInt("id_delegacion")));
+
+                handler.insertData("comerciales", campos, datos);
+
+                datos.clear();
             }
 
             conn.close();
         } catch (Exception e) {
             Log.d("CONEXIÓN", e.getMessage());
         }
+    }
+
+    public String crearStringIds (ArrayList<Integer> idsLocal) {
+        //Creación del string para la consulta en MYSQL
+        String idsQuery = "";
+
+        for (int id : idsLocal) {
+            idsQuery += id + ", ";
+        }
+        //Eliminación de la última coma en el string
+        if (idsQuery.length() > 0) {
+            idsQuery = idsQuery.substring(0, idsQuery.length()-1);
+        }
+
+        return idsQuery;
     }
 }
