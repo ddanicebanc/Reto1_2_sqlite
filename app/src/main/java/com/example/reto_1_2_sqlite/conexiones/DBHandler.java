@@ -10,12 +10,15 @@ import android.graphics.BitmapFactory;
 
 import com.example.reto_1_2_sqlite.modelos.Articulo;
 import com.example.reto_1_2_sqlite.modelos.CabeceraPedido;
+import com.example.reto_1_2_sqlite.modelos.Partner;
 import com.example.reto_1_2_sqlite.modelos.User;
 import com.example.reto_1_2_sqlite.modelos.Visita;
-import com.example.reto_1_2_sqlite.modelos.Partner;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "comercialesdb";
@@ -89,7 +92,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 "precio real,\n" +
                 "primary key (articulo_id, delegacion_id),\n" +
                 "foreign key (articulo_id) references articulos (id) on delete cascade,\n" +
-                "foreign key (delegacion_id) references delegaciones (id) on delete cascade\n" +
+                "foreign key (delegacion_id) references delegaciones (id_delegacion) on delete cascade\n" +
                 ")";
         sqLiteDatabase.execSQL(query);
 
@@ -142,7 +145,7 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public boolean countTable (String tableName) {
+    public boolean isEmpty (String tableName) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         boolean empty = true;
 
@@ -425,10 +428,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
         c = db.rawQuery(query, null);
 
-        //TODO Arreglar la recuperación de datos
         while (c.moveToNext()) {
-            byte[] byteImage = c.getBlob(1);
-            Bitmap imagen = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+            byte[] imageByteArray;
+            imageByteArray = Base64.getDecoder().decode(c.getString(1));
+            Bitmap imagen = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
 
             articulos.add(new Articulo(
                     c.getString(0),
@@ -525,9 +528,13 @@ public class DBHandler extends SQLiteOpenHelper {
         ArrayList<Integer> datos = new ArrayList<>();
         String query = "select " + nombreColumna +
                 " from articulos" +
-                " inner join catalogo on (articulos.id = catalogo.articulo_id) " +
-                " where delegacion_id = " + idDel;
+                " inner join catalogo on (articulos.id = catalogo.articulo_id) ";
         SQLiteDatabase db = this.getReadableDatabase();
+
+        if (idDel != -1) {
+            query = query + " where delegacion_id = " + idDel;
+        }
+
         Cursor c = db.rawQuery(query, null, null);
 
         if (c.getCount() > 0) {
@@ -658,20 +665,20 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Bitmap getImagenArticulo (int idArticulo) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Bitmap imagen = null;
+        Bitmap imageBM = null;
         String query = "select imagen from articulos where id = " + idArticulo;
         Cursor c = db.rawQuery(query, null);
 
         if (c.getCount() == 1) {
             while (c.moveToNext()) {
-                byte[] byteImage = c.getBlob(0);
-                imagen = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+                byte[] imageByteArray = Base64.getDecoder().decode(c.getString(0));
+                imageBM = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
             }
         }
 
         c.close();
 
-        return imagen;
+        return imageBM;
     }
 
     public boolean insertData (String tableName, ArrayList<String> columns, ArrayList<String> columnValues) {
@@ -689,5 +696,58 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
         return error;
+    }
+
+    public void getCatalogo(ResultSet result) {
+        ArrayList<String> datos = new ArrayList<>();
+        ArrayList<String> columnas = new ArrayList<>();
+        int mysqlArticulo, mysqlDelegacion, sqliteArticulo, sqliteDelegacion;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select * from catalogo";
+
+        columnas.add("articulo_id");
+        columnas.add("delegacion_id");
+        columnas.add("stock");
+        columnas.add("precio");
+
+        Cursor c = db.rawQuery(query, null);
+
+        try {
+            while (result.next()) {
+                mysqlArticulo = result.getInt("id_articulo");
+                mysqlDelegacion = result.getInt("id_delegacion");
+
+                if (c.getCount() > 0) {
+                    while (c.moveToNext()) {
+                        sqliteArticulo = c.getInt(0);
+                        sqliteDelegacion = c.getInt(1);
+
+                        if (mysqlArticulo == sqliteArticulo && mysqlDelegacion == sqliteDelegacion) {
+
+                        } else {
+                            datos.add(String.valueOf(mysqlArticulo));
+                            datos.add(String.valueOf(mysqlDelegacion));
+                            datos.add(String.valueOf(result.getInt("stock")));
+                            datos.add(String.valueOf(result.getFloat("precio")));
+
+                            this.insertData("catalogo", columnas, datos);
+
+                            datos.clear();
+                        }
+                    }
+                } else {
+                    datos.add(String.valueOf(mysqlArticulo));
+                    datos.add(String.valueOf(mysqlDelegacion));
+                    datos.add(String.valueOf(result.getInt("stock")));
+                    datos.add(String.valueOf(result.getFloat("precio")));
+
+                    this.insertData("catalogo", columnas, datos);
+
+                    datos.clear();
+                }
+            }
+        } catch (SQLException sqle) {
+
+        }
     }
 }
