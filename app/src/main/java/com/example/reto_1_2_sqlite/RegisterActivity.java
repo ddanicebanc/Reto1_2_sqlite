@@ -15,9 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.reto_1_2_sqlite.conexiones.CargaDelegaciones;
-import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.conexiones.CargaComerciales;
+import com.example.reto_1_2_sqlite.conexiones.DBHandler;
+import com.example.reto_1_2_sqlite.conexiones.HiloSincronizacion;
 
 import java.util.ArrayList;
 
@@ -56,8 +56,8 @@ public class RegisterActivity extends AppCompatActivity {
         edtUser = findViewById(R.id.edt_usr);
         edtPassword = findViewById(R.id.edt_psswd);
 
-        if (handler.countTable("delegaciones")) {
-            CargaDelegaciones hiloDel = new CargaDelegaciones(RegisterActivity.this);
+        if (handler.isEmpty("delegaciones")) {
+            HiloSincronizacion hiloDel = new HiloSincronizacion(RegisterActivity.this);
 
             try {
                 hiloDel.start();
@@ -67,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
 
-        if (handler.countTable("comerciales")) {
+        if (handler.isEmpty("comerciales")) {
             //Lanzamiento de un hilo diferente al MainThread, las conexiones remotas no pueden estar
             //en el hilo principal
             loadThread.start();
@@ -157,23 +157,38 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!contrasenia.isEmpty()) {
                         //Comprobamos que el usuario no esté repetido
                         if (!handler.searchByName("usuarios", "nombre", usuario)) {
-                            //Rellenamos los arrayList con las columnas y datos
-                            columnas.add("id");
-                            columnas.add("nombre");
-                            columnas.add("contrasenia");
-                            columnas.add("comercial_id");
+                            if (comercialNames.size() == 0) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                builder.setMessage("No existen comerciales, no se puede realizar el registro." +
+                                                "\nPor favor, contacta con el administrador.")
+                                        .setTitle("ERROR")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.cancel();
+                                            }
+                                        });
+                                builder.show();
+                            } else {
+                                //Rellenamos los arrayList con las columnas y datos
+                                columnas.add("id");
+                                columnas.add("nombre");
+                                columnas.add("contrasenia");
+                                columnas.add("comercial_id");
 
-                            datos.add(String.valueOf(idComercialSeleccionado));
-                            datos.add(usuario);
-                            datos.add(contrasenia);
-                            datos.add(String.valueOf(idComercialSeleccionado));
+                                datos.add(String.valueOf(idComercialSeleccionado));
+                                datos.add(usuario);
+                                datos.add(contrasenia);
+                                datos.add(String.valueOf(idComercialSeleccionado));
 
-                            handler.insertData("usuarios", columnas, datos);
-                            //Cerramos la conexión antes de terminar la actividad
-                            handler.close();
+                                handler.insertData("usuarios", columnas, datos);
+                                //Cerramos la conexión antes de terminar la actividad
+                                handler.close();
 
-                            //Terminamos la actividad
-                            finish();
+                                //Terminamos la actividad
+                                finish();
+                            }
                         } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
                             builder.setMessage("El nombre de usuario introducido ya existe, selecciona otro por favor.")
