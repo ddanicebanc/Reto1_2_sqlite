@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         DBHandler dbhandler = new DBHandler(MainActivity.this);
 
         //If usuarios table is empty, there are no users registered
-        if (dbhandler.countTable("usuarios")) {
+        if (dbhandler.isEmpty("usuarios")) {
             dbhandler.close();
             myIntent = new Intent(
                     MainActivity.this,
