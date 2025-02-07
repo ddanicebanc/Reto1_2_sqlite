@@ -63,9 +63,9 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
                 editIdPartner.setText(String.valueOf(extras.getInt("partnerId")));
             }
 
-            partners = handler.getArrayPartners(user,partnerId);
+            partners = handler.getArrayPartners(user,partnerId,"");
         }else{
-            partners = handler.getArrayPartners(user,-1);
+            partners = handler.getArrayPartners(user,-1,"");
         }
 
         //Referencia de recycleview
