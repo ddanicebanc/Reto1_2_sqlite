@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 
 import com.example.reto_1_2_sqlite.modelos.Articulo;
 import com.example.reto_1_2_sqlite.modelos.CabeceraPedido;
+import com.example.reto_1_2_sqlite.modelos.LinPedido;
 import com.example.reto_1_2_sqlite.modelos.Partner;
 import com.example.reto_1_2_sqlite.modelos.User;
 import com.example.reto_1_2_sqlite.modelos.Visita;
@@ -122,10 +123,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 "id integer primary key autoincrement," +
                 "numeroLinea integer," +
                 "articulo_id integer," +
+                "delegacion_id integer," +
                 "cantidad integer," +
                 "precio real," +
                 "cab_pedido_id integer," +
-                "foreign key (articulo_id) references articulos (id) on delete cascade," +
+                "foreign key (articulo_id, delegacion_id) references catalogo (articulo_id, delegacion_id) on delete cascade," +
                 "foreign key (cab_pedido_id) references cab_pedidos (id) on delete cascade)";
         sqLiteDatabase.execSQL(query);
     }
@@ -285,6 +287,10 @@ public class DBHandler extends SQLiteOpenHelper {
             partes[1] = partes[1].substring(1);
         }
 
+        if (partes[2].charAt(0) == '0') {
+            partes[2] = partes[2].substring(1);
+        }
+
         fechaHoy = "";
         fechaHoy = partes[0] + "-" + partes[1] + "-" + partes[2];
 
@@ -344,13 +350,18 @@ public class DBHandler extends SQLiteOpenHelper {
         return visitas;
     }
 
-    public ArrayList<Partner> getArrayPartners (User user, int partnerId) {
+    public ArrayList<Partner> getArrayPartners (User user, int partnerId, String hilo) {
         ArrayList<Partner> partners = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "select * from partners where usuario_id = " + user.getId();
+        String query = "select * from partners";
         int id,telefono,usuarioId;
         String nombre,direccion,poblacion,email;
 
+        if (!hilo.equals("")) {
+            query += " where id not in (" + hilo + ")";
+        } else {
+            query += " where usuario_id = " + user.getId();
+        }
 
         if (partnerId != -1 ){
             query=query + " and id = " + partnerId;
@@ -382,15 +393,20 @@ public class DBHandler extends SQLiteOpenHelper {
         return partners;
     }
 
-    public ArrayList<CabeceraPedido> getArrayPedidos (User user) {
+    public ArrayList<CabeceraPedido> getArrayPedidos (User user, String hilo) {
         ArrayList<CabeceraPedido> pedidos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "select * from cab_pedidos where usuario_id = " + user.getId();
+        String query = "select * from cab_pedidos";
         int id,usuarioId,delegacionId, partnerId;
         String fechaPedido,fechaEnvio,fechaPago;
 
-        Cursor c = db.rawQuery(query, null, null);
+        if (!hilo.equals("")) {
+            query += " where id not in (" + hilo + ")";
+        } else {
+            query += " where usuario_id = " + user.getId();
+        }
 
+        Cursor c = db.rawQuery(query, null, null);
 
         while (c.moveToNext()) {
             id=c.getInt(0);
@@ -604,9 +620,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return datos;
     }
-
-
-
     public ArrayList<Integer> getSearchFieldIntegerArray (String tableName, String searchColumn) {
         ArrayList<Integer> searchColumnArray = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -749,5 +762,30 @@ public class DBHandler extends SQLiteOpenHelper {
         } catch (SQLException sqle) {
 
         }
+    }
+
+    public ArrayList<LinPedido> getArrayLineas(User user, String hilo) {
+        ArrayList<LinPedido> lineas = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select * from lin_pedidos";
+
+        if (!hilo.equals("")) {
+            query += " where id not in (" + hilo + ")";
+        }
+
+        Cursor c = db.rawQuery(query, null);
+        while (c.moveToNext()){
+            lineas.add(new LinPedido(
+                    c.getInt(0),
+                    c.getInt(6),
+                    c.getInt(2),
+                    c.getInt(3),
+                    c.getInt(4),
+                    c.getFloat(5)
+            ));
+        }
+        c.close();
+
+        return lineas;
     }
 }
