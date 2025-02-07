@@ -37,7 +37,7 @@ public class ConsultaPedidos extends AppCompatActivity implements Serializable {
 
         //Configuración del recyclerView
         //Inicializar el arraylist con los pedidos
-        ArrayList<CabeceraPedido> pedidos = handler.getArrayPedidos(user);
+        ArrayList<CabeceraPedido> pedidos = handler.getArrayPedidos(user, "");
         //Asignar el elemento del layout al objeto
         RecyclerView rclPedidos = findViewById(R.id.rclPedidos);
         //Crear el adaptador y el LayoutManager para mostrar la información en el recyclerView
