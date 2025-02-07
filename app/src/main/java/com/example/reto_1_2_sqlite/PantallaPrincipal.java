@@ -5,21 +5,23 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.reto_1_2_sqlite.conexiones.HiloSincronizacion;
-import com.example.reto_1_2_sqlite.consultas.ConsultaVisitas;
+import com.example.reto_1_2_sqlite.conexiones.HiloCarga;
 import com.example.reto_1_2_sqlite.consultas.ConsultaCatalogo;
 import com.example.reto_1_2_sqlite.consultas.ConsultaPartners;
 import com.example.reto_1_2_sqlite.consultas.ConsultaPedidos;
+import com.example.reto_1_2_sqlite.consultas.ConsultaVisitas;
 import com.example.reto_1_2_sqlite.modelos.User;
 
 import org.osmdroid.api.IMapController;
@@ -37,6 +39,8 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
     private ImageButton btnCalendar, btnPartners, btnPedidos, btnCatalogo;
     private User user;
     private MapView map = null;
+
+    TextView info;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +51,10 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
         setContentView(R.layout.layout_pantalla_principal);
+
+        //Configuración de la actionbar
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         //Configuración del mapview
         map = findViewById(R.id.map);
@@ -173,20 +181,7 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
             }
         });
 
-        Button btntest = findViewById(R.id.pruebasync);
-        btntest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                HiloSincronizacion hilo = new HiloSincronizacion(PantallaPrincipal.this);
-
-                try {
-                    hilo.start();
-                    hilo.join();
-                } catch (InterruptedException ie) {
-                    Log.d("CONEXIÓN", ie.getMessage());
-                }
-            }
-        });
+        info = findViewById(R.id.info);
     }
 
     @Override
@@ -239,6 +234,32 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
                     this,
                     permissionsToRequest.toArray(new String[0]),
                     REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sincronizar:
+
+                return true;
+                case R.id.cargar:
+                    HiloCarga hilo = new HiloCarga(PantallaPrincipal.this, user);
+                    hilo.start();
+                    try {
+                        hilo.join();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
