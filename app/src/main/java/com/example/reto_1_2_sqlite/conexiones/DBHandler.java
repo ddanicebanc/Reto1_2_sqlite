@@ -283,16 +283,8 @@ public class DBHandler extends SQLiteOpenHelper {
         fechaHoy = today.toString();
         partes = fechaHoy.split("-");
 
-        if (partes[1].charAt(0) == '0') {
-            partes[1] = partes[1].substring(1);
-        }
-
-        if (partes[2].charAt(0) == '0') {
-            partes[2] = partes[2].substring(1);
-        }
-
-        fechaHoy = "";
-        fechaHoy = partes[0] + "-" + partes[1] + "-" + partes[2];
+        //Se guarda la fecha con el formato MM-dd-yyyy
+        fechaHoy = partes[1] + "-" + partes[2] + "-" + partes[0];
 
         activeUserId = usuario.getId();
 
@@ -790,5 +782,23 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
 
         return lineas;
+    }
+
+    public String getPartnerAddress (int partnerId) {
+        String direccion = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "select direccion from partners where id = " + partnerId;
+        Cursor c = db.rawQuery(query, null);
+
+        while (c.moveToNext()) {
+            direccion = c.getString(0);
+        }
+        c.close();
+
+        if (direccion.equals("")) {
+            direccion = "Dirección";
+        }
+
+        return direccion;
     }
 }
