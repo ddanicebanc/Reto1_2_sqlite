@@ -64,9 +64,9 @@ public class PartnersAdapter extends RecyclerView.Adapter<PartnersAdapter.ViewHo
         }
 
         //Este metodo se utiliza desde la actividad que captura el evento de clic de los items
-//        public void setOnClickListener(ItemClickListener clicListener){
-//            this.clicListener = clicListener;
-//        }
+        public void setOnClickListener(ItemClickListener clicListener){
+            this.clicListener = clicListener;
+        }
 
         //Se llama cada vez que se hace scroll en la pantalla y los elementos desaparecen y aparecen
         @Override
