@@ -42,6 +42,7 @@ import java.io.Serializable;
 public class MainActivity extends AppCompatActivity implements Serializable {
     private Button btnRegister;
     private static Intent myIntent;
+    private EditText edtUser, edtPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_main);
 
         DBHandler dbhandler = new DBHandler(MainActivity.this);
+        edtUser = findViewById(R.id.edt_usr);
+        edtPassword = findViewById(R.id.edt_psswd);
 
         //If usuarios table is empty, there are no users registered
         if (dbhandler.isEmpty("usuarios")) {
@@ -63,16 +66,20 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText edtUser = findViewById(R.id.edt_usr);
+
                 String sUser = edtUser.getText().toString();
 
                 if (sUser.isEmpty()) {
-
+                    Toast.makeText(
+                            MainActivity.this,
+                            "Por favor, introduce un nombre de usuario.",
+                            Toast.LENGTH_SHORT
+                    ).show();
                 } else {
                     DBHandler handler = new DBHandler(MainActivity.this);
 
                     if (dbhandler.searchByName("usuarios", "nombre", sUser)) {
-                        EditText edtPassword = findViewById(R.id.edt_psswd);
+
                         String sPassword = edtPassword.getText().toString();
 
                         String searchValues = sUser + ";" + sPassword;
@@ -113,7 +120,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                     } else {
                         Toast.makeText(MainActivity.this,
                                 "El usuario introducido no existe.",
-                                Toast.LENGTH_LONG);
+                                Toast.LENGTH_LONG
+                                ).show();
                     }
                 }
             }
@@ -128,5 +136,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 startActivity(myIntent);
             }
         });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        edtUser.setText("");
+        edtUser.requestFocus();
+        edtPassword.setText("");
     }
 }
