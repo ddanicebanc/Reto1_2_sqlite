@@ -39,7 +39,7 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable,
         Intent startIntent = getIntent();
         Bundle extras = startIntent.getExtras();
         editIdPartner = findViewById(R.id.editIdPartner);
-        ArrayList<Partner> partners= new ArrayList<>();
+        ArrayList<Partner> partners = new ArrayList<>();
 
         //Recuperamos la información del usuario registrado
         user = (User) getIntent().getSerializableExtra("cUser");
