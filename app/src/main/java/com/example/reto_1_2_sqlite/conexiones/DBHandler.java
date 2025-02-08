@@ -307,14 +307,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
             //Formatear la fecha de visita para la correcta visualización
             String[] partesFecha = fechaVisita.split("-");
-            fechaVisita = "";
-            for (int i = partesFecha.length - 1; i >= 0; i--) {
-                if (i != 0) {
-                    fechaVisita = fechaVisita + partesFecha[i] + "-";
-                } else {
-                    fechaVisita = fechaVisita + partesFecha[i];
-                }
-            }
+            fechaVisita = partesFecha[1] + "-" + partesFecha[0] + "-" + partesFecha[2];
 
             String partnersQuery = "select nombre from partners where id = " + partnerId;
 
