@@ -78,6 +78,7 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable,
         PartnersAdapter adapter = new PartnersAdapter(partners, this);
         rclPartner.setAdapter(adapter);
         rclPartner.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setOnClickListener(this::onClick);
 
         // Referencia al botón y configuración del evento click
         Button validarButton = findViewById(R.id.buttonValidar);
@@ -174,7 +175,6 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable,
             }
         });
     }
-
     private boolean validarIdPartner() {
         // Referencia al EditText del ID
         editIdPartner = findViewById(R.id.editIdPartner);
