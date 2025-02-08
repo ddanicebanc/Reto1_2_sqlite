@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AnadirVisitas extends AppCompatActivity implements Serializable {
-public static String fechaDato, direccion;
+    public static String fechaDato = "", direccion;
     private EditText editFecha, editDireccion;
     private Spinner spnNombrePartners;
     DBHandler handler;
@@ -64,15 +64,22 @@ public static String fechaDato, direccion;
                                                   int monthOfYear, int dayOfMonth) {
                                 // on below line we are setting date to our edit text.
                                 editFecha.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                                fechaDato = "";
-                                fechaDato = fechaDato + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                                String sDay = String.valueOf(dayOfMonth);
+                                if (sDay.length() == 1) {
+                                    sDay = "0" + sDay;
+                                }
+                                String sMonth = String.valueOf((monthOfYear + 1));
+                                if (sMonth.length() == 1) {
+                                    sMonth = "0" + sMonth;
+                                }
+
+                                fechaDato = sMonth + "-" + sDay + "-" + year;
                             }
                         },
-                        // on below line we are passing year,
-                        // month and day for selected date in our date picker.
+                        // on below line we are passing year, month and day
+                        // for selected date in our date picker.
                         anio, mes, dia);
-                // at last we are calling show to
-                // display our date picker dialog.
+                // at last we are calling show to display our date picker dialog.
                 datePickerDialog.getDatePicker().setFirstDayOfWeek(Calendar.MONDAY);
 
                 datePickerDialog.show();
@@ -94,6 +101,7 @@ public static String fechaDato, direccion;
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedPartnerIndex = partnerIds.get(position);
+                editDireccion.setHint(handler.getPartnerAddress(selectedPartnerIndex));
             }
 
             @Override
@@ -120,7 +128,15 @@ public static String fechaDato, direccion;
                     datos.add(fechaDato);
 
                     columnas.add("direccion");
-                    datos.add(editDireccion.getText().toString());
+                    if (editDireccion.getText().toString().isEmpty()) {
+                        if (editDireccion.getHint().toString().equals("Dirección")) {
+                            datos.add("");
+                        } else {
+                            datos.add(editDireccion.getHint().toString());
+                        }
+                    } else {
+                        datos.add(editDireccion.getText().toString());
+                    }
 
                     handler.insertData("visitas", columnas, datos);
                     finish();
@@ -133,25 +149,12 @@ public static String fechaDato, direccion;
         direccion = editDireccion.getText().toString().trim();
         boolean validado = true;
 
-        if (fechaDato.isEmpty() || direccion.isEmpty()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("ERROR")
-                    .setMessage("El partner introducido ya existe.")
-                    .setCancelable(false)
-                    .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            editFecha.setText("");
-                            editDireccion.setText("");
-                            editFecha.requestFocus();
-                            dialog.cancel();
-                        }
-                    })
-                    .show();
-            Toast.makeText(this, "Todos los campos deben estar llenos", Toast.LENGTH_LONG).show();
+        if (fechaDato.isEmpty()) {
+            Toast.makeText(this, "Por favor, seleccione una fecha para la visita.",
+                    Toast.LENGTH_LONG).show();
             validado = false;
         } else {
-            if (!direccion.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]+")) {
+            if (!direccion.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]+") && !direccion.isEmpty()) {
                 Toast.makeText(this,
                         "El campo 'Dirección' solo puede contener letras y números",
                         Toast.LENGTH_LONG)
