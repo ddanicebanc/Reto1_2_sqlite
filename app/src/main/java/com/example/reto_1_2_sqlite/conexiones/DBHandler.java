@@ -436,7 +436,7 @@ public class DBHandler extends SQLiteOpenHelper {
         //TODO Después de la bajada de datos, comprobar la carga de los artículos en el catálogo
         ArrayList<Articulo> articulos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "select articulos.nombre, articulos.imagen, catalogo.precio" +
+        String query = "select articulos.nombre, articulos.imagen, catalogo.precio, catalogo.stock, articulos.tipo" +
                         " from catalogo " +
                         " inner join articulos on (articulos.id = catalogo.articulo_id)" +
                         " where catalogo.delegacion_id = " + user.getDelegationId();
@@ -451,6 +451,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
             articulos.add(new Articulo(
                     c.getString(0),
+                    c.getString(4),
+                    c.getString(2),
+                    c.getString(3),
                     imagen
             ));
         }
