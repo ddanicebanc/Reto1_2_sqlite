@@ -31,4 +31,7 @@
     <string name="catalog">Catálogo</string>
     <string name="cargar">Subir datos</string>
     <string name="sincronizar">Sincronizar datos</string>
+    <string name="categoria"><u>Categoría</u></string>
+    <string name="stock"><u>Stock</u></string>
+    <string name="cat_price"><u>Precio</u></string>
 </resources>
