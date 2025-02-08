@@ -27,7 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ConsultaPartners extends AppCompatActivity implements Serializable {
+public class ConsultaPartners extends AppCompatActivity implements Serializable, PartnersAdapter.ItemClickListener {
     public User user;
     public DBHandler handler;
     public EditText editIdPartner;
@@ -193,5 +193,8 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
 
         return true;
     }
+
+    @Override
+    public void onClick(View view, int position) {}
 }
 
