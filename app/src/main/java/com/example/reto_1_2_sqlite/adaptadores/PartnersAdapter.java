@@ -31,6 +31,7 @@ public class PartnersAdapter extends RecyclerView.Adapter<PartnersAdapter.ViewHo
         private final TextView txvPartnerName;
         private final TextView txvPartnerAddress;
         private final TextView txvPartnerTel;
+        private final TextView txvPartnerEmail;
 
         public ViewHolder(View view) {
             super(view);
@@ -39,16 +40,16 @@ public class PartnersAdapter extends RecyclerView.Adapter<PartnersAdapter.ViewHo
             txvPartnerName = view.findViewById(R.id.txvPartnerName);
             txvPartnerAddress = view.findViewById(R.id.txvPartnerAddress);
             txvPartnerTel = view.findViewById(R.id.txvPartnerTel);
+            txvPartnerEmail = view.findViewById(R.id.txvPartnerEmail);
         }
 
         public TextView getTxvPartnerName() {
             return txvPartnerName;
         }
-
         public TextView getTxvDireccion() {
             return txvPartnerAddress;
         }
-
+        public TextView getPartnerEmail() {return txvPartnerEmail;}
         public TextView getTxvTel() {
             return txvPartnerTel;
         }
@@ -83,10 +84,12 @@ public class PartnersAdapter extends RecyclerView.Adapter<PartnersAdapter.ViewHo
         public void onBindViewHolder(ViewHolder viewHolder, final int position) {
             String partnerName = dataSet.get(position).getNombre();
             String partnerAddress = dataSet.get(position).getDireccion();
+            String partnerEmail = dataSet.get(position).getEmail();
             int partnerTel = dataSet.get(position).getTelefono();
 
             viewHolder.getTxvPartnerName().setText(partnerName);
             viewHolder.getTxvDireccion().setText(partnerAddress);
+            viewHolder.getPartnerEmail().setText(partnerEmail);
             viewHolder.getTxvTel().setText(String.valueOf(partnerTel));
         }
 
