@@ -8,7 +8,31 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-
+/**
+ * <h2>Clase para la sincronización de datos con el servidor de MYSQL</h2>
+ * <p>
+ *     El proceso descrito a continuación es homologo para todas las tablas que se tratan.
+ * </p>
+ * <p>
+ *     Las tablas que se tratan en este hilo son las siguientes:
+ *     <ul>
+ *         <li>Artículos</li>
+ *         <li>Delegaciones</li>
+ *         <li>Catálogo</li>
+ *         <li>Comerciales</li>
+ *     </ul>
+ * </p>
+ * <p>
+ *     El proceso de sincronización sigue los siguientes pasos:
+ *     <ol>
+ *         <li>Establece una conexión con el servidor de MYSQL</li>
+ *         <li>Recupera los ids de la tabla y se guardan en un arrayList</li>
+ *         <li>Se filtran los ids de la misma tabla en MYSQL quitando los de SQLite con un NOT IN</li>
+ *         <li>Se recorre el ResultSet resultante y se hace el insert on la bbdd SQLite</li>
+ *     </ol>
+ * </p>
+ * <p>El proceso está comentado sólo con la tabla de artículos.</p>
+ */
 public class HiloSincronizacion extends Thread {
     String nombre, tipo, imagen;
     int id;
@@ -21,7 +45,7 @@ public class HiloSincronizacion extends Thread {
 
     @Override
     public void run () {
-        String url = "jdbc:mysql://192.168.1.133:3306/prueba_carga";
+        String url = "jdbc:mysql://192.168.21.193:3306/prueba_carga";
 
         try {
             Connection conn = DriverManager.getConnection(url, "daniroot", "dani");

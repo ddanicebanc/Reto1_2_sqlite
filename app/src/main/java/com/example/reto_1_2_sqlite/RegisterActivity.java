@@ -22,10 +22,16 @@ import com.example.reto_1_2_sqlite.conexiones.HiloSincronizacion;
 import java.util.ArrayList;
 
 /**
- * <h2><u>Clase para el registro</u></h2>
- * <p>Clase para gestionar el registro de nuevos usuarios.
- *    Contiene los campos de usuario, contraseña y partner.</p>
- * <p>Los partners se cargan desde la bbdd local o desde el servidor de la delegación de MYSQL si no existen datos.</p>
+ * <h2>Clase para registrar nuevos usuarios</h2>
+ * <p>
+ *    Contiene los campos de:
+ *    <ul>
+ *        <li>Nombre de usuario</li>
+ *        <li>Contraseña</li>
+ *        <li>Partner</li>
+ *    </ul>
+ * </p>
+ * <p>Los partners se cargan en un spinner desde la bbdd local o desde el servidor de la delegación de MYSQL si no existen datos.</p>
  */
 public class RegisterActivity extends AppCompatActivity {
     private EditText edtUser, edtPassword;

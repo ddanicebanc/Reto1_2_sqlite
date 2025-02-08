@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
+ * <h2>Clase para la carga de información de la aplicación en el servidor de MYSQL</h2>
  * <p>Hilo que inserta la información de los pedidos guardados en el sevidor de mysql</p>
  * <p><ol>
  *     <li>Primero recoge los ids de los pedidos en el servidor para filtrar los pedidos en local</li>
@@ -32,7 +33,7 @@ public class HiloCarga extends Thread {
 
     @Override
     public void run() {
-        String url = "jdbc:mysql://192.168.1.133:3306/prueba_carga";
+        String url = "jdbc:mysql://192.168.21.193:3306/prueba_carga";
         ArrayList<Integer> idsMysql = new ArrayList<>();
         String idsQuery = "-1", insert;
 
@@ -152,6 +153,7 @@ public class HiloCarga extends Thread {
                         "" + lineas.get(i).getIdArticulo() + "," +
                         "" + lineas.get(i).getIdDelegacion() + "," +
                         "" + lineas.get(i).getCantidad() + ");";
+                //TODO Añadir el campo de importe
                 Statement stmti = conn.createStatement();
                 stmti.execute(insert);
             }

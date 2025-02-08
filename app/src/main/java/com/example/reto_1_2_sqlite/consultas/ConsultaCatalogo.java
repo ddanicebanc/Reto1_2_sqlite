@@ -21,6 +21,18 @@ import com.example.reto_1_2_sqlite.modelos.User;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * <h2>Clase para la pantalla del Catálogo</h2>
+ * <p>
+ *     La pantalla tiene los siguientes elementos:
+ *     <ul>
+ *         <li>Encabezado con el nombre del usuario</li>
+ *         <li>Lista con las visitas del usuario actual, ordenados en orden ascendente por fecha</li>
+ *         <li>Checkbox para mostrar visitas anteriores a la fecha actual</li>
+ *         <li>Botón para añadir nuevas visitas</li>
+ *     </ul>
+ * </p>
+ */
 public class ConsultaCatalogo extends AppCompatActivity implements Serializable, CatalogoAdapter.ItemClickListener {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
