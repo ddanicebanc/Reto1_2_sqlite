@@ -22,7 +22,10 @@ import com.example.reto_1_2_sqlite.modelos.User;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-
+/**
+ * {@code AnadirVisitas} es una {@link AppCompatActivity} que permite al usuario añadir nuevas visitas.
+ * La actividad permite seleccionar la fecha de la visita, el socio y la dirección.
+ */
 public class AnadirVisitas extends AppCompatActivity implements Serializable {
     public static String fechaDato = "", direccion;
     private EditText editFecha, editDireccion;
@@ -47,6 +50,11 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
 
         //Selección de la fecha a través de la UI
         editFecha.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Se llama cuando se hace clic en el campo de fecha.  Muestra un diálogo de
+             * selección de fecha.
+             * @param v La {@link View} en la que se hizo clic.
+             */
             @Override
             public void onClick(View v) {
                 final Calendar c = Calendar.getInstance();
@@ -59,6 +67,13 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
                         // on below line we are passing context.
                         AnadirVisitas.this,
                         new DatePickerDialog.OnDateSetListener() {
+                            /**
+                             * Se llama cuando se establece la fecha en el diálogo.
+                             * @param view El {@link DatePicker} que contiene la fecha seleccionada.
+                             * @param year El año seleccionado.
+                             * @param monthOfYear El mes seleccionado (0-11).
+                             * @param dayOfMonth El día del mes seleccionado.
+                             */
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
@@ -98,6 +113,13 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
         );
         spnNombrePartners.setAdapter(adapter);
         spnNombrePartners.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            /**
+             * Se llama cuando se selecciona un elemento del spinner.
+             * @param parent El {@link AdapterView} padre.
+             * @param view La {@link View} seleccionada.
+             * @param position La posición del elemento seleccionado.
+             * @param id El ID de fila del elemento seleccionado.
+             */
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedPartnerIndex = partnerIds.get(position);
@@ -112,6 +134,10 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
 
         // Configurar el listener del botón
         guardarButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Se llama cuando se hace clic en el botón "Guardar".  Guarda la visita en la base de datos.
+             * @param v La {@link View} en la que se hizo clic.
+             */
             @Override
             public void onClick(View v) {
                 if (validarCampos()) {
@@ -144,7 +170,10 @@ public class AnadirVisitas extends AppCompatActivity implements Serializable {
             }
         });
     }
-
+    /**
+     * Valida los campos de fecha y dirección.
+     * @return {@code true} si ambos campos son válidos, {@code false} en caso contrario.
+     */
     private boolean validarCampos() {
         direccion = editDireccion.getText().toString().trim();
         boolean validado = true;

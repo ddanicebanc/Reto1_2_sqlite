@@ -32,6 +32,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.MissingResourceException;
 
+/**
+ * {@code AnadirLineasPedido} es una {@link AppCompatActivity} que permite al usuario añadir líneas a un pedido.
+ * La actividad permite seleccionar un artículo, la cantidad y el precio, y visualiza las líneas añadidas.
+ * También permite finalizar el pedido.
+ */
 public class AnadirLineasPedido extends AppCompatActivity implements Serializable {
     private EditText edtCantidad, edtPrecio;
     private int selectedProductIndex, numeroLinea;
@@ -107,7 +112,7 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
         });
 
         //Configuración del recyclerView
-        //Comprobación de que el arrayList no es nulo
+        //Comprobación de que el arrayList no es nulo, para cuando cargamos la actividad por primera vez
         if (lineas != null) {
             RecyclerView rclLineas = findViewById(R.id.rclLineas);
 
@@ -192,7 +197,15 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
             }
         });
     }
-
+    /**
+     * Inserta la cabecera del pedido y sus líneas en la base de datos.
+     * Este método realiza las siguientes operaciones:
+     * <ol>
+     *     <li>Inserta la cabecera del pedido en la tabla "cab_pedidos".</li>
+     *     <li>Inserta cada línea del pedido en la tabla "lin_pedidos".</li>
+     *     <li>Inicia la actividad {@link ConsultaPedidos} para mostrar los pedidos.</li>
+     * </ol>
+     */
     private void insertarPedido () {
         //Insertamos la información en la base de datos
         ArrayList<String> columnas = new ArrayList<>();
@@ -251,7 +264,13 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
         myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(myIntent);
     }
-
+    /**
+     * Valida los campos de cantidad y precio.
+     * Este método verifica si los campos de texto para la cantidad y el precio están vacíos.
+     * Si alguno de los campos está vacío, muestra un mensaje Toast y establece la variable 'valido' a false.
+     *
+     * @return {@code true} si ambos campos (cantidad y precio) son válidos (no están vacíos), {@code false} en caso contrario.
+     */
     private boolean validarCampos() {
         boolean valido = true;
 

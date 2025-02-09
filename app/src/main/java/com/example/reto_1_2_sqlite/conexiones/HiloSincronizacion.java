@@ -45,7 +45,7 @@ public class HiloSincronizacion extends Thread {
 
     @Override
     public void run () {
-        String url = "jdbc:mysql://192.168.21.193:3306/prueba_carga";
+        String url = "jdbc:mysql://192.168.1.134:3306/db_delegaciones";
 
         try {
             Connection conn = DriverManager.getConnection(url, "daniroot", "dani");

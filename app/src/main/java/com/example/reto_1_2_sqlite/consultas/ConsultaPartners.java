@@ -175,6 +175,15 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable,
             }
         });
     }
+
+    /**
+     * Valida el ID de partner ingresado por el usuario.
+     *
+     * Verifica si el campo está vacío (se considera válido) o si contiene solo dígitos numéricos.
+     * Si el ID no cumple con estos criterios, muestra un mensaje de error Toast.
+     *
+     * @return {@code true} si el ID es válido (está vacío o contiene solo números), {@code false} si no es válido.
+     */
     private boolean validarIdPartner() {
         // Referencia al EditText del ID
         editIdPartner = findViewById(R.id.editIdPartner);
@@ -193,7 +202,11 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable,
 
         return true;
     }
-
+    /**
+     * Método personalizado de escucha para los elementos del recyclerview
+     * @param view La {@link View} en la que se hizo clic.
+     * @param position La posición del elemento en el que se hizo clic.
+     */
     @Override
     public void onClick(View view, int position) {}
 }
