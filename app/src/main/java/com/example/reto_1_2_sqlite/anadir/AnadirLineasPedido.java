@@ -24,6 +24,7 @@ import com.example.reto_1_2_sqlite.R;
 import com.example.reto_1_2_sqlite.adaptadores.LineasAdapter;
 import com.example.reto_1_2_sqlite.consultas.ConsultaPedidos;
 import com.example.reto_1_2_sqlite.modelos.CabeceraPedido;
+import com.example.reto_1_2_sqlite.modelos.LinPedido;
 import com.example.reto_1_2_sqlite.modelos.LineaPedido;
 import com.example.reto_1_2_sqlite.modelos.User;
 
@@ -43,6 +44,7 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
     private static ArrayList<String> nombreArticulos = new ArrayList<>();
     private static ArrayList<Integer> idArticulos = new ArrayList<>();
     private static ArrayList<LineaPedido> lineas = new ArrayList<>();
+    private static ArrayList<LinPedido> lineasInsert = new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +84,6 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
         Spinner spnArticulos = findViewById(R.id.spnNombreArticulo);
 
         //Carga de los articulos pertenecientes a la delegación del usuario (la del comercial)
-        //TODO Hay que cambiar la base de datos para reflejar la tabla de catálogo
         nombreArticulos = handler.getArticuloStringArray("nombre", user.getDelegationId());
         idArticulos = handler.getArticuloIntArray("id", user.getDelegationId());
         ArrayAdapter<String> adapterArticulos = new ArrayAdapter<>(
@@ -222,6 +223,7 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
 
         columnas.add("numeroLinea");
         columnas.add("articulo_id");
+        columnas.add("delegacion_id");
         columnas.add("cantidad");
         columnas.add("precio");
         columnas.add("cab_pedido_id");
@@ -229,6 +231,7 @@ public class AnadirLineasPedido extends AppCompatActivity implements Serializabl
         for (LineaPedido l : lineas) {
             datos.add(String.valueOf(l.getNumeroLinea()));
             datos.add(String.valueOf(l.getArticuloId()));
+            datos.add(String.valueOf(cabecera.getDelegacionId()));
             datos.add(String.valueOf(l.getCantidad()));
             datos.add(String.valueOf(l.getPrecio()));
             datos.add(String.valueOf(l.getCabPedidoId()));

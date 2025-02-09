@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reto_1_2_sqlite.PantallaPrincipal;
-import com.example.reto_1_2_sqlite.anadir.AnadirCabeceraPedido;
-import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.R;
 import com.example.reto_1_2_sqlite.adaptadores.PedidosAdapter;
+import com.example.reto_1_2_sqlite.anadir.AnadirCabeceraPedido;
+import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.modelos.CabeceraPedido;
 import com.example.reto_1_2_sqlite.modelos.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,7 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ConsultaPedidos extends AppCompatActivity implements Serializable {
+public class ConsultaPedidos extends AppCompatActivity implements Serializable, PedidosAdapter.ItemClickListener {
     DBHandler handler;
 
     @Override
@@ -37,11 +37,12 @@ public class ConsultaPedidos extends AppCompatActivity implements Serializable {
 
         //Configuración del recyclerView
         //Inicializar el arraylist con los pedidos
-        ArrayList<CabeceraPedido> pedidos = handler.getArrayPedidos(user);
+        ArrayList<CabeceraPedido> pedidos = handler.getArrayPedidos(user, "");
         //Asignar el elemento del layout al objeto
         RecyclerView rclPedidos = findViewById(R.id.rclPedidos);
         //Crear el adaptador y el LayoutManager para mostrar la información en el recyclerView
         PedidosAdapter adapter = new PedidosAdapter(pedidos, this);
+        adapter.setOnClickListener(this::onClick);
         rclPedidos.setAdapter(adapter);
         rclPedidos.setLayoutManager(new LinearLayoutManager(this));
 
@@ -121,4 +122,7 @@ public class ConsultaPedidos extends AppCompatActivity implements Serializable {
             }
         });
     }
+
+    @Override
+    public void onClick(View view, int position) {}
 }

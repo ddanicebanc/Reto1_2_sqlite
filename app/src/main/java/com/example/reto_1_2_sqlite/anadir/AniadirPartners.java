@@ -13,8 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.R;
+import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.consultas.ConsultaPartners;
 import com.example.reto_1_2_sqlite.modelos.User;
 
@@ -80,8 +80,6 @@ public class AniadirPartners extends AppCompatActivity implements Serializable {
                     i.putExtra("cUser", user);
                     startActivity(i);
                     finish();
-                } else {
-                    //TODO En caso de que no pase la validación
                 }
             }
         });
@@ -92,11 +90,6 @@ public class AniadirPartners extends AppCompatActivity implements Serializable {
         String name, address, city, phone, email, zipcode;
 
         name = edtName.getText().toString();
-        address = edtAddress.getText().toString();
-        city = edtCity.getText().toString();
-        phone = edtPhone.getText().toString();
-        email = edtEmail.getText().toString();
-        zipcode = edtEmail.getText().toString();
 
         if (name.isEmpty()) {
             Toast.makeText(this,

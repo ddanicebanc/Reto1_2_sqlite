@@ -1,22 +1,30 @@
 package com.example.reto_1_2_sqlite;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.reto_1_2_sqlite.consultas.ConsultaVisitas;
+import com.example.reto_1_2_sqlite.conexiones.HiloCarga;
+import com.example.reto_1_2_sqlite.conexiones.HiloSincronizacion;
 import com.example.reto_1_2_sqlite.consultas.ConsultaCatalogo;
 import com.example.reto_1_2_sqlite.consultas.ConsultaPartners;
 import com.example.reto_1_2_sqlite.consultas.ConsultaPedidos;
+import com.example.reto_1_2_sqlite.consultas.ConsultaVisitas;
 import com.example.reto_1_2_sqlite.modelos.User;
 
 import org.osmdroid.api.IMapController;
@@ -29,11 +37,44 @@ import org.osmdroid.views.overlay.Marker;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * <h2>Clase para la pantalla principal de la aplicación</h2>
+ * <p>
+ *     La pantalla principal consta de los siguientes elementos:
+ *     <ul>
+ *         <li>
+ *             Botones para entrar en las ventanas correspondientes a:
+ *             <ul>
+ *                 <li>Visitas</li>
+ *                 <li>Partners</li>
+ *                 <li>Pedidos</li>
+ *                 <li>Catálogo</li>
+ *             </ul>
+ *         </li>
+ *         <li>Mapa con la ubicación de la delegación</li>
+ *         <li>Pie de pantalla con el acceso directo a las ventanas de los botones principales, para mejorar la accesibilidad</li>
+ *     </ul>
+ * </p>
+ * <p>
+ *     La pantalla principal cumple la función de centro de acceso a todas las opciones.
+ * </p>
+ * <p>
+ *     Todas las opciones vuelven a la pantalla principal.
+ * </p>
+ * <p>
+ *     Para poder implementar el mapa, se ha utilizado la siguiente librería de GitHub
+ *     <ul>
+ *         <li>osmdroid</li>
+ *     </ul>
+ * </p>
+ */
 public class PantallaPrincipal extends AppCompatActivity implements Serializable {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private ImageButton btnCalendar, btnPartners, btnPedidos, btnCatalogo;
     private User user;
     private MapView map = null;
+
+    TextView info;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +85,10 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
         setContentView(R.layout.layout_pantalla_principal);
+
+        //Configuración de la actionbar
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         //Configuración del mapview
         map = findViewById(R.id.map);
@@ -169,6 +214,8 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
                 startActivity(i);
             }
         });
+
+        info = findViewById(R.id.info);
     }
 
     @Override
@@ -221,6 +268,51 @@ public class PantallaPrincipal extends AppCompatActivity implements Serializable
                     this,
                     permissionsToRequest.toArray(new String[0]),
                     REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sincronizar:
+                HiloSincronizacion hiloSinc = new HiloSincronizacion(PantallaPrincipal.this);
+                hiloSinc.start();
+                try {
+                    hiloSinc.join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                return true;
+                case R.id.cargar:
+                    HiloCarga hilo = new HiloCarga(PantallaPrincipal.this, user);
+                    hilo.start();
+                    try {
+                        hilo.join();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    if (!hilo.isAlive()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(PantallaPrincipal.this);
+                        builder.setMessage("Proceso de sincronización terminado")
+                                .setTitle("FINALIZADO")
+                                .setCancelable(false)
+                                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
+                        builder.show();
+                    }
+                    return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

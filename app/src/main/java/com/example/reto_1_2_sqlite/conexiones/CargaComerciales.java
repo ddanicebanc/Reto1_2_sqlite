@@ -1,5 +1,6 @@
 package com.example.reto_1_2_sqlite.conexiones;
 
+import static com.example.reto_1_2_sqlite.RegisterActivity.comercialEmails;
 import static com.example.reto_1_2_sqlite.RegisterActivity.comercialIds;
 import static com.example.reto_1_2_sqlite.RegisterActivity.comercialNames;
 import static com.example.reto_1_2_sqlite.RegisterActivity.comercialTels;
@@ -15,7 +16,7 @@ import java.sql.Statement;
 /**
  * Hilo para cargar los comerciales en la base de datos local en la primera carga de la aplicación
  */
-public class MysqlConnection extends Thread {
+public class CargaComerciales extends Thread {
     public void run() {
         String url;
         //Vaciado de los arrays con los datos de los comerciales para evitar duplicados
@@ -23,14 +24,14 @@ public class MysqlConnection extends Thread {
         comercialNames.clear();
         comercialTels.clear();
         delegationIds.clear();
+        comercialEmails.clear();
 
         //Esta es la dirección en casa en el momento de prueba
-        url = "jdbc:mysql://192.168.1.134:3306/db_delegaciones";
+        url = "jdbc:mysql://192.168.21.193:3306/prueba_carga";
 
         //Conexión a la base de datos remota a través del conector jdbc
         try {
             Connection conn = DriverManager.getConnection(url, "daniroot", "dani");
-            Log.d("CONEXIÓN", "CONEXIÓN CORRECTA");
 
             String query = "select * from comerciales;";
             Statement stmt = conn.createStatement();
@@ -41,7 +42,8 @@ public class MysqlConnection extends Thread {
                 comercialIds.add(result.getInt(1));
                 comercialNames.add(result.getString(2));
                 comercialTels.add(result.getInt(3));
-                delegationIds.add(result.getInt(4));
+                comercialEmails.add(result.getString(4));
+                delegationIds.add(result.getInt(5));
             }
 
             conn.close();

@@ -27,7 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ConsultaPartners extends AppCompatActivity implements Serializable {
+public class ConsultaPartners extends AppCompatActivity implements Serializable, PartnersAdapter.ItemClickListener {
     public User user;
     public DBHandler handler;
     public EditText editIdPartner;
@@ -39,7 +39,7 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
         Intent startIntent = getIntent();
         Bundle extras = startIntent.getExtras();
         editIdPartner = findViewById(R.id.editIdPartner);
-        ArrayList<Partner> partners= new ArrayList<>();
+        ArrayList<Partner> partners = new ArrayList<>();
 
         //Recuperamos la información del usuario registrado
         user = (User) getIntent().getSerializableExtra("cUser");
@@ -63,9 +63,9 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
                 editIdPartner.setText(String.valueOf(extras.getInt("partnerId")));
             }
 
-            partners = handler.getArrayPartners(user,partnerId);
+            partners = handler.getArrayPartners(user,partnerId,"");
         }else{
-            partners = handler.getArrayPartners(user,-1);
+            partners = handler.getArrayPartners(user,-1,"");
         }
 
         //Referencia de recycleview
@@ -78,6 +78,7 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
         PartnersAdapter adapter = new PartnersAdapter(partners, this);
         rclPartner.setAdapter(adapter);
         rclPartner.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setOnClickListener(this::onClick);
 
         // Referencia al botón y configuración del evento click
         Button validarButton = findViewById(R.id.buttonValidar);
@@ -174,7 +175,6 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
             }
         });
     }
-
     private boolean validarIdPartner() {
         // Referencia al EditText del ID
         editIdPartner = findViewById(R.id.editIdPartner);
@@ -193,5 +193,8 @@ public class ConsultaPartners extends AppCompatActivity implements Serializable 
 
         return true;
     }
+
+    @Override
+    public void onClick(View view, int position) {}
 }
 

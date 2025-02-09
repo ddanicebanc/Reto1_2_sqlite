@@ -16,9 +16,33 @@ import com.example.reto_1_2_sqlite.modelos.User;
 
 import java.io.Serializable;
 
+/**
+ * <h2>Clase principal para el inicio de sesión en la aplicación</h2>
+ * <p>
+ *     La clase realiza las comprobaciones iniciales siguiendo el proceso:
+ *     <ul>
+ *         <li>Comprueba si la tabla de usuarios está vacía
+ *         <ul>
+ *             <li>Si está vacía: Abre la pantalla de registro</li>
+ *             <li>Si no: Carga los elementos de la pantalla de inicio de sesión</li>
+ *         </ul>
+ *         </li>
+ *         <li>Comprobación de los campos para el inicio de sesión:
+ *         <ol>
+ *             <li>Comprueba si el usario está vacío, saca un Toast si lo está</li>
+ *             <li>Comprueba que el usuario introducido existe. Si no existe muestra un aviso</li>
+ *             <li>Si pasa la comprobación del usuario, comprueba que la contraseña no esté vacía</li>
+ *             <li>Si la contraseña no coincide con la del usuario introducido, muestra un aviso</li>
+ *             <li>Si pasa todas las comprobaciones inicia sesión cargando la pantalla principal</li>
+ *         </ol>
+ *         </li>
+ *     </ul>
+ * </p>
+ */
 public class MainActivity extends AppCompatActivity implements Serializable {
     private Button btnRegister;
     private static Intent myIntent;
+    private EditText edtUser, edtPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +50,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_main);
 
         DBHandler dbhandler = new DBHandler(MainActivity.this);
+        edtUser = findViewById(R.id.edt_usr);
+        edtPassword = findViewById(R.id.edt_psswd);
 
         //If usuarios table is empty, there are no users registered
-        if (dbhandler.countTable("usuarios")) {
+        if (dbhandler.isEmpty("usuarios")) {
             dbhandler.close();
             myIntent = new Intent(
                     MainActivity.this,
@@ -40,16 +66,20 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText edtUser = findViewById(R.id.edt_usr);
+
                 String sUser = edtUser.getText().toString();
 
                 if (sUser.isEmpty()) {
-
+                    Toast.makeText(
+                            MainActivity.this,
+                            "Por favor, introduce un nombre de usuario.",
+                            Toast.LENGTH_SHORT
+                    ).show();
                 } else {
                     DBHandler handler = new DBHandler(MainActivity.this);
 
                     if (dbhandler.searchByName("usuarios", "nombre", sUser)) {
-                        EditText edtPassword = findViewById(R.id.edt_psswd);
+
                         String sPassword = edtPassword.getText().toString();
 
                         String searchValues = sUser + ";" + sPassword;
@@ -87,6 +117,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                                 builder.show();
                             }
                         }
+                    } else {
+                        Toast.makeText(MainActivity.this,
+                                "El usuario introducido no existe.",
+                                Toast.LENGTH_LONG
+                                ).show();
                     }
                 }
             }
@@ -101,5 +136,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 startActivity(myIntent);
             }
         });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        edtUser.setText("");
+        edtUser.requestFocus();
+        edtPassword.setText("");
     }
 }

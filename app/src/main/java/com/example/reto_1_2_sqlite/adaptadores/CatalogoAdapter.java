@@ -26,7 +26,7 @@ public class CatalogoAdapter extends RecyclerView.Adapter<CatalogoAdapter.ViewHo
     private Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView txvNombreArticulo;
+        private final TextView txvNombreArticulo,txvCategoria, txvStock, txvPrecio;
         private final ImageView imgArticulo;
 
         public ViewHolder (View view) {
@@ -34,10 +34,16 @@ public class CatalogoAdapter extends RecyclerView.Adapter<CatalogoAdapter.ViewHo
             view.setOnClickListener(this);
 
             txvNombreArticulo = view.findViewById(R.id.txvNombreArticulo);
+            txvCategoria = view.findViewById(R.id.cat_cat_content);
+            txvStock = view.findViewById(R.id.cat_stock_content);
+            txvPrecio = view.findViewById(R.id.cat_price_content);
             imgArticulo = view.findViewById(R.id.imgCatalogo);
         }
 
         public TextView getTxvNombreArticulo () {return txvNombreArticulo;}
+        public TextView getTxvCategoria () {return txvCategoria;}
+        public TextView getTxvStock () {return txvStock;}
+        public TextView getTxvPrecio () {return txvPrecio;}
         public ImageView getImgArticulo () {return imgArticulo;}
 
         public void onClick (View view) {clickListener.onClick(view, getAdapterPosition());}
@@ -65,10 +71,16 @@ public class CatalogoAdapter extends RecyclerView.Adapter<CatalogoAdapter.ViewHo
     @Override
     public void onBindViewHolder (ViewHolder viewHolder, final int position) {
         String nombre = dataSet.get(position).getNombre();
+        String categoria = dataSet.get(position).getCategoria();
+        String stock = dataSet.get(position).getStock();
+        String precio = dataSet.get(position).getPrecio();
         Bitmap imagenArticulo = dataSet.get(position).getImagen();
 
         viewHolder.getTxvNombreArticulo().setText(nombre);
         viewHolder.getImgArticulo().setImageBitmap(imagenArticulo);
+        viewHolder.getTxvCategoria().setText(categoria);
+        viewHolder.getTxvStock().setText(stock);
+        viewHolder.getTxvPrecio().setText(precio);
     }
 
     @Override

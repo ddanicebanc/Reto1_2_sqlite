@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reto_1_2_sqlite.PantallaPrincipal;
-import com.example.reto_1_2_sqlite.anadir.AnadirVisitas;
-import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.R;
 import com.example.reto_1_2_sqlite.adaptadores.VisitasAdapter;
+import com.example.reto_1_2_sqlite.anadir.AnadirVisitas;
+import com.example.reto_1_2_sqlite.conexiones.DBHandler;
 import com.example.reto_1_2_sqlite.modelos.User;
 import com.example.reto_1_2_sqlite.modelos.Visita;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,7 +26,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class ConsultaVisitas extends AppCompatActivity implements Serializable {
+public class ConsultaVisitas extends AppCompatActivity implements Serializable, VisitasAdapter.ItemClickListener {
     public User user;
     public DBHandler handler;
     public TextView txvTitulo;
@@ -80,6 +80,7 @@ public class ConsultaVisitas extends AppCompatActivity implements Serializable {
 
         //Creamos y establecemos el adaptador para la lista de visitas
         VisitasAdapter adapter = new VisitasAdapter(visitas, this);
+        adapter.setOnClickListener(this::onClick);
         rclView.setAdapter(adapter);
         rclView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -182,4 +183,7 @@ public class ConsultaVisitas extends AppCompatActivity implements Serializable {
 
         txvTitulo.setText(titulo);
     }
+
+    @Override
+    public void onClick(View view, int position) {}
 }

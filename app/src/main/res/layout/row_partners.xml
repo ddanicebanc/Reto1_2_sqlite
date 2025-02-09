@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
     <!-- El layout_height no puede estar como match_parent, si no,
     una fila ocupa toda la pantalla y no se ve el resto-->
@@ -13,29 +14,83 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="5dp">
+        android:layout_marginBottom="5dp"
+>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:padding="5dp">
 
             <TextView
                 android:id="@+id/txvPartnerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_marginStart="20dp"/>
 
             <TextView
-                android:id="@+id/txvPartnerAddress"
+                android:id="@+id/txtCorr"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="Correo: "
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/txvPartnerName"
+                app:layout_constraintStart_toStartOf="@id/txvPartnerName"
+                android:layout_marginStart="10dp" />
+
+            <TextView
+                android:id="@+id/txvPartnerEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/txtCorr"
+                app:layout_constraintTop_toTopOf="@id/txtCorr"/>
+
+            <TextView
+                android:id="@+id/separador"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/txvPartnerEmail"
+                app:layout_constraintTop_toTopOf="@id/txvPartnerEmail"
+                android:text=" | "
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/txtTel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Teléfono: "
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="@id/separador"
+                app:layout_constraintStart_toStartOf="@id/separador"
+                android:layout_marginStart="10dp"/>
 
             <TextView
                 android:id="@+id/txvPartnerTel"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/txvPartnerEmail"
+                app:layout_constraintStart_toEndOf="@id/txtTel"/>
+
+            <TextView
+                android:id="@+id/txtDir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dirección: "
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/txtCorr"
+                app:layout_constraintStart_toStartOf="@id/txvPartnerName"
+                android:layout_marginStart="10dp"/>
+
+            <TextView
+                android:id="@+id/txvPartnerAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/txtDir"
+                app:layout_constraintStart_toEndOf="@id/txtDir" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

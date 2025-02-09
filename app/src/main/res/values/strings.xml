@@ -29,4 +29,9 @@
     <string name="insertLine">Insert new line</string>
     <string name="spn_comercial">Comercial:</string>
     <string name="catalog">Catalog</string>
+    <string name="cargar">Upload data</string>
+    <string name="sincronizar">Sync data</string>
+    <string name="categoria"><u>Category</u></string>
+    <string name="stock"><u>Stock</u></string>
+    <string name="cat_price" ><u>Price</u></string>
 </resources>
