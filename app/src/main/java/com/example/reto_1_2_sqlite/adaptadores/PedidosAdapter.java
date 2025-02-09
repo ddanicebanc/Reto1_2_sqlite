@@ -25,6 +25,7 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView txvNumeroPedido;
         private final TextView txvFechaPedido;
+        private final TextView txvFechaPago;
 
         public ViewHolder(View view) {
             super(view);
@@ -32,10 +33,12 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.ViewHold
 
             txvNumeroPedido = view.findViewById(R.id.txvNumeroPedido);
             txvFechaPedido = view.findViewById(R.id.txvFechaPedido);
+            txvFechaPago = view.findViewById(R.id.txvFechaPago);
         }
 
         public TextView getTxvNumeroPedido () {return txvNumeroPedido;}
         public TextView getTxvFechaPedido () {return txvFechaPedido;}
+        public TextView getTxvFechaPago () {return txvFechaPago;}
 
         @Override
         public void onClick (View view) {clickListener.onClick(view, getAdapterPosition());}
@@ -61,14 +64,25 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.ViewHold
     @Override
     public void onBindViewHolder (ViewHolder viewHolder, final int position) {
         int numeroPedido = dataSet.get(position).getId();
-        String fechaPedido = dataSet.get(position).getFechaPedido();
+        String fechaPedido = reformatearFecha(dataSet.get(position).getFechaPedido());
+        String fechaPago = reformatearFecha(dataSet.get(position).getFechaPago());
 
         viewHolder.getTxvNumeroPedido().setText(String.valueOf(numeroPedido));
         viewHolder.getTxvFechaPedido().setText(fechaPedido);
+        viewHolder.getTxvFechaPago().setText(fechaPago);
     }
 
     @Override
     public int getItemCount() {
         return dataSet.size();
+    }
+
+    private String reformatearFecha (String fecha) {
+        String fechaSalida;
+        String[] partes = fecha.split("-");
+
+        fechaSalida = partes[2] + "-" + partes[1] + "-" + partes[0];
+
+        return fechaSalida;
     }
 }
