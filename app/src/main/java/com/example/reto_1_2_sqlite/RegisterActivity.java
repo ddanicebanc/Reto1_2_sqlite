@@ -32,6 +32,14 @@ import java.util.ArrayList;
  *    </ul>
  * </p>
  * <p>Los partners se cargan en un spinner desde la bbdd local o desde el servidor de la delegación de MYSQL si no existen datos.</p>
+ * <p>
+ *     Realiza las comprobaciones para los campos usuario y contraseña comprobando que:
+ *      <ol>
+ *          <li>No estén vacías</li>
+ *          <li>El usuario no coincida con alguno existente</li>
+ *          <li>La contraseña cumpla los requisitos establecidos</li>
+ *      </ol>
+ * </p>
  */
 public class RegisterActivity extends AppCompatActivity {
     private EditText edtUser, edtPassword;

@@ -25,7 +25,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Locale;
-
+/**
+ * La clase {@code ConsultaVisitas} representa la actividad para consultar y mostrar las visitas de un usuario.
+ * Permite ver las visitas, filtrarlas por fecha (históricas o futuras), añadir nuevas visitas y navegar a otras consultas.
+ * Implementa {@link Serializable} para pasar el objeto {@link User} entre actividades.
+ * Implementa {@link VisitasAdapter.ItemClickListener} para manejar los clicks en los elementos del RecyclerView.
+ */
 public class ConsultaVisitas extends AppCompatActivity implements Serializable, VisitasAdapter.ItemClickListener {
     public User user;
     public DBHandler handler;
@@ -160,8 +165,8 @@ public class ConsultaVisitas extends AppCompatActivity implements Serializable, 
         });
     }
 
-    /*
-    Para refrescar la ventana cuando le damos al botón atrás en la barra de navegación del teléfono
+    /**
+     * Para refrescar la ventana cuando le damos al botón atrás en la barra de navegación del teléfono
      */
     @Override
     public void onRestart() {
@@ -170,6 +175,9 @@ public class ConsultaVisitas extends AppCompatActivity implements Serializable, 
         startActivity(getIntent());
     }
 
+    /**
+     * Carga el título a partir del usuario activo en la actividad
+     */
     public void cargarTitulo () {
         String region = Locale.getDefault().toString();
         String titulo;
@@ -184,6 +192,11 @@ public class ConsultaVisitas extends AppCompatActivity implements Serializable, 
         txvTitulo.setText(titulo);
     }
 
+    /**
+     * Método personalizado de escucha para los elementos del recyclerview
+     * @param view La {@link View} en la que se hizo clic.
+     * @param position La posición del elemento en el que se hizo clic.
+     */
     @Override
     public void onClick(View view, int position) {}
 }

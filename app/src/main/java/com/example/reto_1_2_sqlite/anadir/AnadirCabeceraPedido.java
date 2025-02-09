@@ -29,6 +29,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * {@code AnadirCabeceraPedido} es una {@link AppCompatActivity} que permite al usuario añadir una nueva
+ * cabecera de pedido.  La actividad permite seleccionar las fechas de pedido, pago y envío, así como
+ * el socio asociado al pedido.
+ */
 public class AnadirCabeceraPedido extends AppCompatActivity implements Serializable {
     EditText edtFPedido, edtFPago, edtFEnvio;
     private Spinner spnNombrePartners;
@@ -55,6 +60,8 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
         inicializarCampos();
 
         //Establecimiento de las escucha para los campos de las fechas
+        //Los campos de las fechas muestran una vista de DatePickerDialog para seleccionar una fecha
+        //desde un calendario.
         edtFPago.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +156,7 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
         partnerNames = handler.getNombrePartners(user);
         partnerIds = handler.getIdPartners(user);
 
+        //Asignamos el adaptador del spinner con el array de nombres de partners
         spnNombrePartners = findViewById(R.id.spnNombrePartner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
@@ -156,6 +164,7 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
                 partnerNames
         );
         spnNombrePartners.setAdapter(adapter);
+        //Cambiamos el id del partner seleccionado cada vez que elegimos un elemento del spinner
         spnNombrePartners.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -195,7 +204,10 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
             }
         });
     }
-
+    /**
+     * Comprueba si los campos obligatorios han sido rellenados correctamente.
+     * @return {@code true} si todos los campos son válidos, {@code false} en caso contrario.
+     */
     private boolean comprobarCampos () {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         boolean valido = true;
@@ -232,6 +244,15 @@ public class AnadirCabeceraPedido extends AppCompatActivity implements Serializa
         return valido;
     }
 
+    /**
+     * Método para inicializar los distintos campos de la actividad. Cada elemento se inicializa
+     * con el valor por defecto para cada tipo de dato:
+     * <ul>
+     *     <li>String: ""</li>
+     *     <li>Númerico: 0</li>
+     *     <li>Fecha: Fecha del día actual</li>
+     * </ul>
+     */
     private void inicializarCampos () {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String today = LocalDate.now().format(format).toString();

@@ -20,14 +20,15 @@ import com.example.reto_1_2_sqlite.modelos.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
+/**
+ * {@code AniadirPartners} es una {@link AppCompatActivity} que permite al usuario añadir nuevos partners.
+ * La actividad permite introducir el nombre, dirección, ciudad, teléfono y email del partner.
+ */
 public class AniadirPartners extends AppCompatActivity implements Serializable {
     private Button saveButton;
     private EditText edtName, edtAddress, edtCity, edtPhone, edtEmail, edtZipC;
-    private Spinner spnName;
     private User user;
     private DBHandler handler;
-    private String partnerIndex;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +48,10 @@ public class AniadirPartners extends AppCompatActivity implements Serializable {
 
         saveButton = findViewById(R.id.btn_guardar);
         saveButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Se llama cuando se hace clic en el botón "Guardar".  Guarda el partner en la base de datos.
+             * @param view La {@link View} en la que se hizo clic.
+             */
             @Override
             public void onClick(View view) {
                 if (!comprobarCampos()) {
@@ -84,7 +89,10 @@ public class AniadirPartners extends AppCompatActivity implements Serializable {
             }
         });
     }
-
+    /**
+     * Comprueba si los campos obligatorios han sido rellenados correctamente.
+     * @return {@code true} si hay algún error en los campos, {@code false} en caso contrario.
+     */
     private boolean comprobarCampos() {
         boolean error = false;
         String name, address, city, phone, email, zipcode;

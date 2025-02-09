@@ -122,7 +122,11 @@ public class ConsultaPedidos extends AppCompatActivity implements Serializable, 
             }
         });
     }
-
+    /**
+     * Método personalizado de escucha para los elementos del recyclerview
+     * @param view La {@link View} en la que se hizo clic.
+     * @param position La posición del elemento en el que se hizo clic.
+     */
     @Override
     public void onClick(View view, int position) {}
 }

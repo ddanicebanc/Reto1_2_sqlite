@@ -18,7 +18,6 @@ import java.sql.Statement;
  */
 public class CargaComerciales extends Thread {
     public void run() {
-        String url;
         //Vaciado de los arrays con los datos de los comerciales para evitar duplicados
         comercialIds.clear();
         comercialNames.clear();
@@ -27,8 +26,7 @@ public class CargaComerciales extends Thread {
         comercialEmails.clear();
 
         //Esta es la dirección en casa en el momento de prueba
-        url = "jdbc:mysql://192.168.21.193:3306/prueba_carga";
-
+        String url = "jdbc:mysql://192.168.1.134:3306/db_delegaciones";
         //Conexión a la base de datos remota a través del conector jdbc
         try {
             Connection conn = DriverManager.getConnection(url, "daniroot", "dani");
