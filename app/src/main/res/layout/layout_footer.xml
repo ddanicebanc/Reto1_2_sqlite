@@ -4,22 +4,24 @@
     android:id="@+id/foot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#423A3A"
+    android:background="#818181"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:justifyContent="space_between"
+        app:justifyContent="space_evenly"
+        app:alignItems="center"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/btnAg"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/calendar"
-            android:scaleType="fitXY"
+            android:scaleType="fitCenter"
+            android:background="?android:selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.111"
@@ -29,10 +31,11 @@
 
         <ImageButton
             android:id="@+id/btnPar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/partners"
             android:scaleType="fitXY"
+            android:background="?android:selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.937"
@@ -46,6 +49,7 @@
             android:layout_height="50dp"
             android:src="@drawable/home"
             android:scaleType="fitXY"
+            android:background="?android:selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,10 +57,11 @@
 
         <ImageButton
             android:id="@+id/btnPed"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/orders"
             android:scaleType="fitXY"
+            android:background="?android:selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,10 +69,11 @@
 
         <ImageButton
             android:id="@+id/btnCat"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/catalogo"
             android:scaleType="fitXY"
+            android:background="?android:selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
