@@ -34,7 +34,7 @@ public class HiloCarga extends Thread {
 
     @Override
     public void run() {
-        String url = "jdbc:mysql://192.168.1.134:3306/db_delegaciones";
+        String url = "jdbc:mysql://192.168.20.49:3306/db_delegaciones";
         ArrayList<Integer> idsMysql = new ArrayList<>();
         String idsQuery = "-1", insert;
 

@@ -26,7 +26,7 @@ public class CargaComerciales extends Thread {
         comercialEmails.clear();
 
         //Esta es la dirección en casa en el momento de prueba
-        String url = "jdbc:mysql://192.168.1.134:3306/db_delegaciones";
+        String url = "jdbc:mysql://192.168.20.49:3306/db_delegaciones";
         //Conexión a la base de datos remota a través del conector jdbc
         try {
             Connection conn = DriverManager.getConnection(url, "daniroot", "dani");

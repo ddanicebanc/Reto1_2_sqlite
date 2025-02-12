@@ -45,7 +45,7 @@ public class HiloSincronizacion extends Thread {
 
     @Override
     public void run () {
-        String url = "jdbc:mysql://192.168.1.134:3306/db_delegaciones";
+        String url = "jdbc:mysql://192.168.20.49:3306/db_delegaciones";
 
         try {
             Connection conn = DriverManager.getConnection(url, "daniroot", "dani");
@@ -61,7 +61,7 @@ public class HiloSincronizacion extends Thread {
             String query = "select * from articulos";
             //Añadir el filtro en caso de que haya artículos en local
             if (idsQuery.length() > 0) {
-                query = query + "\nwhere id_articulo in (" + idsQuery + ")";
+                query = query + "\nwhere id_articulo not in (" + idsQuery + ")";
             }
             query += ";";
 
@@ -175,7 +175,7 @@ public class HiloSincronizacion extends Thread {
         }
         //Eliminación de la última coma en el string
         if (idsQuery.length() > 0) {
-            idsQuery = idsQuery.substring(0, idsQuery.length()-1);
+            idsQuery = idsQuery.substring(0, idsQuery.length() - 2);
         }
 
         return idsQuery;
